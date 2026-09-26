@@ -69,9 +69,11 @@ describe('Story 2.2: Verified Client Trust Matrix & Semantic Footer', () => {
     assert.match(htmlContent, /data-action="whatsapp-inquire"/, 'WhatsApp link must have data-action="whatsapp-inquire"');
     assert.match(htmlContent, /href="tel:\+2348106246748"/, 'Must contain direct telephone link');
     assert.match(htmlContent, /href="mailto:mjrgdesigns@gmail\.com"/, 'Must contain direct email link');
+    assert.match(htmlContent, /href="https:\/\/instagram\.com"/, 'Must contain Instagram link');
 
     // Column 3: Quick Navigation
     assert.match(htmlContent, /class="footer-col footer-col-links"/, 'Must contain quick navigation column');
+    assert.match(htmlContent, /<nav aria-label="Footer Navigation">/, 'Quick navigation must be wrapped in semantic nav');
     assert.match(htmlContent, /href="#services"[^>]*class="footer-nav-link"/, 'Must link to #services in footer');
     assert.match(htmlContent, /href="#portfolio"[^>]*class="footer-nav-link"/, 'Must link to #portfolio in footer');
     assert.match(htmlContent, /href="#about"[^>]*class="footer-nav-link"/, 'Must link to #about in footer');

@@ -63,6 +63,18 @@ context: ['_bmad-output/planning-artifacts/epics.md', '_bmad-output/planning-art
 - Given `<footer>` is viewed, all direct channels (WhatsApp, phone, email, address) and quick navigation links are present and accessible.
 - Given mobile viewports, the footer and client grid reflow cleanly without horizontal overflow.
 
+### Review Findings
+- [x] [Review][Patch] Footer interactive links minimum 48px touch target compliance on mobile [`styles.css`]
+- [x] [Review][Patch] High-contrast visible focus indicators (`:focus-visible`) on footer links and logo [`styles.css`]
+- [x] [Review][Patch] Add Instagram social channel link and SVG icon to footer [`index.html`]
+- [x] [Review][Patch] Enclose client card hover sub-elements in `@media (hover: hover)` and add `(pointer: coarse)` fallback [`styles.css`]
+- [x] [Review][Patch] Extend `prefers-reduced-motion` to cover `.client-badge` and `.client-monogram` [`styles.css`]
+
+#### Rejected Findings
+- `false` -- Client card list semantics / tabindex: Static informational badges do not require tab stops or list wrapper.
+- `false` -- Story 2.2 Learning journal / flashcards in review diff: Generated in post-story learning phase by `/bmad-frontend-tutor`.
+- `low` -- Hardcoded hex codes in footer: Colors already correspond to neutral tokens.
+
 ## Implementation Notes
 
 - Added 8 authenticated client cards with monograms in `#about`: CYMA Homes Limited, The Minaret Hospital (TMH), Planned Parenthood Federation of Nigeria (PPFN), Tour of Lagos Waterways (TOLW), GoWeld Engineering, Thesaurus Bay, OAB Foundation, and Glazing Memoirs.
