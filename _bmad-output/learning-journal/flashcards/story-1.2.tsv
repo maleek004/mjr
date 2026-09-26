@@ -1,0 +1,24 @@
+What CSS position property keeps an element in normal flow until a scroll threshold, then fixes it in place?	position: sticky;
+What companion property is strictly required for position: sticky to take effect?	A directional threshold property such as top, bottom, left, or right (e.g., top: 0).
+Why does position: sticky stop sticking once its parent element scrolls completely out of view?	A sticky element is scoped to its direct parent container's box dimensions and cannot stick outside it.
+What CSS property applies a graphical filter like blur to the area behind an element?	backdrop-filter (e.g., backdrop-filter: blur(10px);).
+What CSS property ensures target section headings are not obscured behind a sticky header when navigated via anchor links?	scroll-margin-top (e.g., scroll-margin-top: calc(var(--header-height) + var(--space-md));).
+What CSS rule on the html root element enables smooth scrolling animations for anchor link jumps?	scroll-behavior: smooth;
+In CSS Flexbox, what property distributes child items across the main axis with maximum space between them?	justify-content: space-between;
+In CSS Flexbox, what property aligns items perpendicularly across the cross axis?	align-items: center;
+What is the recommended minimum touch target dimension for interactive controls per WCAG guidelines?	At least 48px by 48px (or 44px minimum for iOS HIG).
+What ARIA attribute indicates whether an expandable widget or mobile navigation drawer is currently open or closed?	aria-expanded (set dynamically to "true" or "false").
+What ARIA attribute on a toggle button programmatically associates it with the element ID it controls?	aria-controls (e.g., aria-controls="mobile-nav").
+What is the difference between the HTML hidden boolean attribute and the CSS display: none rule?	The HTML hidden attribute is a semantic markup attribute that defaults to display: none in user-agent stylesheets.
+What WAI-ARIA role identifies an interactive container as a dialog box requiring user attention?	role="dialog"
+What ARIA attribute informs assistive technologies that content outside the open dialog is inert and non-interactive?	aria-modal="true"
+What JavaScript DOM method searches up the ancestor tree starting from the target element for the closest matching selector?	Element.closest() (e.g., event.target.closest('[data-action]')).
+What is the core performance advantage of the Event Delegation pattern over adding individual event listeners to every interactive element?	It attaches a single listener to a parent/root node, reducing memory consumption and surviving dynamic DOM mutations.
+Through which phase of the DOM Event Dispatch model do delegated click events travel upward to reach the document root?	The Event Bubbling phase.
+Why is animating transform: translateX() significantly more performant than animating the CSS left or width properties?	transform is handled on the GPU composite thread and bypasses costly Layout (Reflow) and Paint pipeline stages.
+What three main rendering stages occur in the browser engine when a layout-affecting CSS property like width changes?	Layout (Reflow) -> Paint -> Composite.
+What CSS property and value on document.body prevents background page scrolling when a mobile drawer or modal is open?	overflow: hidden;
+What keyboard key is universally expected by accessibility standards to dismiss open overlays, dialogs, and mobile drawers?	The Escape key (event.key === 'Escape').
+Why must keyboard focus be explicitly returned to the trigger button when an accessible modal drawer closes?	To restore the user's keyboard navigation context so screen reader and keyboard users do not get lost at document root.
+How does a focus trap loop focus inside an open dialog when the user presses Tab on the last focusable element?	It listens for keydown, prevents default Tab behavior on the last element, and explicitly calls focus() on the first focusable element.
+What browser window property returns the interior viewport width in CSS pixels excluding scrollbars/toolbars?	window.innerWidth
