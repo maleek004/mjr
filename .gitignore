@@ -1,0 +1,19 @@
+# Operating System Files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# BMAD Personal User Configs
+*.user.toml
+_bmad/config.user.toml
+_bmad/custom/*.user.toml
+
+# IDE & Editor Files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Node / Package Manager (if ever used)
+node_modules/
+package-lock.json

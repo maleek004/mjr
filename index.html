@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="MJr Designs & Print Solutions Limited - Premier creative design, strategic branding, high-volume publication printing, and custom apparel manufacturing.">
+  <title>MJr Designs &amp; Print Solutions Limited | Creative Design &amp; Quality Print</title>
+
+  <!-- Preconnect to Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Production Stylesheet -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Accessibility: Skip to main content landmark -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- Semantic Header & Sticky Navigation Landmark -->
+  <header class="site-header" id="top">
+    <div class="header-container container">
+      <a href="#top" class="brand-logo" aria-label="MJr Designs & Print Solutions Home">
+        <span class="logo-accent">MJr</span>
+        <span class="logo-text">DESIGNS</span>
+      </a>
+
+      <!-- Desktop Navigation -->
+      <nav class="site-nav" aria-label="Main Navigation">
+        <ul class="nav-list" role="list">
+          <li><a href="#services" class="nav-link">Services</a></li>
+          <li><a href="#portfolio" class="nav-link">Portfolio</a></li>
+          <li><a href="#about" class="nav-link">About &amp; Clients</a></li>
+          <li><a href="#contact" class="nav-link">Contact</a></li>
+        </ul>
+      </nav>
+
+      <!-- Quick Action CTA -->
+      <div class="header-actions">
+        <a href="https://wa.me/2348106246748" class="btn btn-sm btn-primary header-cta" target="_blank" rel="noopener noreferrer" data-action="whatsapp-inquire" data-context="Header Quick Connect">
+          Quick Connect
+        </a>
+
+        <!-- Mobile Navigation Toggle -->
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="mobile-nav" aria-label="Toggle navigation menu" data-action="toggle-mobile-nav">
+          <span class="hamburger-bar"></span>
+          <span class="hamburger-bar"></span>
+          <span class="hamburger-bar"></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Drawer Navigation -->
+    <nav id="mobile-nav" class="mobile-drawer" aria-label="Mobile Navigation" hidden>
+      <div class="mobile-drawer-content">
+        <ul class="mobile-nav-list" role="list">
+          <li><a href="#services" class="mobile-nav-link" data-action="close-mobile-nav">Services</a></li>
+          <li><a href="#portfolio" class="mobile-nav-link" data-action="close-mobile-nav">Portfolio</a></li>
+          <li><a href="#about" class="mobile-nav-link" data-action="close-mobile-nav">About &amp; Clients</a></li>
+          <li><a href="#contact" class="mobile-nav-link" data-action="close-mobile-nav">Contact</a></li>
+        </ul>
+        <div class="mobile-drawer-cta">
+          <a href="https://wa.me/2348106246748" class="btn btn-primary btn-block" target="_blank" rel="noopener noreferrer" data-action="whatsapp-inquire" data-context="Mobile Drawer Connect">
+            Chat on WhatsApp
+          </a>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Semantic Main Content Landmark -->
+  <main id="main-content">
+    <!-- Hero Section Landmark -->
+    <section id="hero" class="hero-section" aria-labelledby="hero-title">
+      <div class="container hero-container">
+        <div class="hero-badge">Creative Studio &amp; Commercial Print Factory</div>
+        <h1 id="hero-title" class="hero-headline">Creative Design. Strategic Branding. Quality Print.</h1>
+        <p class="hero-subhead">
+          We elevate ambitious corporate enterprises, institutions, and lifestyle brands through authoritative visual identities, high-volume publication printing, and premium apparel manufacturing.
+        </p>
+
+        <div class="hero-actions">
+          <a href="https://wa.me/2348106246748?text=Hello%20MJr%20Designs%2C%20I%27d%20like%20to%20discuss%20a%20custom%20design%20and%20print%20project." class="btn btn-primary btn-lg" target="_blank" rel="noopener noreferrer" data-action="whatsapp-inquire" data-context="Hero Primary CTA">
+            Start a Project
+          </a>
+          <a href="#portfolio" class="btn btn-secondary btn-lg">
+            Explore Portfolio
+          </a>
+        </div>
+
+        <div class="hero-proof-metrics">
+          <div class="proof-metric-card">
+            <span class="metric-value">100+</span>
+            <span class="metric-label">Completed Projects</span>
+          </div>
+          <div class="proof-metric-card">
+            <span class="metric-value">100%</span>
+            <span class="metric-label">Corporate &amp; Event Specialists</span>
+          </div>
+          <div class="proof-metric-card">
+            <span class="metric-value">Direct</span>
+            <span class="metric-label">Nationwide Delivery</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Core Services Section Landmark -->
+    <section id="services" class="section services-section" aria-labelledby="services-title">
+      <div class="container">
+        <div class="section-header">
+          <p class="section-tag">Core Capabilities</p>
+          <h2 id="services-title" class="section-title">End-to-End Design &amp; Print Production</h2>
+          <p class="section-desc">From concept to physical execution, we deliver uncompromised precision across four core pillars.</p>
+        </div>
+        <!-- Services content populated in Epic 2 -->
+        <div class="services-placeholder" id="services-grid"></div>
+      </div>
+    </section>
+
+    <!-- Interactive Portfolio Section Landmark -->
+    <section id="portfolio" class="section portfolio-section" aria-labelledby="portfolio-title">
+      <div class="container">
+        <div class="section-header">
+          <p class="section-tag">Featured Works</p>
+          <h2 id="portfolio-title" class="section-title">Proven Craftsmanship in Action</h2>
+          <p class="section-desc">Browse our validated case studies across identity systems, editorial publications, and custom apparel.</p>
+        </div>
+        <!-- Portfolio content populated in Epic 3 -->
+        <div class="portfolio-placeholder" id="portfolio-root"></div>
+      </div>
+    </section>
+
+    <!-- About & Client Trust Section Landmark -->
+    <section id="about" class="section about-section" aria-labelledby="about-title">
+      <div class="container">
+        <div class="section-header">
+          <p class="section-tag">Trusted Pedigree</p>
+          <h2 id="about-title" class="section-title">Powering Leading Brands &amp; Institutions</h2>
+          <p class="section-desc">We are proud print and design partners to respected corporate and civic organizations.</p>
+        </div>
+        <!-- Client Trust Grid populated in Epic 2 -->
+        <div class="clients-placeholder" id="clients-root"></div>
+      </div>
+    </section>
+
+    <!-- Conversion Banner Section Landmark -->
+    <section id="contact" class="section contact-section" aria-labelledby="contact-title">
+      <div class="container contact-container">
+        <div class="contact-card">
+          <p class="section-tag section-tag-light">Ready to Elevate Your Brand?</p>
+          <h2 id="contact-title" class="contact-headline">Let's Create Something Exceptional Together.</h2>
+          <p class="contact-subhead">Reach out directly for project inquiries, corporate proposals, or high-volume print consultations.</p>
+          <div class="contact-actions">
+            <a href="https://wa.me/2348106246748?text=Hello%20MJr%20Designs%2C%20I%27d%20like%20to%20discuss%20a%20custom%20design%20and%20print%20project." class="btn btn-primary btn-lg" target="_blank" rel="noopener noreferrer" data-action="whatsapp-inquire" data-context="Contact Footer CTA">
+              Inquire on WhatsApp (+234 810 624 6748)
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Semantic Footer Landmark -->
+  <footer class="site-footer">
+    <div class="container footer-container">
+      <div class="footer-brand">
+        <a href="#top" class="brand-logo" aria-label="MJr Designs & Print Solutions Home">
+          <span class="logo-accent">MJr</span>
+          <span class="logo-text">DESIGNS</span>
+        </a>
+        <p class="footer-tagline">Creative Design. Strategic Branding. Quality Print.</p>
+      </div>
+
+      <div class="footer-info">
+        <p class="footer-contact-item"><strong>Direct Phone/WhatsApp:</strong> <a href="tel:+2348106246748">+234 810 624 6748</a></p>
+        <p class="footer-contact-item"><strong>Direct Email:</strong> <a href="mailto:mjrgdesigns@gmail.com">mjrgdesigns@gmail.com</a></p>
+      </div>
+
+      <div class="footer-bottom">
+        <p class="copyright">&copy; 2026 MJr Designs &amp; Print Solutions Limited. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Application Script (ES6+) -->
+  <script src="app.js" defer></script>
+</body>
+</html>
