@@ -1,0 +1,25 @@
+What is the purpose of the role="dialog" ARIA attribute on a modal container?	It informs assistive technologies that the element is an application dialog box with interactive content requiring user attention.
+What does the aria-modal="true" attribute communicate to the browser and screen readers?	It announces that the dialog is modal, telling assistive technology to treat background content as inert and unavailable while the dialog is open.
+What does aria-labelledby="modal-title" do on an accessible dialog container?	It programmatically binds the accessible name of the dialog to the heading element containing id="modal-title".
+What does aria-describedby="modal-desc" do on an accessible dialog container?	It programmatically associates the dialog with its descriptive body paragraph for screen reader announcements.
+Why must lastFocusedElement (document.activeElement) be cached before opening a modal?	To enable focus restoration by returning keyboard focus back to the initiating trigger button when the modal is dismissed.
+What is keyboard focus trapping in an accessible modal dialog?	A mechanism that constrains Tab and Shift+Tab key navigation strictly within the modal's focusable elements while it remains open.
+In a focus trap, what happens when a user presses Tab while focused on the last focusable element?	The event is prevented (event.preventDefault()) and keyboard focus wraps around to the first focusable element inside the modal.
+In a focus trap, what happens when a user presses Shift+Tab while focused on the first focusable element?	The event is prevented (event.preventDefault()) and keyboard focus wraps backwards to the last focusable element inside the modal.
+Why is checking typeof el.focus === 'function' insufficient for filtering visible focusable elements in the DOM?	Because every HTMLElement prototype inherits the focus method, causing hidden (display: none) elements to pass the filter.
+How does the browser determine if an element is currently rendered in the visual layout tree using DOM properties?	By checking whether el.offsetParent !== null, or el.offsetWidth > 0, or el.offsetHeight > 0.
+Why should an out-of-bounds focus guard (if (!modal.contains(document.activeElement))) be included in a modal Tab handler?	To immediately re-constrain focus to the first or last modal element if focus ever lands outside the modal container.
+What standard keyboard key must dismiss a modal dialog according to WCAG 2.1 AA?	The Escape key (event.key === 'Escape').
+What CSS rule on the body element locks background document scrolling when a modal is active?	overflow: hidden; (paired with touch-action: none; for mobile touch devices).
+Why can applying overflow: hidden on the body cause a horizontal layout shift (CLS) on desktop browsers?	Because removing the vertical scrollbar changes the viewport width, causing layout text and centered containers to snap rightward.
+What modern CSS property prevents layout shift when scrollbars are removed during scroll-locking?	scrollbar-gutter: stable; on the root html element.
+What CSS property creates a frosted-glass blur effect on the semi-transparent backdrop behind a modal?	backdrop-filter: blur(8px); (with -webkit-backdrop-filter: blur(8px); for WebKit compatibility).
+Why are opacity and transform properties preferred for modal entry animations over animating top or height?	Because opacity and transform are handled on the GPU Compositor thread without triggering expensive Layout (Reflow) or Paint cycles.
+What CSS media query must be used to disable modal scale/fade animations for motion-sensitive users?	@media (prefers-reduced-motion: reduce).
+Why should close button glyph characters like &times; be wrapped in <span aria-hidden="true">&times;</span>?	To hide the raw symbol from screen readers, ensuring they only announce the button's explicit aria-label.
+What is the effect of setting hidden attribute on a modal container element in HTML5?	The browser applies user-agent default styling display: none !important, removing the element from visual layout and the accessibility tree.
+What is the time complexity of centralized event delegation for modal open/close actions?	O(1) memory overhead because a single root listener on document handles all dispatch via event.target.closest('[data-action]').
+Why should dataset.projectId be used on modal trigger buttons instead of hardcoding project data in the markup?	It allows the JavaScript controller to look up project data dynamically from the single source of truth (PORTFOLIO_DATA).
+What JavaScript method is used to safely encode user inquiry messages into WhatsApp web URLs?	encodeURIComponent(messageText).
+What is overscroll-behavior: contain used for in a modal scrollable container (.modal-scroll-wrap)?	It prevents scroll chaining, stopping background document scroll when reaching the top or bottom of the modal content.
+What is the difference between role="dialog" and role="alertdialog"?	role="dialog" is for general interactive modals, whereas role="alertdialog" is reserved for urgent interruptions requiring immediate acknowledgment (e.g. error prompts).

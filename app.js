@@ -19,6 +19,98 @@
   // Cached trigger element for focus restoration
   let lastFocusedElement = null;
 
+  // WhatsApp Configuration & Template Registry
+  const WHATSAPP_CONFIG = {
+    defaultPhone: '2348106246748',
+    baseUrl: 'https://wa.me/'
+  };
+
+  const WHATSAPP_TEMPLATES = {
+    hero: "Hello MJr Designs, I'd like to discuss a custom design and print project for my organization.",
+    'header-nav': "Hello MJr Designs, I would like to make a general inquiry about your creative branding and print services.",
+    'brand-identity': "Hello MJr Designs, I am interested in your Brand Identity & Corporate Design packages.",
+    'marketing-ads': "Hello MJr Designs, I would like to discuss Marketing & Advertising Design services for my campaign.",
+    'print-production': "Hello MJr Designs, I would like to request a quote for Print & Publication Production.",
+    'custom-apparel': "Hello MJr Designs, I am looking for custom shirt and apparel printing for my brand/organization.",
+    modal: "Hello MJr Designs, I saw your {projectTitle} case study and would like to discuss a similar project.",
+    footer: "Hello MJr Designs, I'm reaching out from your website footer to inquire about your services.",
+    default: "Hello MJr Designs, I would like to inquire about your design and print services."
+  };
+
+  /**
+   * Format phone number to international digits-only format
+   * @param {string} phone - Input phone number
+   * @returns {string} Sanitized phone digits
+   */
+  function sanitizePhoneNumber(phone) {
+    if (typeof phone !== 'string') return WHATSAPP_CONFIG.defaultPhone;
+    const digits = phone.replace(/\D/g, '');
+    return digits.length > 0 ? digits : WHATSAPP_CONFIG.defaultPhone;
+  }
+
+  /**
+   * Resolve context-specific message from template registry
+   * @param {string} context - Context key
+   * @param {Object} [options={}] - Dynamic interpolation variables (e.g. { projectTitle })
+   * @returns {string} Fully interpolated message string
+   */
+  function resolveWhatsAppMessage(context, options = {}) {
+    const key = (typeof context === 'string' && context.trim().toLowerCase()) || 'default';
+    let template = WHATSAPP_TEMPLATES[key] || WHATSAPP_TEMPLATES['default'];
+
+    const projectTitle = (options && typeof options.projectTitle === 'string' && options.projectTitle.trim())
+      ? options.projectTitle.trim()
+      : 'featured';
+
+    template = template.replace('{projectTitle}', projectTitle);
+
+    return template;
+  }
+
+  /**
+   * Construct sanitized, RFC 3986-compliant WhatsApp deep link URL
+   * @param {string} [phone] - Target phone number
+   * @param {string} [context] - Context template key
+   * @param {Object} [options={}] - Additional interpolation parameters
+   * @returns {string} Fully qualified wa.me URL
+   */
+  function generateWhatsAppUrl(phone, context, options = {}) {
+    const cleanPhone = sanitizePhoneNumber(phone || WHATSAPP_CONFIG.defaultPhone);
+    const message = resolveWhatsAppMessage(context, options);
+    const encodedText = encodeURIComponent(message);
+    return `${WHATSAPP_CONFIG.baseUrl}${cleanPhone}?text=${encodedText}`;
+  }
+
+  /**
+   * Centralized Handler for WhatsApp Inquiry Action
+   * @param {HTMLElement} actionEl - The trigger element containing metadata
+   */
+  function handleWhatsAppInquiry(actionEl) {
+    if (!actionEl) return;
+
+    const context = actionEl.dataset.context || actionEl.dataset.service || 'default';
+    let projectTitle = '';
+
+    if (context === 'modal' || actionEl.id === 'modal-whatsapp-cta') {
+      const titleEl = document.getElementById('modal-title');
+      projectTitle = titleEl ? titleEl.textContent.trim() : '';
+    } else if (actionEl.dataset.projectId) {
+      const project = PORTFOLIO_DATA.find(p => p.id === actionEl.dataset.projectId);
+      if (project) projectTitle = project.title;
+    }
+
+    const url = generateWhatsAppUrl(WHATSAPP_CONFIG.defaultPhone, context, { projectTitle });
+
+    // Update href if element is an anchor
+    if (actionEl.tagName && actionEl.tagName.toLowerCase() === 'a') {
+      actionEl.href = url;
+      actionEl.target = '_blank';
+      actionEl.rel = 'noopener noreferrer';
+    } else if (typeof window !== 'undefined' && typeof window.open === 'function') {
+      window.open(url, '_blank', 'noopener,noreferrer');
+    }
+  }
+
   /**
    * Root Event Delegation Handler
    */
@@ -30,6 +122,10 @@
       const action = actionEl.dataset.action;
 
       switch (action) {
+        case 'whatsapp-inquire': {
+          handleWhatsAppInquiry(actionEl);
+          break;
+        }
         case 'open-modal': {
           event.preventDefault();
           const projectId = actionEl.dataset.projectId;
@@ -526,9 +622,9 @@
     }
 
     if (ctaBtn) {
-      const waText = encodeURIComponent(`Hello MJr Designs, I saw your ${project.title} case study and would like to discuss a similar project.`);
-      ctaBtn.href = `https://wa.me/2348106246748?text=${waText}`;
-      ctaBtn.dataset.context = project.whatsappContext || `${project.title} Modal Case Study`;
+      ctaBtn.href = generateWhatsAppUrl(WHATSAPP_CONFIG.defaultPhone, 'modal', { projectTitle: project.title });
+      ctaBtn.dataset.context = 'modal';
+      ctaBtn.dataset.projectId = project.id;
     }
 
     // 2. Display Modal & Lock Body Scroll
@@ -587,6 +683,12 @@
     window.openModal = openModal;
     window.closeModal = closeModal;
     window.state = state;
+    window.WHATSAPP_CONFIG = WHATSAPP_CONFIG;
+    window.WHATSAPP_TEMPLATES = WHATSAPP_TEMPLATES;
+    window.sanitizePhoneNumber = sanitizePhoneNumber;
+    window.resolveWhatsAppMessage = resolveWhatsAppMessage;
+    window.generateWhatsAppUrl = generateWhatsAppUrl;
+    window.handleWhatsAppInquiry = handleWhatsAppInquiry;
   }
 
   if (typeof module !== 'undefined' && module.exports) {
@@ -598,7 +700,13 @@
       filterPortfolio,
       openModal,
       closeModal,
-      state
+      state,
+      WHATSAPP_CONFIG,
+      WHATSAPP_TEMPLATES,
+      sanitizePhoneNumber,
+      resolveWhatsAppMessage,
+      generateWhatsAppUrl,
+      handleWhatsAppInquiry
     };
   }
 })();

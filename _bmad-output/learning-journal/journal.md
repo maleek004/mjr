@@ -183,6 +183,53 @@
    - Managing focus protection on hidden DOM elements (`aria-hidden="true"` and child `tabindex="-1"`) ensures keyboard navigation is never trapped in invisible elements.
    - Smooth opacity transitions and `@media (prefers-reduced-motion: reduce)` defense.
 
+### Story 3.3: Accessible Lightbox Modal with Keyboard Focus Management
+* **Date**: 2026-09-27
+* **Files Implemented**: `index.html`, `styles.css`, `app.js`
+* **Test Suite**: `_bmad-output/test-artifacts/story-3.3.test.mjs` (4/4 suites passed, 20 total assertions)
+* **Flashcards**: `_bmad-output/learning-journal/flashcards/story-3.3.tsv` (25 cards)
+
+#### Core Concepts Mastered:
+1. **WAI-ARIA 1.2 Dialog Pattern & Assistive Tree Semantics**:
+   - Implemented `#portfolio-modal` with `role="dialog"`, `aria-modal="true"`, `aria-labelledby="modal-title"`, and `aria-describedby="modal-desc"`.
+   - Programmatically mapped the dialog name and description to DOM nodes, informing screen readers of modal boundaries and inert background content.
+
+2. **Focus Management Lifecycle & Focus Trapping Algorithms**:
+   - **Focus Caching**: Captured `lastFocusedElement = document.activeElement` before modal activation to enable clean return navigation.
+   - **Focus Wrapping**: Constrained `Tab` (first \(\rightarrow\) last wrap) and `Shift+Tab` (last \(\rightarrow\) first wrap) strictly within interactive modal children (`button`, `[href]`).
+   - **Visibility Filtering**: Used `(el.offsetParent !== null || el.offsetWidth > 0 || el.offsetHeight > 0)` to reliably ignore unrendered DOM elements.
+   - **Out-of-Bounds Recovery**: Added `if (!modal.contains(document.activeElement))` guard to re-constrain rogue focus states.
+   - **Focus Restoration**: Returned keyboard focus back to the initiating trigger button (`lastFocusedElement.focus()`) on dismissal.
+
+3. **Background Scroll-Locking & Layout Stability (CLS = 0)**:
+   - Locked background document viewport with `body.modal-open { overflow: hidden; touch-action: none; }`.
+   - Added `html { scrollbar-gutter: stable; }` to prevent jarring horizontal layout reflow when scrollbars are toggled.
+   - Used `overscroll-behavior: contain` on `.modal-scroll-wrap` to prevent scroll chaining into the underlying document.
+
+4. **GPU Compositing & Reduced-Motion Ergonomics**:
+   - Engineered backdrop frosted-glass effect with `backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);`.
+   - Designed keyframe entrance animation (`@keyframes modalScaleIn`) utilizing compositor-only properties (`opacity` and `transform`) to avoid paint/reflow cycles.
+   - Enforced `@media (prefers-reduced-motion: reduce)` to disable animations for motion-sensitive users.
+
+### Story 4.1: Centralized WhatsApp URL Generator & Context Engine
+* **Date**: 2026-09-27
+* **Files Implemented**: `app.js`, `index.html`, `styles.css`
+* **Test Suite**: `_bmad-output/test-artifacts/story-4.1.test.mjs` (7/7 tests passed)
+
+#### Core Concepts Mastered:
+1. **RFC 3986 URI Percent-Encoding & Parameter Construction**:
+   - Used `encodeURIComponent()` to safely convert Unicode text, whitespace, punctuation, and emoji into standard ASCII percent-encoded octets.
+   - Built a deterministic deep-link constructor targeting `https://wa.me/2348106246748?text=...`.
+2. **Context-Aware Conversational Routing & Template Interpolation**:
+   - Implemented `WHATSAPP_CONFIG` and `WHATSAPP_TEMPLATES` dictionary mapping section contexts (`hero`, `header-nav`, `brand-identity`, `marketing-ads`, `print-production`, `custom-apparel`, `modal`, `footer`) to tailored sales openers.
+   - Dynamic interpolation of `{projectTitle}` for modal case studies with fallback safety.
+3. **Event Delegation Action Dispatching**:
+   - Routed `data-action="whatsapp-inquire"` dynamically through the centralized `document.body` click listener.
+4. **Tabnabbing Security & External Anchor Hardening**:
+   - Enforced `target="_blank"` and `rel="noopener noreferrer"` across all conversion triggers to isolate the `window.opener` context.
+
+
+
 
 
 
