@@ -477,6 +477,71 @@
     </div>
   </footer>
 
+  <!-- Accessible Case Study Lightbox Modal Landmark -->
+  <div id="portfolio-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-describedby="modal-desc" hidden>
+    <div class="modal-backdrop" data-action="close-modal" tabindex="-1"></div>
+    
+    <div class="modal-container">
+      <!-- Modal Close Button -->
+      <button type="button" 
+              class="modal-close-btn" 
+              data-action="close-modal" 
+              aria-label="Close case study details">
+        &times;
+      </button>
+
+      <div class="modal-scroll-wrap">
+        <!-- Modal Visual Header -->
+        <div class="modal-media-wrap">
+          <div id="modal-media-placeholder" class="modal-media-placeholder">
+            <div class="modal-media-badge" aria-hidden="true">
+              <span id="modal-media-monogram" class="modal-monogram">MJ</span>
+            </div>
+            <span class="modal-media-watermark">MJr Case Study Showcase</span>
+          </div>
+          <span id="modal-category-badge" class="modal-category-badge">Brand Identity</span>
+        </div>
+
+        <!-- Modal Body Content -->
+        <div class="modal-content">
+          <div class="modal-header-meta">
+            <span id="modal-client-name" class="modal-client-name">Client Name</span>
+            <h2 id="modal-title" class="modal-title">Project Title</h2>
+          </div>
+
+          <p id="modal-desc" class="modal-description">
+            Project description and deliverable details.
+          </p>
+
+          <div class="modal-scope-section">
+            <h3 class="modal-section-heading">Delivered Scope &amp; Artifacts</h3>
+            <ul id="modal-scope-list" class="modal-scope-list" role="list" aria-label="Delivered Project Scope">
+              <!-- Populated dynamically by app.js -->
+            </ul>
+          </div>
+
+          <!-- Modal Action Footer -->
+          <div class="modal-actions">
+            <a id="modal-whatsapp-cta" 
+               href="https://wa.me/2348106246748" 
+               class="btn btn-primary btn-lg btn-block" 
+               target="_blank" 
+               rel="noopener noreferrer" 
+               data-action="whatsapp-inquire" 
+               data-context="Modal Case Study CTA">
+              Request a Similar Quote on WhatsApp
+            </a>
+            <button type="button" 
+                    class="btn btn-outline btn-block modal-dismiss-btn" 
+                    data-action="close-modal">
+              Back to Portfolio
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Application Script (ES6+) -->
   <script src="app.js" defer></script>
 </body>

@@ -1,0 +1,25 @@
+What are the three successive phases of the DOM Event Propagation lifecycle in modern browsers?	Capturing phase, Target phase, and Bubbling phase.
+In the DOM event lifecycle, which phase travels from the window/document downwards through ancestor nodes to the target element?	The Capturing phase (Trickling phase).
+In the DOM event lifecycle, which phase travels upwards from the event target through all ancestor nodes back up to the window/document?	The Bubbling phase.
+By default, does addEventListener('click', handler) register its handler for the capturing phase or the bubbling phase?	The bubbling phase (capture is false by default).
+How can you register an event listener to run during the capturing phase instead of the bubbling phase?	Pass { capture: true } or true as the third argument to addEventListener().
+What is the core architectural principle of Event Delegation in JavaScript?	Attaching a single event listener to a shared parent/root container to handle events triggered by any of its descendants via event bubbling.
+What modern DOM method searches up the ancestor chain from an element (including itself) to find the closest ancestor matching a CSS selector?	Element.prototype.closest() (e.g. event.target.closest('[data-action]')).
+If no matching ancestor is found when calling element.closest(selector), what value is returned?	null.
+Why does Event Delegation consume less browser memory than attaching individual event listeners to 100 separate button elements?	It allocates only 1 event listener object in memory instead of 100 separate listener function instances and binding references.
+How does Event Delegation eliminate stale listener bugs when DOM elements are dynamically inserted, filtered, or replaced?	Because the listener resides on the permanent root container, newly rendered children bubble events automatically without needing re-attached listeners.
+In an event handler, what is the difference between event.target and event.currentTarget?	event.target is the innermost element that initiated the event, while event.currentTarget is the element to which the event listener is currently attached.
+What JavaScript DOM API method prevents the browser's default action (such as following an anchor link or submitting a form) from executing?	event.preventDefault().
+What JavaScript DOM API method stops an event from bubbling further up the DOM hierarchy?	event.stopPropagation().
+In the WAI-ARIA Tabs pattern, what role must be applied to the container wrapping the selectable tab buttons?	role="tablist".
+In the WAI-ARIA Tabs pattern, what role must be applied to each individual filter button?	role="tab".
+What is the concept of 'Roving Tabindex' in accessible widget navigation?	Setting tabindex="0" on the currently active tab (making it focusable via Tab key) while setting tabindex="-1" on all inactive tabs (so Tab moves past the group).
+In WAI-ARIA tablist navigation, how should a keyboard user navigate between tabs within the tablist?	Using Arrow keys (ArrowRight / ArrowLeft / ArrowDown / ArrowUp) to move focus, while Tab exits the tablist to the next focusable widget.
+What ARIA attribute on a tab button points to the ID of the container element whose display it controls?	aria-controls="[target-element-id]" (e.g., aria-controls="portfolio-grid").
+Why should focusable child elements (buttons, links) inside hidden cards receive tabindex="-1" when filtered out?	To prevent keyboard users from tabbing into invisible, hidden elements and losing visible focus context.
+In the CSS rendering pipeline, why is animating transform and opacity computationally cheaper than animating height or top?	transform and opacity are handled directly on the GPU/Compositor thread without triggering expensive Layout (Reflow) or Paint recalculations.
+What happens to a CSS opacity transition if display: none is applied simultaneously on the same element?	The transition is bypassed immediately because display: none instantly removes the element from the browser rendering/layout tree.
+What CSS pseudo-class matches an element only when focused via keyboard or non-pointer navigation, preventing focus rings on mouse clicks?	:focus-visible.
+In JavaScript, what Set method provides an O(1) membership check to validate if a string exists in a whitelist?	Set.prototype.has() (e.g. VALID_CATEGORIES.has(slug)).
+What String method in JavaScript removes leading and trailing whitespace characters?	String.prototype.trim().
+In the context of Single-Page Application (SPA) architecture, what is 'Unidirectional State Flow'?	A pattern where state is stored as a single source of truth, user actions update that state, and the UI renders deterministically from the updated state.

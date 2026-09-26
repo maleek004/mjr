@@ -16,6 +16,9 @@
     isMobileNavOpen: false
   };
 
+  // Cached trigger element for focus restoration
+  let lastFocusedElement = null;
+
   /**
    * Root Event Delegation Handler
    */
@@ -27,6 +30,17 @@
       const action = actionEl.dataset.action;
 
       switch (action) {
+        case 'open-modal': {
+          event.preventDefault();
+          const projectId = actionEl.dataset.projectId;
+          openModal(projectId);
+          break;
+        }
+        case 'close-modal': {
+          event.preventDefault();
+          closeModal();
+          break;
+        }
         case 'filter-category': {
           event.preventDefault();
           const selectedCategory = actionEl.dataset.category || 'all';
@@ -98,11 +112,45 @@
   }
 
   /**
-   * Global Keyboard Event Handling (Escape Dismissal, Focus Trap & Tablist Navigation)
+   * Global Keyboard Event Handling (Modal Escape & Focus Trap, Tablist Navigation & Mobile Drawer)
    */
   if (typeof document !== 'undefined') {
     document.addEventListener('keydown', (event) => {
-      // 1. Tablist Arrow Navigation for Portfolio Filters
+      // 1. Modal Escape & Focus Trap Handling
+      if (state.activeModalId) {
+        const modal = document.getElementById('portfolio-modal');
+        if (modal) {
+          if (event.key === 'Escape') {
+            event.preventDefault();
+            closeModal();
+            return;
+          }
+
+          if (event.key === 'Tab') {
+            const focusables = Array.from(
+              modal.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])')
+            ).filter(el => !el.hasAttribute('disabled') && (el.offsetParent !== null || el.offsetWidth > 0 || el.offsetHeight > 0 || typeof el.focus === 'function'));
+
+            if (focusables.length > 0) {
+              const firstEl = focusables[0];
+              const lastEl = focusables[focusables.length - 1];
+
+              if (event.shiftKey && document.activeElement === firstEl) {
+                event.preventDefault();
+                lastEl.focus();
+                return;
+              } else if (!event.shiftKey && document.activeElement === lastEl) {
+                event.preventDefault();
+                firstEl.focus();
+                return;
+              }
+            }
+          }
+        }
+        return;
+      }
+
+      // 2. Tablist Arrow Navigation for Portfolio Filters
       const activeTab = document.activeElement;
       if (activeTab && activeTab.matches && activeTab.matches('.portfolio-filter-bar [role="tab"]')) {
         const tabs = Array.from(document.querySelectorAll('.portfolio-filter-bar [role="tab"]'));
@@ -135,7 +183,7 @@
         }
       }
 
-      // 2. Mobile Drawer Escape & Focus Trap
+      // 3. Mobile Drawer Escape & Focus Trap
       if (!state.isMobileNavOpen) return;
 
       if (event.key === 'Escape') {
@@ -415,6 +463,98 @@
   }
 
   /**
+   * Open Accessible Portfolio Case Study Lightbox Modal
+   * @param {string} projectId - Unique project identifier
+   */
+  function openModal(projectId) {
+    if (typeof projectId !== 'string' || !projectId.trim()) return;
+
+    const project = PORTFOLIO_DATA.find(item => item.id === projectId.trim());
+    if (!project) {
+      if (typeof console !== 'undefined' && console.warn) {
+        console.warn(`[MJr Engine] Project with id "${projectId}" not found in PORTFOLIO_DATA.`);
+      }
+      return;
+    }
+
+    if (typeof document === 'undefined') return;
+
+    const modal = document.getElementById('portfolio-modal');
+    if (!modal) return;
+
+    // Cache current focused element to restore upon modal close
+    lastFocusedElement = document.activeElement;
+    state.activeModalId = project.id;
+
+    // 1. Populate Modal Content
+    const titleEl = document.getElementById('modal-title');
+    const clientEl = document.getElementById('modal-client-name');
+    const descEl = document.getElementById('modal-desc');
+    const catBadgeEl = document.getElementById('modal-category-badge');
+    const monogramEl = document.getElementById('modal-media-monogram');
+    const placeholderEl = document.getElementById('modal-media-placeholder');
+    const scopeListEl = document.getElementById('modal-scope-list');
+    const ctaBtn = document.getElementById('modal-whatsapp-cta');
+
+    if (titleEl) titleEl.textContent = project.title;
+    if (clientEl) clientEl.textContent = project.client || project.title;
+    if (descEl) descEl.textContent = project.description;
+    if (catBadgeEl) catBadgeEl.textContent = project.categoryLabel;
+    if (monogramEl) monogramEl.textContent = project.title.substring(0, 2).toUpperCase();
+    if (placeholderEl && placeholderEl.style) {
+      placeholderEl.style.setProperty('--modal-accent', project.accentColor || '#FF6B00');
+    }
+
+    if (scopeListEl) {
+      scopeListEl.innerHTML = (Array.isArray(project.scope) ? project.scope : [])
+        .map(tag => `<li class="modal-scope-chip">#${escapeHtml(String(tag))}</li>`)
+        .join('');
+    }
+
+    if (ctaBtn) {
+      const waText = encodeURIComponent(`Hello MJr Designs, I saw your ${project.title} case study and would like to discuss a similar project.`);
+      ctaBtn.href = `https://wa.me/2348106246748?text=${waText}`;
+      ctaBtn.dataset.context = project.whatsappContext || `${project.title} Modal Case Study`;
+    }
+
+    // 2. Display Modal & Lock Body Scroll
+    modal.removeAttribute('hidden');
+    if (document.body && document.body.classList) {
+      document.body.classList.add('modal-open');
+    }
+
+    // 3. Move initial focus into Modal for Accessibility
+    const focusTarget = modal.querySelector('.modal-close-btn') || modal.querySelector('button, [href]');
+    if (focusTarget && typeof focusTarget.focus === 'function') {
+      focusTarget.focus();
+    }
+  }
+
+  /**
+   * Close Case Study Lightbox Modal & Restore State
+   */
+  function closeModal() {
+    if (!state.activeModalId) return;
+
+    if (typeof document === 'undefined') return;
+
+    const modal = document.getElementById('portfolio-modal');
+    if (!modal) return;
+
+    state.activeModalId = null;
+    modal.setAttribute('hidden', '');
+    if (document.body && document.body.classList) {
+      document.body.classList.remove('modal-open');
+    }
+
+    // Restore keyboard focus to originating element
+    if (lastFocusedElement && typeof lastFocusedElement.focus === 'function') {
+      lastFocusedElement.focus();
+      lastFocusedElement = null;
+    }
+  }
+
+  /**
    * Initialize Application on DOM Ready
    */
   if (typeof document !== 'undefined') {
@@ -430,6 +570,8 @@
     window.escapeHtml = escapeHtml;
     window.createPortfolioCardMarkup = createPortfolioCardMarkup;
     window.filterPortfolio = filterPortfolio;
+    window.openModal = openModal;
+    window.closeModal = closeModal;
     window.state = state;
   }
 
@@ -440,6 +582,8 @@
       escapeHtml,
       createPortfolioCardMarkup,
       filterPortfolio,
+      openModal,
+      closeModal,
       state
     };
   }
