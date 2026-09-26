@@ -19,26 +19,28 @@
   /**
    * Root Event Delegation Handler
    */
-  document.addEventListener('click', (event) => {
-    const actionEl = event.target.closest('[data-action]');
-    if (!actionEl) return;
+  if (typeof document !== 'undefined') {
+    document.addEventListener('click', (event) => {
+      const actionEl = event.target.closest('[data-action]');
+      if (!actionEl) return;
 
-    const action = actionEl.dataset.action;
+      const action = actionEl.dataset.action;
 
-    switch (action) {
-      case 'toggle-mobile-nav': {
-        event.preventDefault();
-        toggleMobileNav();
-        break;
+      switch (action) {
+        case 'toggle-mobile-nav': {
+          event.preventDefault();
+          toggleMobileNav();
+          break;
+        }
+        case 'close-mobile-nav': {
+          closeMobileNav();
+          break;
+        }
+        default:
+          break;
       }
-      case 'close-mobile-nav': {
-        closeMobileNav();
-        break;
-      }
-      default:
-        break;
-    }
-  });
+    });
+  }
 
   /**
    * Open Mobile Navigation Drawer
@@ -92,46 +94,50 @@
   /**
    * Global Keyboard Event Handling (Escape Dismissal & Focus Trap)
    */
-  document.addEventListener('keydown', (event) => {
-    if (!state.isMobileNavOpen) return;
+  if (typeof document !== 'undefined') {
+    document.addEventListener('keydown', (event) => {
+      if (!state.isMobileNavOpen) return;
 
-    if (event.key === 'Escape') {
-      event.preventDefault();
-      closeMobileNav();
-      return;
-    }
-
-    if (event.key === 'Tab') {
-      const mobileDrawer = document.getElementById('mobile-nav');
-      if (!mobileDrawer) return;
-
-      const focusables = Array.from(
-        mobileDrawer.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])')
-      ).filter(el => !el.hasAttribute('disabled') && el.offsetParent !== null);
-
-      if (focusables.length === 0) return;
-
-      const firstEl = focusables[0];
-      const lastEl = focusables[focusables.length - 1];
-
-      if (event.shiftKey && document.activeElement === firstEl) {
+      if (event.key === 'Escape') {
         event.preventDefault();
-        lastEl.focus();
-      } else if (!event.shiftKey && document.activeElement === lastEl) {
-        event.preventDefault();
-        firstEl.focus();
+        closeMobileNav();
+        return;
       }
-    }
-  });
+
+      if (event.key === 'Tab') {
+        const mobileDrawer = document.getElementById('mobile-nav');
+        if (!mobileDrawer) return;
+
+        const focusables = Array.from(
+          mobileDrawer.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])')
+        ).filter(el => !el.hasAttribute('disabled') && el.offsetParent !== null);
+
+        if (focusables.length === 0) return;
+
+        const firstEl = focusables[0];
+        const lastEl = focusables[focusables.length - 1];
+
+        if (event.shiftKey && document.activeElement === firstEl) {
+          event.preventDefault();
+          lastEl.focus();
+        } else if (!event.shiftKey && document.activeElement === lastEl) {
+          event.preventDefault();
+          firstEl.focus();
+        }
+      }
+    });
+  }
 
   /**
    * Viewport Resize Listener - Auto-close mobile drawer on desktop transition
    */
-  window.addEventListener('resize', () => {
-    if (window.innerWidth >= 768 && state.isMobileNavOpen) {
-      closeMobileNav();
-    }
-  });
+  if (typeof window !== 'undefined') {
+    window.addEventListener('resize', () => {
+      if (window.innerWidth >= 768 && state.isMobileNavOpen) {
+        closeMobileNav();
+      }
+    });
+  }
 
   /**
    * Immutable Portfolio Data Model
@@ -146,7 +152,7 @@
       categoryLabel: "Brand Identity & Corporate Design",
       thumbnail: "assets/images/portfolio/cyma-preview.jpg",
       fullImage: "assets/images/portfolio/cyma-full.jpg",
-      scope: ["Logo System", "Brand Identity", "Hard Hats & Safety Vests", "Corporate Stationery", "Vehicle Fleet Graphics"],
+      scope: Object.freeze(["Logo System", "Brand Identity", "Hard Hats & Safety Vests", "Corporate Stationery", "Vehicle Fleet Graphics"]),
       description: "Complete corporate identity system and industrial safety gear branding for a high-profile real estate development firm in Lagos.",
       accentColor: "#FF6B00",
       whatsappContext: "CYMA Homes Corporate Branding"
@@ -159,7 +165,7 @@
       categoryLabel: "Custom Apparel & Merch",
       thumbnail: "assets/images/portfolio/apparel-preview.jpg",
       fullImage: "assets/images/portfolio/apparel-full.jpg",
-      scope: ["Heavyweight Cotton Tees", "Embroidery & Screenprint", "Trucker Caps", "Tote Bags", "Woven Neck Labels"],
+      scope: Object.freeze(["Heavyweight Cotton Tees", "Embroidery & Screenprint", "Trucker Caps", "Tote Bags", "Woven Neck Labels"]),
       description: "High-volume custom t-shirt and lifestyle apparel production featuring precision screen printing, heat press, and bespoke brand packaging.",
       accentColor: "#1A1A1A",
       whatsappContext: "Custom Shirt & Apparel Printing"
@@ -172,7 +178,7 @@
       categoryLabel: "Packaging & Brand Identity",
       thumbnail: "assets/images/portfolio/glazing-preview.jpg",
       fullImage: "assets/images/portfolio/glazing-full.jpg",
-      scope: ["Logo Refresh", "Yoghurt Bottle Labels", "Food Packaging", "Takeaway Bags", "Marketing Flyers"],
+      scope: Object.freeze(["Logo Refresh", "Yoghurt Bottle Labels", "Food Packaging", "Takeaway Bags", "Marketing Flyers"]),
       description: "Vibrant brand identity, custom product bottle labels, and food packaging suites engineered for fast-moving retail consumer appeal.",
       accentColor: "#E05A00",
       whatsappContext: "Glazing Memoirs Product Packaging"
@@ -185,7 +191,7 @@
       categoryLabel: "Publications & Editorial",
       thumbnail: "assets/images/portfolio/tolw-preview.jpg",
       fullImage: "assets/images/portfolio/tolw-full.jpg",
-      scope: ["5th Edition Magazine", "Editorial Layout", "Event Program Compendium", "VIP Badges", "Outdoor Signage"],
+      scope: Object.freeze(["5th Edition Magazine", "Editorial Layout", "Event Program Compendium", "VIP Badges", "Outdoor Signage"]),
       description: "High-volume editorial magazine and event publication production with luxury spot UV finishing, perfect binding, and color fidelity.",
       accentColor: "#006699",
       whatsappContext: "Tour of Lagos Waterways Publications"
@@ -198,7 +204,7 @@
       categoryLabel: "Marketing & Billboards",
       thumbnail: "assets/images/portfolio/skillforge-preview.jpg",
       fullImage: "assets/images/portfolio/skillforge-full.jpg",
-      scope: ["Highway Billboard Creative", "Digital Campaign Ads", "Roll-Up Banners", "Course Catalogs"],
+      scope: Object.freeze(["Highway Billboard Creative", "Digital Campaign Ads", "Roll-Up Banners", "Course Catalogs"]),
       description: "High-visibility outdoor billboard campaigns and multi-channel marketing collateral designed to maximize student enrollment conversions.",
       accentColor: "#2E5BFF",
       whatsappContext: "SkillForge Large Format Billboard"
@@ -211,12 +217,12 @@
       categoryLabel: "Civic & Editorial Branding",
       thumbnail: "assets/images/portfolio/oab-preview.jpg",
       fullImage: "assets/images/portfolio/oab-full.jpg",
-      scope: ["Brand Identity Guidelines", "Annual Report Compendium", "Custom Event Shirts", "Souvenir Gift Sets"],
+      scope: Object.freeze(["Brand Identity Guidelines", "Annual Report Compendium", "Custom Event Shirts", "Souvenir Gift Sets"]),
       description: "Comprehensive institutional branding, annual report editorial printing, and custom-branded souvenirs for high-impact civic empowerment programs.",
       accentColor: "#00875A",
       whatsappContext: "OAB Foundation Civic Branding"
     }
-  ]);
+  ].map(Object.freeze));
 
   /**
    * Utility helper to safely escape string content before HTML injection
@@ -239,28 +245,38 @@
    * @returns {string} HTML markup string
    */
   function createPortfolioCardMarkup(project) {
-    const scopeTagsMarkup = (project.scope || [])
-      .map(tag => `<li class="portfolio-tag">#${escapeHtml(tag)}</li>`)
+    if (!project || typeof project !== 'object') return '';
+
+    const title = typeof project.title === 'string' ? project.title : '';
+    const id = typeof project.id === 'string' ? project.id : '';
+    const category = typeof project.category === 'string' ? project.category : '';
+    const categoryLabel = typeof project.categoryLabel === 'string' ? project.categoryLabel : '';
+    const description = typeof project.description === 'string' ? project.description : '';
+    const accentColor = typeof project.accentColor === 'string' ? project.accentColor : '#FF6B00';
+    const whatsappContext = typeof project.whatsappContext === 'string' ? project.whatsappContext : '';
+
+    const scopeTagsMarkup = (Array.isArray(project.scope) ? project.scope : [])
+      .map(tag => `<li class="portfolio-tag">#${escapeHtml(String(tag))}</li>`)
       .join('');
 
-    const monogram = escapeHtml(project.title.substring(0, 2).toUpperCase());
-    const waUrl = `https://wa.me/2348106246748?text=${encodeURIComponent('Hello MJr Designs, I saw your ' + project.title + ' case study and would like to discuss a similar project.')}`;
+    const monogram = escapeHtml(title.substring(0, 2).toUpperCase());
+    const waUrl = `https://wa.me/2348106246748?text=${encodeURIComponent('Hello MJr Designs, I saw your ' + title + ' case study and would like to discuss a similar project.')}`;
 
     return `
-      <article class="portfolio-card" data-project-id="${escapeHtml(project.id)}" data-category="${escapeHtml(project.category)}">
+      <article class="portfolio-card" data-project-id="${escapeHtml(id)}" data-category="${escapeHtml(category)}">
         <div class="portfolio-media-wrap">
-          <div class="portfolio-media-placeholder" style="--card-accent: ${escapeHtml(project.accentColor)};">
+          <div class="portfolio-media-placeholder" style="--card-accent: ${escapeHtml(accentColor)};">
             <div class="media-badge-icon" aria-hidden="true">
               <span class="media-monogram">${monogram}</span>
             </div>
             <span class="media-watermark">MJr Case Study</span>
           </div>
-          <span class="portfolio-category-badge">${escapeHtml(project.categoryLabel)}</span>
+          <span class="portfolio-category-badge">${escapeHtml(categoryLabel)}</span>
         </div>
 
         <div class="portfolio-card-body">
-          <h3 class="portfolio-card-title">${escapeHtml(project.title)}</h3>
-          <p class="portfolio-card-desc">${escapeHtml(project.description)}</p>
+          <h3 class="portfolio-card-title">${escapeHtml(title)}</h3>
+          <p class="portfolio-card-desc">${escapeHtml(description)}</p>
           <ul class="portfolio-tag-list" role="list" aria-label="Project Scope">
             ${scopeTagsMarkup}
           </ul>
@@ -270,8 +286,8 @@
           <button type="button" 
                   class="btn btn-primary btn-sm btn-block" 
                   data-action="open-modal" 
-                  data-project-id="${escapeHtml(project.id)}"
-                  aria-label="Inspect ${escapeHtml(project.title)} Case Study">
+                  data-project-id="${escapeHtml(id)}"
+                  aria-label="Inspect ${escapeHtml(title)} Case Study">
             Inspect Case Study
           </button>
           <a href="${waUrl}"
@@ -279,8 +295,8 @@
              target="_blank"
              rel="noopener noreferrer"
              data-action="whatsapp-inquire"
-             data-context="${escapeHtml(project.whatsappContext)}"
-             aria-label="Inquire on WhatsApp about ${escapeHtml(project.title)}">
+             data-context="${escapeHtml(whatsappContext)}"
+             aria-label="Inquire on WhatsApp about ${escapeHtml(title)}">
             Inquire Similar
           </a>
         </div>
@@ -295,21 +311,36 @@
   function renderPortfolioCards(items) {
     const grid = document.getElementById('portfolio-grid');
     if (!grid) return;
+    if (!Array.isArray(items)) {
+      grid.innerHTML = '<p class="portfolio-empty-note">No case studies available.</p>';
+      return;
+    }
     grid.innerHTML = items.map(createPortfolioCardMarkup).join('');
   }
 
   /**
    * Initialize Application on DOM Ready
    */
-  document.addEventListener('DOMContentLoaded', () => {
-    renderPortfolioCards(PORTFOLIO_DATA);
-  });
+  if (typeof document !== 'undefined') {
+    document.addEventListener('DOMContentLoaded', () => {
+      renderPortfolioCards(PORTFOLIO_DATA);
+    });
+  }
 
-  // Expose to window for testing / inspection if in browser
+  // Expose for browser runtime & Node testing environments
   if (typeof window !== 'undefined') {
     window.PORTFOLIO_DATA = PORTFOLIO_DATA;
     window.renderPortfolioCards = renderPortfolioCards;
     window.escapeHtml = escapeHtml;
     window.createPortfolioCardMarkup = createPortfolioCardMarkup;
+  }
+
+  if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+      PORTFOLIO_DATA,
+      renderPortfolioCards,
+      escapeHtml,
+      createPortfolioCardMarkup
+    };
   }
 })();

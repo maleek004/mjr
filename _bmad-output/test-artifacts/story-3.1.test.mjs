@@ -2,6 +2,10 @@ import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
+import { createRequire } from 'node:module';
+
+const require = createRequire(import.meta.url);
+const appModule = require('../../app.js');
 
 describe('Story 3.1: JavaScript Portfolio Data Modeling & Card Grid Layout', () => {
   const htmlPath = path.resolve('index.html');
@@ -31,9 +35,11 @@ describe('Story 3.1: JavaScript Portfolio Data Modeling & Card Grid Layout', () 
     assert.match(htmlContent, /<div[^>]*class="[^"]*portfolio-grid[^"]*"[^>]*id="portfolio-grid"/, 'Must contain #portfolio-grid container');
   });
 
-  test('AC-2: JavaScript PORTFOLIO_DATA Model & Immutability (TC-311)', () => {
-    // Verify PORTFOLIO_DATA definition & Object.freeze
-    assert.match(jsContent, /const\s+PORTFOLIO_DATA\s*=\s*Object\.freeze\(\[/, 'PORTFOLIO_DATA must be defined with Object.freeze()');
+  test('AC-2: JavaScript PORTFOLIO_DATA Model & Deep Immutability (TC-311)', () => {
+    const { PORTFOLIO_DATA } = appModule;
+    assert.ok(Array.isArray(PORTFOLIO_DATA), 'PORTFOLIO_DATA must be an array');
+    assert.equal(PORTFOLIO_DATA.length, 6, 'PORTFOLIO_DATA must contain exactly 6 case studies');
+    assert.ok(Object.isFrozen(PORTFOLIO_DATA), 'PORTFOLIO_DATA array must be frozen');
 
     // Verify 6 authentic case studies exist in data model
     const expectedProjectIds = [
@@ -46,34 +52,41 @@ describe('Story 3.1: JavaScript Portfolio Data Modeling & Card Grid Layout', () 
     ];
 
     expectedProjectIds.forEach((id) => {
-      assert.match(jsContent, new RegExp(`id:\\s*["']${id}["']`), `PORTFOLIO_DATA must include project id '${id}'`);
+      const project = PORTFOLIO_DATA.find(p => p.id === id);
+      assert.ok(project, `PORTFOLIO_DATA must include project id '${id}'`);
+      assert.ok(Object.isFrozen(project), `Project '${id}' must be deeply frozen`);
+      assert.ok(Object.isFrozen(project.scope), `Project '${id}'.scope must be frozen`);
+      assert.ok(typeof project.title === 'string' && project.title.length > 0, `Project '${id}' must have valid title`);
+      assert.ok(Array.isArray(project.scope) && project.scope.length > 0, `Project '${id}' must have valid scope tags`);
+      assert.ok(typeof project.whatsappContext === 'string' && project.whatsappContext.length > 0, `Project '${id}' must have whatsappContext`);
     });
-
-    // Verify required schema keys are present
-    assert.match(jsContent, /category:\s*["']branding["']/, 'Must contain branding category');
-    assert.match(jsContent, /category:\s*["']apparel["']/, 'Must contain apparel category');
-    assert.match(jsContent, /category:\s*["']publications["']/, 'Must contain publications category');
-    assert.match(jsContent, /category:\s*["']marketing["']/, 'Must contain marketing category');
-    assert.match(jsContent, /scope:\s*\[/, 'Must contain scope array');
-    assert.match(jsContent, /whatsappContext:\s*["']/, 'Must contain whatsappContext identifier');
   });
 
-  test('AC-3: Dynamic DOM Rendering Engine & XSS Sanitization (TC-312, TC-315, TC-316)', () => {
-    // Verify escapeHtml utility
-    assert.match(jsContent, /function\s+escapeHtml\s*\(/, 'Must define escapeHtml() function');
-    assert.match(jsContent, /replace\(\/&\/g,\s*['"]&amp;['"]\)/, 'escapeHtml must sanitize & ampersands');
-    assert.match(jsContent, /replace\(\/<\//, 'escapeHtml must sanitize < brackets');
-    assert.match(jsContent, /replace\(\/>\//, 'escapeHtml must sanitize > brackets');
+  test('AC-3: Dynamic DOM Rendering Engine, Markup Generation & XSS Sanitization (TC-312, TC-315, TC-316)', () => {
+    const { escapeHtml, createPortfolioCardMarkup, PORTFOLIO_DATA } = appModule;
 
-    // Verify createPortfolioCardMarkup template generator
-    assert.match(jsContent, /function\s+createPortfolioCardMarkup\s*\(/, 'Must define createPortfolioCardMarkup() function');
-    assert.match(jsContent, /data-action=["']open-modal["']/, 'Card markup must include data-action="open-modal"');
-    assert.match(jsContent, /data-project-id=/, 'Card markup must bind data-project-id');
-    assert.match(jsContent, /data-action=["']whatsapp-inquire["']/, 'Card markup must include data-action="whatsapp-inquire"');
+    // Direct runtime unit test for escapeHtml
+    assert.equal(escapeHtml('<script>alert("xss") & \'test\'</script>'), '&lt;script&gt;alert(&quot;xss&quot;) &amp; &#039;test&#039;&lt;/script&gt;');
+    assert.equal(escapeHtml(null), '');
+    assert.equal(escapeHtml(undefined), '');
 
-    // Verify renderPortfolioCards function and DOMContentLoaded hook
-    assert.match(jsContent, /function\s+renderPortfolioCards\s*\(/, 'Must define renderPortfolioCards() function');
-    assert.match(jsContent, /document\.addEventListener\(['"]DOMContentLoaded['"],\s*\(\)\s*=>\s*\{[\s\S]*?renderPortfolioCards\(PORTFOLIO_DATA\);/s, 'Must call renderPortfolioCards on DOMContentLoaded');
+    // Direct runtime unit test for createPortfolioCardMarkup
+    const sampleProject = PORTFOLIO_DATA[0];
+    const markup = createPortfolioCardMarkup(sampleProject);
+
+    assert.ok(markup.includes(`data-project-id="${sampleProject.id}"`), 'Card markup must include data-project-id');
+    assert.ok(markup.includes(`data-category="${sampleProject.category}"`), 'Card markup must include data-category');
+    assert.ok(markup.includes(`data-action="open-modal"`), 'Card markup must include data-action="open-modal"');
+    assert.ok(markup.includes(`data-action="whatsapp-inquire"`), 'Card markup must include data-action="whatsapp-inquire"');
+    assert.ok(markup.includes(sampleProject.title), 'Card markup must contain project title');
+
+    sampleProject.scope.forEach(tag => {
+      assert.ok(markup.includes(`#${escapeHtml(tag)}`), `Card markup must include #${tag} chip`);
+    });
+
+    // Defensive handling of malformed input
+    assert.equal(createPortfolioCardMarkup(null), '');
+    assert.equal(createPortfolioCardMarkup(undefined), '');
   });
 
   test('AC-4: Responsive 2D CSS Grid & Micro-Interaction Styling (TC-313, TC-314, TC-317)', () => {
@@ -88,7 +101,11 @@ describe('Story 3.1: JavaScript Portfolio Data Modeling & Card Grid Layout', () 
     assert.match(cssContent, /hover: hover[\s\S]*?\.portfolio-card:hover\s*\{[\s\S]*?transform:\s*translateY\(-6px\);/s, '.portfolio-card:hover must elevate with translateY(-6px)');
     assert.match(cssContent, /\.portfolio-card:hover\s*\.portfolio-media-placeholder\s*\{[\s\S]*?transform:\s*scale\(1\.03\);/s, 'Media placeholder must scale slightly on card hover');
 
-    // Focus indicators & button styles
+    // Focus indicators & button touch target standards
+    assert.match(cssContent, /\.filter-btn\s*\{[\s\S]*?min-height:\s*48px;/, 'Filter buttons must satisfy 48px touch target standard');
     assert.match(cssContent, /\.filter-btn:focus-visible\s*\{[\s\S]*?outline:\s*3px\s+solid\s+var\(--color-primary\);/, 'Filter buttons must have 3px outline on focus-visible');
+
+    // Reduced motion support
+    assert.match(cssContent, /prefers-reduced-motion:\s*reduce[\s\S]*?\.portfolio-card[\s\S]*?transition:\s*none/s, 'prefers-reduced-motion must disable transitions on .portfolio-card');
   });
 });

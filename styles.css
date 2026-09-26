@@ -821,7 +821,7 @@ ul, ol {
   padding: var(--space-sm) var(--space-lg);
   border-radius: var(--radius-full);
   cursor: pointer;
-  min-height: 44px;
+  min-height: 48px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -924,7 +924,7 @@ ul, ol {
 
 .media-watermark {
   font-size: var(--font-size-xs);
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 0.75);
   font-weight: var(--font-weight-medium);
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -1331,11 +1331,19 @@ ul, ol {
   .client-badge,
   .client-monogram,
   .footer-contact-link,
-  .footer-nav-link {
+  .footer-nav-link,
+  .portfolio-card,
+  .portfolio-media-placeholder,
+  .filter-btn {
     transition: none !important;
   }
   
-  .client-card:hover {
+  .client-card:hover,
+  .portfolio-card:hover {
+    transform: none !important;
+  }
+
+  .portfolio-card:hover .portfolio-media-placeholder {
     transform: none !important;
   }
 }
