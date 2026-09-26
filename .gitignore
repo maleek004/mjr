@@ -17,3 +17,6 @@ _bmad/custom/*.user.toml
 # Node / Package Manager (if ever used)
 node_modules/
 package-lock.json
+
+# Agent Scratch & Temp Directories
+.gemini/
