@@ -1,0 +1,25 @@
+What CSS filter function converts visual element colors to monochrome shades?	filter: grayscale(percentage) (e.g. filter: grayscale(100%)).
+What CSS filter function controls element transparency alongside or independent of opacity property?	filter: opacity(percentage) (e.g. filter: opacity(0.75)).
+Why does CSS filter execute on the GPU Compositing layer rather than triggering Layout/Reflow?	Filter functions operate as pixel shader post-processing passes during the paint/composite stage without altering geometric dimensions.
+What media query detects if the primary pointer device supports true hovering (like a mouse)?	@media (hover: hover) and (pointer: fine)
+What problem occurs on touchscreen devices when hover micro-interactions are not guarded by fine pointer media queries?	Tapping an element triggers sticky hover states where hover pseudo-classes remain permanently active until tapping elsewhere.
+What media query explicitly matches touchscreens, styluses, and mobile devices without cursor hover?	@media (hover: none), (pointer: coarse)
+What HTML5 semantic element is specifically designed to contain contact information for an author or corporate entity?	The <address> element.
+What is the default typographical style applied by browsers to the <address> element?	font-style: italic (reset in modern CSS with font-style: normal).
+Why should general physical locations or street addresses unrelated to contact channels not be wrapped in <address>?	The HTML5 specification restricts <address> specifically to contact information for the nearest <article> or <body> ancestor.
+What HTML5 attribute is required when multiple <nav> elements exist on the same page?	aria-label (e.g. aria-label="Footer Navigation") to distinguish landmark purpose for screen readers.
+What is the minimum recommended touch target size under WCAG 2.1/2.2 Success Criterion 2.5.5 / 2.5.8?	48px by 48px (or 24px minimum with 48px target spacing).
+What CSS technique guarantees an inline-flex link meets the 48px touch target standard without inflating text font size?	Setting min-height: 48px; display: inline-flex; align-items: center; on the anchor element.
+What CSS pseudo-class targets focus only when initiated via keyboard navigation or assistive technology?	:focus-visible (preventing unwanted focus rings on standard mouse clicks).
+What CSS property controls the distance between an outline border and the element's edge?	outline-offset (e.g. outline-offset: 3px).
+Why is outline-offset preferred over border or padding changes for focus indicators?	Outlines and outline offsets do not alter the CSS Box Model geometry and cause zero Layout/Reflow recalculations.
+What media query allows developers to honor user OS preferences for minimized animations and transitions?	@media (prefers-reduced-motion: reduce)
+What is the CSS rule to completely disable transitions across animated child elements under reduced motion?	transition: none !important;
+What CSS Grid column track expression creates responsive columns that wrap dynamically without hardcoded media queries?	grid-template-columns: repeat(auto-fit, minmax(min_width, 1fr));
+What is the key difference between auto-fit and auto-fill in CSS Grid when fewer items exist than available tracks?	auto-fit collapses empty tracks to 0px allowing existing items to stretch, whereas auto-fill preserves empty track slots.
+What attributes must always accompany target="_blank" on external hyperlinks for security and performance?	rel="noopener noreferrer" (prevents window.opener exploitation and process thread blocking).
+What accessibility attribute hides decorative vector SVGs from screen reader accessibility trees?	aria-hidden="true"
+Why should telephone numbers in web documents use the tel: URL scheme?	tel:+2348106246748 allows mobile operating systems and VoIP applications to initiate one-tap direct dialing.
+Why should email addresses in web documents use the mailto: URL scheme?	mailto:mjrgdesigns@gmail.com triggers the user's default OS email client with the recipient pre-populated.
+What is the minimum WCAG 2.1 AA contrast ratio required for standard body text against its background?	4.5:1 (or 3:1 for large text >= 24px or bold >= 18.66px).
+What computed contrast ratio is required for WCAG AAA enhanced compliance?	7:1 for normal text (or 4.5:1 for large text).

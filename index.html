@@ -242,10 +242,22 @@
         <div class="section-header">
           <p class="section-tag">Featured Works</p>
           <h2 id="portfolio-title" class="section-title">Proven Craftsmanship in Action</h2>
-          <p class="section-desc">Browse our validated case studies across identity systems, editorial publications, and custom apparel.</p>
+          <p class="section-desc">Browse our validated case studies across identity systems, editorial publications, marketing campaigns, and custom apparel.</p>
         </div>
-        <!-- Portfolio content populated in Epic 3 -->
-        <div class="portfolio-placeholder" id="portfolio-root"></div>
+
+        <!-- Filter Bar -->
+        <div class="portfolio-filter-bar" role="tablist" aria-label="Portfolio Category Filter">
+          <button type="button" class="filter-btn active" role="tab" aria-selected="true" data-action="filter-category" data-category="all">All Projects</button>
+          <button type="button" class="filter-btn" role="tab" aria-selected="false" data-action="filter-category" data-category="branding">Brand Identity</button>
+          <button type="button" class="filter-btn" role="tab" aria-selected="false" data-action="filter-category" data-category="publications">Publications &amp; Editorial</button>
+          <button type="button" class="filter-btn" role="tab" aria-selected="false" data-action="filter-category" data-category="marketing">Marketing &amp; Billboards</button>
+          <button type="button" class="filter-btn" role="tab" aria-selected="false" data-action="filter-category" data-category="apparel">Custom Apparel &amp; Merch</button>
+        </div>
+
+        <!-- Dynamic 2D Portfolio Grid Container -->
+        <div class="portfolio-grid" id="portfolio-grid">
+          <!-- Populated dynamically by app.js -->
+        </div>
       </div>
     </section>
 

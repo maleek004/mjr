@@ -134,9 +134,182 @@
   });
 
   /**
+   * Immutable Portfolio Data Model
+   * Single source of truth for all portfolio items, filtering, and modal dialogs.
+   */
+  const PORTFOLIO_DATA = Object.freeze([
+    {
+      id: "cyma-homes",
+      title: "CYMA HOMES Limited",
+      client: "CYMA HOMES Limited",
+      category: "branding",
+      categoryLabel: "Brand Identity & Corporate Design",
+      thumbnail: "assets/images/portfolio/cyma-preview.jpg",
+      fullImage: "assets/images/portfolio/cyma-full.jpg",
+      scope: ["Logo System", "Brand Identity", "Hard Hats & Safety Vests", "Corporate Stationery", "Vehicle Fleet Graphics"],
+      description: "Complete corporate identity system and industrial safety gear branding for a high-profile real estate development firm in Lagos.",
+      accentColor: "#FF6B00",
+      whatsappContext: "CYMA Homes Corporate Branding"
+    },
+    {
+      id: "streetwear-merch",
+      title: "Custom Branded Shirts & Streetwear",
+      client: "Streetwear & Corporate Apparel Clients",
+      category: "apparel",
+      categoryLabel: "Custom Apparel & Merch",
+      thumbnail: "assets/images/portfolio/apparel-preview.jpg",
+      fullImage: "assets/images/portfolio/apparel-full.jpg",
+      scope: ["Heavyweight Cotton Tees", "Embroidery & Screenprint", "Trucker Caps", "Tote Bags", "Woven Neck Labels"],
+      description: "High-volume custom t-shirt and lifestyle apparel production featuring precision screen printing, heat press, and bespoke brand packaging.",
+      accentColor: "#1A1A1A",
+      whatsappContext: "Custom Shirt & Apparel Printing"
+    },
+    {
+      id: "glazing-memoirs",
+      title: "Glazing Memoirs FMCG",
+      client: "Glazing Memoirs Food & Beverage",
+      category: "branding",
+      categoryLabel: "Packaging & Brand Identity",
+      thumbnail: "assets/images/portfolio/glazing-preview.jpg",
+      fullImage: "assets/images/portfolio/glazing-full.jpg",
+      scope: ["Logo Refresh", "Yoghurt Bottle Labels", "Food Packaging", "Takeaway Bags", "Marketing Flyers"],
+      description: "Vibrant brand identity, custom product bottle labels, and food packaging suites engineered for fast-moving retail consumer appeal.",
+      accentColor: "#E05A00",
+      whatsappContext: "Glazing Memoirs Product Packaging"
+    },
+    {
+      id: "tolw-brochure",
+      title: "Tour of Lagos Waterways (TOLW)",
+      client: "Tour of Lagos Waterways Initiative",
+      category: "publications",
+      categoryLabel: "Publications & Editorial",
+      thumbnail: "assets/images/portfolio/tolw-preview.jpg",
+      fullImage: "assets/images/portfolio/tolw-full.jpg",
+      scope: ["5th Edition Magazine", "Editorial Layout", "Event Program Compendium", "VIP Badges", "Outdoor Signage"],
+      description: "High-volume editorial magazine and event publication production with luxury spot UV finishing, perfect binding, and color fidelity.",
+      accentColor: "#006699",
+      whatsappContext: "Tour of Lagos Waterways Publications"
+    },
+    {
+      id: "skillforge-billboard",
+      title: "SkillForge ICT Academy",
+      client: "SkillForge Tech Institute",
+      category: "marketing",
+      categoryLabel: "Marketing & Billboards",
+      thumbnail: "assets/images/portfolio/skillforge-preview.jpg",
+      fullImage: "assets/images/portfolio/skillforge-full.jpg",
+      scope: ["Highway Billboard Creative", "Digital Campaign Ads", "Roll-Up Banners", "Course Catalogs"],
+      description: "High-visibility outdoor billboard campaigns and multi-channel marketing collateral designed to maximize student enrollment conversions.",
+      accentColor: "#2E5BFF",
+      whatsappContext: "SkillForge Large Format Billboard"
+    },
+    {
+      id: "oab-foundation",
+      title: "OAB Foundation Civic Outreach",
+      client: "OAB Philanthropic Foundation",
+      category: "branding",
+      categoryLabel: "Civic & Editorial Branding",
+      thumbnail: "assets/images/portfolio/oab-preview.jpg",
+      fullImage: "assets/images/portfolio/oab-full.jpg",
+      scope: ["Brand Identity Guidelines", "Annual Report Compendium", "Custom Event Shirts", "Souvenir Gift Sets"],
+      description: "Comprehensive institutional branding, annual report editorial printing, and custom-branded souvenirs for high-impact civic empowerment programs.",
+      accentColor: "#00875A",
+      whatsappContext: "OAB Foundation Civic Branding"
+    }
+  ]);
+
+  /**
+   * Utility helper to safely escape string content before HTML injection
+   * @param {string} str 
+   * @returns {string}
+   */
+  function escapeHtml(str) {
+    if (typeof str !== 'string') return '';
+    return str
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
+  /**
+   * Generate HTML string for an individual portfolio card
+   * @param {Object} project - Portfolio project data object
+   * @returns {string} HTML markup string
+   */
+  function createPortfolioCardMarkup(project) {
+    const scopeTagsMarkup = (project.scope || [])
+      .map(tag => `<li class="portfolio-tag">#${escapeHtml(tag)}</li>`)
+      .join('');
+
+    const monogram = escapeHtml(project.title.substring(0, 2).toUpperCase());
+    const waUrl = `https://wa.me/2348106246748?text=${encodeURIComponent('Hello MJr Designs, I saw your ' + project.title + ' case study and would like to discuss a similar project.')}`;
+
+    return `
+      <article class="portfolio-card" data-project-id="${escapeHtml(project.id)}" data-category="${escapeHtml(project.category)}">
+        <div class="portfolio-media-wrap">
+          <div class="portfolio-media-placeholder" style="--card-accent: ${escapeHtml(project.accentColor)};">
+            <div class="media-badge-icon" aria-hidden="true">
+              <span class="media-monogram">${monogram}</span>
+            </div>
+            <span class="media-watermark">MJr Case Study</span>
+          </div>
+          <span class="portfolio-category-badge">${escapeHtml(project.categoryLabel)}</span>
+        </div>
+
+        <div class="portfolio-card-body">
+          <h3 class="portfolio-card-title">${escapeHtml(project.title)}</h3>
+          <p class="portfolio-card-desc">${escapeHtml(project.description)}</p>
+          <ul class="portfolio-tag-list" role="list" aria-label="Project Scope">
+            ${scopeTagsMarkup}
+          </ul>
+        </div>
+
+        <div class="portfolio-card-footer">
+          <button type="button" 
+                  class="btn btn-primary btn-sm btn-block" 
+                  data-action="open-modal" 
+                  data-project-id="${escapeHtml(project.id)}"
+                  aria-label="Inspect ${escapeHtml(project.title)} Case Study">
+            Inspect Case Study
+          </button>
+          <a href="${waUrl}"
+             class="btn btn-outline btn-sm btn-block"
+             target="_blank"
+             rel="noopener noreferrer"
+             data-action="whatsapp-inquire"
+             data-context="${escapeHtml(project.whatsappContext)}"
+             aria-label="Inquire on WhatsApp about ${escapeHtml(project.title)}">
+            Inquire Similar
+          </a>
+        </div>
+      </article>
+    `;
+  }
+
+  /**
+   * Render portfolio cards into the grid container
+   * @param {Array} items 
+   */
+  function renderPortfolioCards(items) {
+    const grid = document.getElementById('portfolio-grid');
+    if (!grid) return;
+    grid.innerHTML = items.map(createPortfolioCardMarkup).join('');
+  }
+
+  /**
    * Initialize Application on DOM Ready
    */
   document.addEventListener('DOMContentLoaded', () => {
-    // Initialized
+    renderPortfolioCards(PORTFOLIO_DATA);
   });
+
+  // Expose to window for testing / inspection if in browser
+  if (typeof window !== 'undefined') {
+    window.PORTFOLIO_DATA = PORTFOLIO_DATA;
+    window.renderPortfolioCards = renderPortfolioCards;
+    window.escapeHtml = escapeHtml;
+    window.createPortfolioCardMarkup = createPortfolioCardMarkup;
+  }
 })();

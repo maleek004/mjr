@@ -108,4 +108,27 @@
 5. **Multi-Line Deliverable Typography Alignment**:
    - Setting `align-items: flex-start` with a subtle `margin-top: 2px` on custom `::before` pseudo-element checkmark badges prevents icons from floating to the vertical midpoint when deliverable text wraps onto multiple lines.
 
+### Story 2.2: Verified Client Trust Matrix & Semantic Footer
+* **Date**: 2026-09-26
+* **Files Implemented**: `index.html`, `styles.css`
+* **Flashcards**: `_bmad-output/learning-journal/flashcards/story-2.2.tsv` (25 cards)
+
+#### Core Concepts Mastered:
+1. **CSS Filter Post-Processing & GPU Compositing**:
+   - `filter: grayscale(100%) opacity(0.75)` applies pixel manipulation post-processing at the GPU compositing stage without altering DOM geometry or triggering reflow.
+   - Smoothly transitioning `filter` and `transform` on hover creates hardware-accelerated micro-interactions.
+   - Scoping hover effects to `@media (hover: hover) and (pointer: fine)` and providing fallback `@media (hover: none), (pointer: coarse) { filter: grayscale(0%) opacity(1); }` avoids sticky-hover artifacts on touch devices.
+
+2. **Semantic HTML5 Addressing & Footer Landmarks**:
+   - The `<address>` element is semantically dedicated to author/business contact channels (`tel:`, `mailto:`, `https://wa.me/...`) for its ancestor document, distinct from arbitrary physical addresses.
+   - Wrapping secondary navigation in `<nav aria-label="Footer Navigation">` provides dedicated landmark boundaries for assistive technology without colliding with the primary site header navigation.
+
+3. **Touch-Target Ergonomics (WCAG 2.1 AA \(\ge 48\text{px}\))**:
+   - Using `min-height: 48px; display: inline-flex; align-items: center;` guarantees touch targets meet accessibility standards on mobile viewports without forcing unnaturally large text font sizes.
+   - Custom focus indicators using `:focus-visible` and `outline-offset: 3px` create unmistakable high-contrast keyboard navigation rings without introducing box-model layout shifts.
+
+4. **Reduced-Motion Universal Defense (`prefers-reduced-motion`)**:
+   - Honoring `@media (prefers-reduced-motion: reduce)` by neutralizing `transition: none !important;` and `transform: none !important;` across cards, badges, and links guarantees accessible comfort for vestibular disorder users.
+
+
 
