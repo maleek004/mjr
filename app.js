@@ -27,6 +27,12 @@
       const action = actionEl.dataset.action;
 
       switch (action) {
+        case 'filter-category': {
+          event.preventDefault();
+          const selectedCategory = actionEl.dataset.category || 'all';
+          filterPortfolio(selectedCategory);
+          break;
+        }
         case 'toggle-mobile-nav': {
           event.preventDefault();
           toggleMobileNav();
@@ -92,10 +98,44 @@
   }
 
   /**
-   * Global Keyboard Event Handling (Escape Dismissal & Focus Trap)
+   * Global Keyboard Event Handling (Escape Dismissal, Focus Trap & Tablist Navigation)
    */
   if (typeof document !== 'undefined') {
     document.addEventListener('keydown', (event) => {
+      // 1. Tablist Arrow Navigation for Portfolio Filters
+      const activeTab = document.activeElement;
+      if (activeTab && activeTab.matches && activeTab.matches('.portfolio-filter-bar [role="tab"]')) {
+        const tabs = Array.from(document.querySelectorAll('.portfolio-filter-bar [role="tab"]'));
+        const currentIndex = tabs.indexOf(activeTab);
+
+        if (currentIndex !== -1) {
+          let nextIndex = -1;
+
+          if (event.key === 'ArrowRight' || event.key === 'ArrowDown') {
+            event.preventDefault();
+            nextIndex = (currentIndex + 1) % tabs.length;
+          } else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') {
+            event.preventDefault();
+            nextIndex = (currentIndex - 1 + tabs.length) % tabs.length;
+          } else if (event.key === 'Home') {
+            event.preventDefault();
+            nextIndex = 0;
+          } else if (event.key === 'End') {
+            event.preventDefault();
+            nextIndex = tabs.length - 1;
+          }
+
+          if (nextIndex !== -1) {
+            const nextTab = tabs[nextIndex];
+            nextTab.focus();
+            const nextCategory = nextTab.dataset.category || 'all';
+            filterPortfolio(nextCategory);
+            return;
+          }
+        }
+      }
+
+      // 2. Mobile Drawer Escape & Focus Trap
       if (!state.isMobileNavOpen) return;
 
       if (event.key === 'Escape') {
@@ -318,6 +358,62 @@
     grid.innerHTML = items.map(createPortfolioCardMarkup).join('');
   }
 
+  const VALID_PORTFOLIO_CATEGORIES = Object.freeze(new Set(['all', 'branding', 'publications', 'marketing', 'apparel']));
+
+  /**
+   * Filter Portfolio Cards by Category
+   * Updates state, synchronizes ARIA tab states, and toggles card visibility classes.
+   * 
+   * @param {string} targetCategory - Category slug ('all', 'branding', 'publications', 'marketing', 'apparel')
+   */
+  function filterPortfolio(targetCategory) {
+    const rawCategory = (typeof targetCategory === 'string' && targetCategory.trim()) 
+      ? targetCategory.trim().toLowerCase() 
+      : 'all';
+
+    // Validate against allowed categories, fallback gracefully to 'all'
+    const category = VALID_PORTFOLIO_CATEGORIES.has(rawCategory) ? rawCategory : 'all';
+
+    // 1. Update State
+    state.activeCategory = category;
+
+    // 2. Synchronize Filter Tab Buttons UI & ARIA Attributes (Roving Tabindex)
+    if (typeof document !== 'undefined') {
+      const filterButtons = document.querySelectorAll('[data-action="filter-category"]');
+      filterButtons.forEach((btn) => {
+        const btnCategory = (btn.dataset.category || 'all').trim().toLowerCase();
+        const isActive = btnCategory === category;
+        
+        btn.classList.toggle('active', isActive);
+        btn.setAttribute('aria-selected', isActive ? 'true' : 'false');
+        btn.setAttribute('tabindex', isActive ? '0' : '-1');
+      });
+
+      // 3. Filter Portfolio Cards in DOM with Defensive Normalization
+      const cards = document.querySelectorAll('.portfolio-card');
+      cards.forEach((card) => {
+        const cardCategory = (card.dataset.category || '').trim().toLowerCase();
+        const shouldShow = (category === 'all' || cardCategory === category);
+
+        if (shouldShow) {
+          card.classList.remove('is-hidden');
+          card.removeAttribute('aria-hidden');
+          const focusables = card.querySelectorAll('button, a');
+          if (focusables) {
+            focusables.forEach(el => el.removeAttribute('tabindex'));
+          }
+        } else {
+          card.classList.add('is-hidden');
+          card.setAttribute('aria-hidden', 'true');
+          const focusables = card.querySelectorAll('button, a');
+          if (focusables) {
+            focusables.forEach(el => el.setAttribute('tabindex', '-1'));
+          }
+        }
+      });
+    }
+  }
+
   /**
    * Initialize Application on DOM Ready
    */
@@ -333,6 +429,8 @@
     window.renderPortfolioCards = renderPortfolioCards;
     window.escapeHtml = escapeHtml;
     window.createPortfolioCardMarkup = createPortfolioCardMarkup;
+    window.filterPortfolio = filterPortfolio;
+    window.state = state;
   }
 
   if (typeof module !== 'undefined' && module.exports) {
@@ -340,7 +438,9 @@
       PORTFOLIO_DATA,
       renderPortfolioCards,
       escapeHtml,
-      createPortfolioCardMarkup
+      createPortfolioCardMarkup,
+      filterPortfolio,
+      state
     };
   }
 })();

@@ -1,0 +1,25 @@
+What JavaScript method prevents new properties from being added to an object and marks all existing properties as read-only and non-configurable?	Object.freeze(obj)
+Why is Object.freeze() considered shallow by default in JavaScript?	It only freezes direct properties of the top-level object; nested child objects and arrays remain fully mutable unless frozen recursively.
+What JavaScript predicate function checks whether an object has been frozen?	Object.isFrozen(obj)
+What is the primary security vulnerability when injecting dynamic string variables directly into element.innerHTML?	Cross-Site Scripting (XSS), where unescaped user or data strings can execute malicious JavaScript in the victim's browser.
+What five fundamental characters must an HTML sanitization function encode to prevent XSS injection in markup?	Ampersand (&), less-than (<), greater-than (>), double quote ("), and single quote (').
+What is the HTML character entity representation for the ampersand character (&)?	&amp;
+What is the HTML character entity representation for the less-than character (<)?	&lt;
+What is the HTML character entity representation for the double quote character (")?	&quot;
+What is the HTML character entity representation for the single quote / apostrophe character (')?	&#039; (or &apos;)
+What modern CSS property allows a container to automatically maintain proportional width and height before media loads?	aspect-ratio (e.g. aspect-ratio: 16 / 10;)
+How does CSS aspect-ratio prevent Cumulative Layout Shift (CLS) during page loading?	It instructs the layout engine to reserve the exact vertical box dimensions immediately during the Layout phase before images download.
+In CSS Grid, what is the effect of repeat(auto-fit, minmax(320px, 1fr)) on a 1000px wide container?	It creates 3 equal columns of ~333px each, automatically stretching items to fill the row.
+What is the key behavioral difference between auto-fit and auto-fill in CSS Grid when there are fewer items than available tracks?	auto-fit collapses empty remaining tracks to 0px allowing items to stretch, whereas auto-fill preserves empty tracks as empty space.
+What browser lifecycle event fires as soon as the HTML document has been completely parsed and the DOM tree is built, without waiting for stylesheets or images?	DOMContentLoaded
+What browser lifecycle event waits for the entire page, including all dependent resources such as images, stylesheets, and iframes, to finish loading?	window.onload (load event)
+In a flexbox column (.portfolio-card), what CSS rule forces a terminal button to align to the bottom edge across cards of varying text height?	margin-top: auto; (on the footer or CTA button inside a display: flex; flex-direction: column container)
+What is the WCAG 2.1 AA minimum contrast ratio requirement for standard body text against its background?	4.5:1 (or 3:1 for large text >= 24px regular or >= 18.66px bold)
+What is the minimum recommended touch-target size according to mobile web accessibility standards (WCAG 2.1)?	48px by 48px (or min-height: 48px with touch clearance)
+What CSS media query allows websites to detect if a user has requested the operating system to minimize non-essential motion or animations?	@media (prefers-reduced-motion: reduce)
+What is the purpose of the WAI-ARIA role="tablist" attribute on a container?	It identifies the container to screen readers as a group of tab controls that organize content into selectable views.
+What WAI-ARIA attribute communicates to assistive technology whether an individual tab is currently selected or inactive?	aria-selected="true" or aria-selected="false"
+In JavaScript, what built-in function properly encodes special characters including commas, slashes, and ampersands for use inside a URL query string parameter?	encodeURIComponent()
+How does encodeURIComponent() differ from encodeURI()?	encodeURIComponent() encodes URI syntax separators like &, ?, =, /, whereas encodeURI() leaves protocol and domain structural characters intact.
+Why should you check typeof document !== 'undefined' before attaching event listeners in universal JavaScript code?	To prevent ReferenceError exceptions when the script is imported or executed in server-side, Node.js, or headless test runner environments where document does not exist.
+What JavaScript property API allows reading all data-* custom attributes on an HTML element as camelCase object properties?	element.dataset (e.g., element.dataset.projectId for data-project-id)

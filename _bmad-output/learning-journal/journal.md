@@ -130,5 +130,59 @@
 4. **Reduced-Motion Universal Defense (`prefers-reduced-motion`)**:
    - Honoring `@media (prefers-reduced-motion: reduce)` by neutralizing `transition: none !important;` and `transform: none !important;` across cards, badges, and links guarantees accessible comfort for vestibular disorder users.
 
+## Sprint 3: Interactive Filterable Portfolio & Accessible Lightbox
+
+### Story 3.1: JavaScript Portfolio Data Modeling & Card Grid Layout
+* **Date**: 2026-09-26
+* **Files Implemented**: `index.html`, `styles.css`, `app.js`
+* **Test Suite**: `_bmad-output/test-artifacts/story-3.1.test.mjs` (4/4 suites passed, 12 total assertions)
+* **Flashcards**: `_bmad-output/learning-journal/flashcards/story-3.1.tsv` (25 cards)
+
+#### Core Concepts Mastered:
+1. **Data-Driven Architecture & Deep Immutability**:
+   - Decoupled data model (`PORTFOLIO_DATA`) from DOM markup, enforcing single-source-of-truth invariants (AD-2).
+   - `Object.freeze()` applied recursively to both outer arrays and nested project objects/arrays to guarantee true runtime immutability against accidental mutations.
+
+2. **Secure Dynamic DOM Rendering & XSS Elimination**:
+   - Dynamic template generation using `createPortfolioCardMarkup` with HTML entity sanitization (`escapeHtml` escaping `&`, `<`, `>`, `"`, `'`).
+   - String concatenation of sanitized template literals versus `document.createElement()` memory allocations.
+   - Initializing on `DOMContentLoaded` to execute DOM mounting as soon as the HTML parser completes without waiting for image assets.
+
+3. **2D Responsive CSS Grid & Track Calculations**:
+   - `repeat(auto-fit, minmax(320px, 1fr))` dynamically manages column counts across 320px–1440px viewports with zero media query clutter.
+   - Vertical card flex layout (`display: flex; flex-direction: column;`) paired with `margin-top: auto` on `.portfolio-card-footer` guarantees uniform baseline button alignment across cards with varying title or description lengths.
+
+4. **Zero Cumulative Layout Shift (CLS = 0) with `aspect-ratio`**:
+   - Applying `aspect-ratio: 16 / 10` on `.portfolio-media-wrap` reserves the exact layout dimensions in the browser's Box Model prior to image downloads, eliminating visual layout jumps.
+   - High-fidelity CSS gradient placeholders with custom monogram badges provide instant visual feedback.
+
+5. **Universal Module Export & Accessibility Standards**:
+   - Dual-environment module exporting (`window` for browsers, `module.exports` for Node.js test runners) wrapped in `typeof document !== 'undefined'` checks.
+   - Touch target accessibility (`min-height: 48px;`), WCAG 2.1 AA text contrast (\(\ge 4.5:1\)), and `@media (prefers-reduced-motion: reduce)` support.
+
+### Story 3.2: Zero-Framework Category Filter Tab Bar (Event Delegation)
+* **Date**: 2026-09-26
+* **Files Implemented**: `index.html`, `styles.css`, `app.js`
+* **Test Suite**: `_bmad-output/test-artifacts/story-3.2.test.mjs` (4/4 suites passed, 16 total assertions)
+* **Flashcards**: `_bmad-output/learning-journal/flashcards/story-3.2.tsv`
+
+#### Core Concepts Mastered:
+1. **The DOM Event Propagation Lifecycle & Event Delegation**:
+   - Centralized root event listener on `document` intercepts bubbling click actions via `event.target.closest('[data-action="filter-category"]')`.
+   - Eliminates \(N\) separate event listeners, preventing memory leaks, garbage collection overhead, and stale listener bindings.
+
+2. **Unidirectional State Flow & Declarative DOM Updates**:
+   - UI interaction updates `state.activeCategory = selectedCategory` (with whitelist validation and defensive fallback).
+   - Filter state drives both tab visual selection and card visibility (`.portfolio-card.is-hidden`) deterministically from a single source of truth.
+
+3. **WAI-ARIA Tablist Pattern & Roving Tabindex**:
+   - `role="tablist"` paired with `role="tab"`, `aria-selected`, `aria-controls="portfolio-grid"`, and roving `tabindex` (`0` on active tab, `-1` on inactive tabs).
+   - Full keyboard arrow key navigation (`ArrowLeft`, `ArrowRight`, `Home`, `End`) enables fluid, screen-reader-compliant category switching.
+
+4. **Compositor Efficiency vs Layout Reflow**:
+   - Managing focus protection on hidden DOM elements (`aria-hidden="true"` and child `tabindex="-1"`) ensures keyboard navigation is never trapped in invisible elements.
+   - Smooth opacity transitions and `@media (prefers-reduced-motion: reduce)` defense.
+
+
 
 
