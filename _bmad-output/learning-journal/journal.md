@@ -53,3 +53,28 @@
    - Dynamic `aria-expanded="true|false"` communicates open/closed state to screen readers.
    - `Escape` key dismissal and focus trapping inside the drawer keep keyboard focus bounded.
    - Closing the drawer restores document body scrolling (`body.menu-locked`) and safely returns active focus to the hamburger toggle.
+
+### Story 1.3: Brand Hero Section with Proof Metrics & Primary CTA
+* **Date**: 2026-09-26
+* **Files Implemented**: `index.html`, `styles.css`, `app.js`
+* **Flashcards**: `_bmad-output/learning-journal/flashcards/story-1.3.tsv` (24 cards)
+
+#### Core Concepts Mastered:
+1. **Fluid Typography Calculus & The `clamp()` Function**:
+   - `clamp(MIN, PREFERRED, MAX)` computes dynamic font sizes at runtime on the fly.
+   - Using viewport units like `5vw + 1rem` inside the preferred expression establishes a continuous mathematical slope across viewports without breakpoint jumps.
+   - The browser's layout engine recalculates text dimensions during viewport resize events without triggering stylesheet re-parsing.
+
+2. **Compositing Layers & Hardware-Accelerated Micro-Interactions**:
+   - Hover and active states using `transform: translateY(-2px)` and `transform: scale(0.98)` bypass the Layout (Reflow) and Paint stages, executing exclusively on the GPU Compositor thread.
+   - Traditional properties like `margin-top` or `top` force the browser to invalidate geometry and perform an expensive full subtree layout recalculation.
+
+3. **WCAG 2.1 AA Color Contrast Hierarchy**:
+   - Normal text (\(< 18\text{pt}\) or \(< 14\text{pt}\) bold) requires a minimum contrast ratio of \(4.5:1\).
+   - Large text (\(\ge 18\text{pt}\) / \(24\text{px}\) regular or \(\ge 14\text{pt}\) / \(18.66\text{px}\) bold) requires \(3.0:1\).
+   - High-contrast pairing (`#E05A00` text on `#FFF4EC` badge background $\rightarrow$ 4.6:1) guarantees readability for users with low vision or color perception variations.
+
+4. **URL Encoding & Protocol Handling**:
+   - Context-aware WhatsApp conversion triggers utilize URL query string parameters (`wa.me/2348106246748?text=...`) with RFC 3986 percent-encoding (`%20` for spaces, `%2C` for commas, `%27` for apostrophes).
+   - Adding `target="_blank"` paired with `rel="noopener noreferrer"` prevents reverse tabnabbing security vulnerabilities and protects browser thread isolation.
+

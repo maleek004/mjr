@@ -1,0 +1,24 @@
+What is the mathematical function of clamp(MIN, VAL, MAX) in CSS?	It clamps a value between an absolute lower bound (MIN) and upper bound (MAX) based on a preferred dynamic expression (VAL).
+In --font-size-h1: clamp(2.25rem, 5vw + 1rem, 3.75rem), what triggers the font size to scale dynamically?	The viewport width unit (5vw) within the preferred value expression.
+What browser engine phase is skipped when an element animates using transform instead of top or margin?	The Layout (Reflow) and Paint phases are skipped, running directly on the GPU Compositor thread.
+Why does transform: translateY(-2px) run at 60/120fps compared to margin-top: -2px?	transform manipulates the element's composite layer directly without invalidating the geometry or triggering geometry recalculation of sibling nodes.
+What CSS property creates a smooth color transition from white to neutral background in the hero section?	background: linear-gradient(180deg, #FFFFFF 0%, var(--color-bg) 100%);
+What is the default direction of a CSS linear-gradient() if no angle or direction is specified?	to bottom (equivalent to 180deg).
+In CSS Grid, what does grid-template-columns: repeat(3, 1fr) specify?	It divides the grid container into exactly three equal-width flexible fractional tracks.
+How does 1fr differ from 33.33% in CSS Grid?	1fr distributes leftover free space after accounting for gaps and fixed track sizing, preventing horizontal scrollbar overflow bugs.
+What is the minimum recommended touch target size specified by WCAG 2.1 Success Criterion 2.5.5 for mobile controls?	44px by 44px (with 48px by 48px widely recommended for touch ergonomics).
+What is the minimum contrast ratio required by WCAG 2.1 AA for standard body text against its background?	4.5:1 (Level AA standard).
+What is the minimum contrast ratio required by WCAG 2.1 AA for large text (18pt / 24px regular or 14pt / 18.66px bold)?	3.0:1 (Level AA standard).
+Why does the hero badge use --color-primary-dark (#E05A00) instead of --color-primary (#FF6B00) on light orange backgrounds?	To satisfy the WCAG AA 4.5:1 contrast ratio threshold against the light background (#FFF4EC).
+What HTML5 landmark element represents the dominant introductory content of the document body?	The <header> element or the top <section> within <main>.
+What is the accessibility purpose of aria-labelledby="hero-title" on a <section>?	It programmatically establishes the accessible name of the section landmark using the referenced heading element's text.
+What attribute on an external <a> tag prevents security vulnerabilities like tabnabbing when using target="_blank"?	rel="noopener noreferrer"
+In URL encoding, what does %20 or + represent in a query string?	A whitespace (space) character.
+In URL query parameters, what does the percent-encoded sequence %2C represent?	A comma character (,).
+In URL query parameters, what does the percent-encoded sequence %27 represent?	An apostrophe / single quote character (').
+In CSS, what selector pseudo-class matches when an element receives keyboard navigation focus without showing on mouse clicks?	:focus-visible
+What CSS property controls the outline spacing from an element's border box without affecting layout flow?	outline-offset (e.g., outline-offset: 2px;).
+In CSS Flexbox, what property controls whether flex items wrap onto multiple lines when container space is insufficient?	flex-wrap (e.g., flex-wrap: wrap;).
+Why is active pseudo-class transform: scale(0.98) applied to buttons?	To provide tactile visual feedback simulating physical button compression on click or tap.
+What happens in the Critical Rendering Path when an element's box-shadow changes on hover?	The browser creates a Paint operation to re-render the shadow pixels, but avoids a full Layout reflow.
+How does letter-spacing: -0.03em affect large hero headlines?	It tightens character tracking proportionally to font size, improving typographic density and visual cohesion on large display text.
