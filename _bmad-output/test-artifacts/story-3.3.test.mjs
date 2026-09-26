@@ -74,7 +74,7 @@ describe('Story 3.3: Accessible Lightbox Modal with Keyboard Focus Management', 
     );
   });
 
-  test('AC-3: Dynamic Content Population, State Sync & WhatsApp Link Context (TC-331, TC-332, TC-333)', () => {
+  test('AC-3: Dynamic Content Population, State Sync & Focus Restoration (TC-331, TC-332, TC-333)', () => {
     const { openModal, closeModal, state, PORTFOLIO_DATA } = appModule;
     assert.ok(typeof openModal === 'function', 'app.js must export openModal function');
     assert.ok(typeof closeModal === 'function', 'app.js must export closeModal function');
@@ -92,6 +92,9 @@ describe('Story 3.3: Accessible Lightbox Modal with Keyboard Focus Management', 
         id,
         dataset: {},
         href: '',
+        offsetParent: {},
+        offsetWidth: 100,
+        offsetHeight: 40,
         style: {
           setProperty: (k, v) => { styles[k] = String(v); },
           getPropertyValue: (k) => styles[k] || ''
@@ -105,6 +108,7 @@ describe('Story 3.3: Accessible Lightbox Modal with Keyboard Focus Management', 
         getAttribute: (k) => attributes[k] || null,
         removeAttribute: (k) => { delete attributes[k]; },
         hasAttribute: (k) => Object.prototype.hasOwnProperty.call(attributes, k),
+        contains: (node) => true,
         get innerHTML() { return innerHTML; },
         set innerHTML(val) { innerHTML = String(val); },
         get textContent() { return textContent; },
@@ -113,7 +117,14 @@ describe('Story 3.3: Accessible Lightbox Modal with Keyboard Focus Management', 
           if (selector === '.modal-close-btn') return mockCloseBtn;
           return null;
         },
-        focus: () => { mockFocusTracker.current = id || tag; },
+        querySelectorAll: (selector) => {
+          if (selector.includes('button')) return [mockCloseBtn, mockCta];
+          return [];
+        },
+        focus: function () {
+          mockFocusTracker.current = id || tag;
+          if (global.document) global.document.activeElement = this;
+        },
         _styles: styles,
         _attributes: attributes
       };
@@ -176,11 +187,12 @@ describe('Story 3.3: Accessible Lightbox Modal with Keyboard Focus Management', 
       assert.match(mockCta.href, /https:\/\/wa\.me\/2348106246748\?text=/, 'WhatsApp link must target +2348106246748');
       assert.match(mockCta.href, /CYMA%20HOMES%20Limited/, 'WhatsApp message must be URI-encoded with project name');
 
-      // Test 2: Close modal and verify state reset
+      // Test 2: Close modal and verify state reset and focus restoration
       closeModal();
       assert.equal(state.activeModalId, null, 'State activeModalId must be reset to null');
       assert.equal(mockModal.hasAttribute('hidden'), true, 'Modal must have hidden attribute restored when closed');
       assert.equal(global.document.body.classList.has('modal-open'), false, 'Body must have modal-open class removed');
+      assert.equal(mockFocusTracker.current, 'trigger-btn', 'Focus must be restored to initiating trigger button upon close');
 
       // Test 3: Defensive handling for non-existent project id
       openModal('non_existent_project');
@@ -196,6 +208,13 @@ describe('Story 3.3: Accessible Lightbox Modal with Keyboard Focus Management', 
       cssContent,
       /body\.modal-open\s*\{[\s\S]*?overflow:\s*hidden;/,
       'body.modal-open must declare overflow: hidden'
+    );
+
+    // Scrollbar gutter stable
+    assert.match(
+      cssContent,
+      /scrollbar-gutter:\s*stable;/,
+      'html must declare scrollbar-gutter: stable to prevent layout shift'
     );
 
     // Modal overlay positioning & z-index

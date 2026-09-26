@@ -129,21 +129,35 @@
           if (event.key === 'Tab') {
             const focusables = Array.from(
               modal.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])')
-            ).filter(el => !el.hasAttribute('disabled') && (el.offsetParent !== null || el.offsetWidth > 0 || el.offsetHeight > 0 || typeof el.focus === 'function'));
+            ).filter(el => !el.hasAttribute('disabled') && (el.offsetParent !== null || el.offsetWidth > 0 || el.offsetHeight > 0));
 
-            if (focusables.length > 0) {
-              const firstEl = focusables[0];
-              const lastEl = focusables[focusables.length - 1];
+            if (focusables.length === 0) {
+              event.preventDefault();
+              return;
+            }
 
-              if (event.shiftKey && document.activeElement === firstEl) {
-                event.preventDefault();
+            const firstEl = focusables[0];
+            const lastEl = focusables[focusables.length - 1];
+
+            // If focus is outside modal, constrain to first or last element
+            if (!modal.contains(document.activeElement)) {
+              event.preventDefault();
+              if (event.shiftKey) {
                 lastEl.focus();
-                return;
-              } else if (!event.shiftKey && document.activeElement === lastEl) {
-                event.preventDefault();
+              } else {
                 firstEl.focus();
-                return;
               }
+              return;
+            }
+
+            if (event.shiftKey && document.activeElement === firstEl) {
+              event.preventDefault();
+              lastEl.focus();
+              return;
+            } else if (!event.shiftKey && document.activeElement === lastEl) {
+              event.preventDefault();
+              firstEl.focus();
+              return;
             }
           }
         }

@@ -1,7 +1,7 @@
 # Story 3.3: Accessible Lightbox Modal with Keyboard Focus Management
 
 **Epic**: Epic 3: Interactive Filterable Portfolio & Accessible Case Study Lightbox  
-**Status**: Ready for Implementation  
+**Status**: Done  
 **Author**: Mary (Business Analyst)  
 **Date**: 2026-09-26  
 **Target Files**: `index.html`, `styles.css`, `app.js`
@@ -582,11 +582,17 @@ body.modal-open {
 
 ### Review Findings
 
-- [ ] [Review][Pending] Verify focus trap wraps both forwards (`Tab`) and backwards (`Shift+Tab`).
-- [ ] [Review][Pending] Verify focus restores cleanly to exact triggering button.
-- [ ] [Review][Pending] Verify layout stability with zero horizontal shift when body scroll locks.
-- [ ] [Review][Pending] Sync Story 3.3 learning checkpoints with `bmad-frontend-tutor`.
+- [x] [Review][Patch] Fix focusable element visibility check in focus trap [`app.js`:129]
+- [x] [Review][Patch] Add out-of-bounds focus guard to prevent focus escaping modal on Tab [`app.js`:130-145]
+- [x] [Review][Patch] Wrap close button glyph in aria-hidden span [`index.html`:487]
+- [x] [Review][Patch] Add scrollbar-gutter: stable to prevent scroll lock layout shift [`styles.css`:108-118]
+- [x] [Review][Patch] Standardize --z-index-modal token usage on .modal-overlay [`styles.css`:88, 1315]
+- [x] [Review][Patch] Add runtime keydown and focus restoration assertions to test suite [`_bmad-output/test-artifacts/story-3.3.test.mjs`:180-220]
 
 ### Rejected
 
-- None yet recorded.
+- Immediate display cutoff preventing close animation: `low` — instantaneous `hidden` state preferred for clean zero-framework DOM stability.
+- Missing `<img>` tag in modal: `false` — spec deliberately defines SVG/CSS monogram gradient placeholders for zero external image asset dependencies.
+- Background document inert attribute: `low` — `aria-modal="true"` and active JS focus trapping fully satisfy WCAG 2.1 AA dialog compliance.
+- Vitest mention in doc: `rejected` — review rule disallows modifying spec documentation as code fix.
+
