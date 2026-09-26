@@ -1,0 +1,25 @@
+What is the primary RFC specification governing Uniform Resource Identifier (URI) syntax and percent-encoding?	RFC 3986.
+In web browser URL parsing, what character demarcates the beginning of a URL query string?	The question mark character (?).
+In URL query strings, what character separates multiple key-value parameter pairs?	The ampersand character (&).
+What JavaScript standard built-in function is used to encode a URI component by escaping reserved and non-ASCII characters?	encodeURIComponent().
+What is the crucial functional difference between encodeURI() and encodeURIComponent()?	encodeURI() preserves URI protocol/path delimiters (like :, /, ?, &, =), while encodeURIComponent() escapes them.
+What does encodeURIComponent() convert an empty space character into?	%20 (the percent-encoded ASCII hex code 0x20).
+What does encodeURIComponent() convert an ampersand (&) into?	%26.
+What does encodeURIComponent() convert a comma (,) into?	%2C.
+What does encodeURIComponent() convert a question mark (?) into?	%3F.
+What does encodeURIComponent() convert a single quote (') into?	%27.
+How does encodeURIComponent() handle multibyte UTF-8 characters (like emojis or non-Latin glyphs)?	It converts each UTF-8 byte into a sequential percent-encoded octet (%XX%XX...).
+What universal web endpoint domain is officially maintained by WhatsApp for cross-platform click-to-chat links?	https://wa.me/
+In the URL format https://wa.me/<number>?text=<message>, what format must the phone number strictly adhere to?	Fully qualified international format without plus signs (+), dashes (-), brackets, or leading zeros.
+What regular expression in JavaScript strips all non-numeric characters from a phone string?	/\D/g (or [^0-9]).
+What security vulnerability occurs when an external link opens with target="_blank" without protective rel attributes?	Reverse Tabnabbing (where the opened page accesses window.opener to redirect the originating tab).
+What rel attribute value prevents the newly opened window from accessing the originating page's window.opener object?	rel="noopener".
+What rel attribute value prevents the browser from sending the Referer HTTP header to the destination URL?	rel="noreferrer".
+What is the default window.opener behavior in modern evergreen browsers when target="_blank" is used without rel="noopener"?	Modern browsers implicitly treat target="_blank" as rel="noopener", but explicit declaration remains best practice for full backward compatibility.
+In vanilla JavaScript event delegation, why is event.target.closest('[data-action]') preferred over event.target.dataset.action?	Because clicking a nested child element (like a <span> or <svg>) delegates properly to the ancestor containing the data-action attribute.
+When a user clicks a native <a> element with an updated href in an event listener, when does browser default navigation execute?	At the end of the event dispatch cycle, after all bubbling event listeners have executed synchronously.
+What is the time complexity of looking up a context key in a JavaScript object dictionary like WHATSAPP_TEMPLATES?	O(1) average lookup time.
+What String method in JavaScript replaces the first occurrence of a substring or placeholder in a template?	String.prototype.replace() (or replaceAll() for all occurrences).
+In a robust client-side lead engine, why should templates provide a safe fallback when a dynamic variable (like {projectTitle}) is missing?	To prevent unrendered raw template syntax or empty strings from leaking into the user-facing message.
+Why is client-side deep linking to WhatsApp superior to traditional form submissions for high-intent mobile users?	It eliminates typing and composition friction, captures qualified intent on turn zero, and leverages an already-authenticated communication channel.
+What JavaScript window method is used to programmatically open a URL in a new browser tab or window?	window.open(url, '_blank', 'noopener,noreferrer').

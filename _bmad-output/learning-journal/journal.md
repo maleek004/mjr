@@ -215,6 +215,7 @@
 * **Date**: 2026-09-27
 * **Files Implemented**: `app.js`, `index.html`, `styles.css`
 * **Test Suite**: `_bmad-output/test-artifacts/story-4.1.test.mjs` (7/7 tests passed)
+* **Flashcards**: `_bmad-output/learning-journal/flashcards/story-4.1.tsv` (25 cards)
 
 #### Core Concepts Mastered:
 1. **RFC 3986 URI Percent-Encoding & Parameter Construction**:

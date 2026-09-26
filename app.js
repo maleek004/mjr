@@ -464,6 +464,7 @@
       <article class="portfolio-card" data-project-id="${escapeHtml(id)}" data-category="${escapeHtml(category)}">
         <div class="portfolio-media-wrap">
           <div class="portfolio-media-placeholder" style="--card-accent: ${escapeHtml(accentColor)};">
+            ${project.thumbnail ? `<img src="${escapeHtml(project.thumbnail)}" alt="${escapeHtml(title)} mockup preview" class="portfolio-thumb-img" loading="lazy" onerror="this.style.display='none'">` : ''}
             <div class="media-badge-icon" aria-hidden="true">
               <span class="media-monogram">${monogram}</span>
             </div>
