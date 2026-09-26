@@ -78,3 +78,34 @@
    - Context-aware WhatsApp conversion triggers utilize URL query string parameters (`wa.me/2348106246748?text=...`) with RFC 3986 percent-encoding (`%20` for spaces, `%2C` for commas, `%27` for apostrophes).
    - Adding `target="_blank"` paired with `rel="noopener noreferrer"` prevents reverse tabnabbing security vulnerabilities and protects browser thread isolation.
 
+## Sprint 2: Core Service Pillars & Verified Client Trust Matrix
+
+### Story 2.1: 4-Pillar Core Services Grid with Contextual Triggers
+* **Date**: 2026-09-26
+* **Files Implemented**: `index.html`, `styles.css`
+* **Flashcards**: `_bmad-output/learning-journal/flashcards/story-2.1.tsv` (24 cards)
+
+#### Core Concepts Mastered:
+1. **2D CSS Grid Track Sizing (`repeat(auto-fit, minmax(...))`)**:
+   - `repeat(auto-fit, minmax(280px, 1fr))` dynamically calculates column tracks at runtime based on container width.
+   - `auto-fit` collapses empty tracks to 0px, allowing existing items to expand across the full width, whereas `auto-fill` preserves empty space.
+   - Eliminates hardcoded breakpoint media query jumps for grid items while guaranteeing a minimum width constraint.
+
+2. **The Magic of `margin-top: auto` in Flexbox Column Layouts**:
+   - Grid cells stretch to equal height by default (`align-items: stretch`).
+   - By making the card a flex column (`display: flex; flex-direction: column`), setting `margin-top: auto` on the terminal button (`.service-cta`) forces it to absorb all residual vertical space.
+   - This produces uniform baseline alignment for all CTA buttons regardless of varying title or description text lengths.
+
+3. **Touch Device Hover Isolation (`@media (hover: hover) and (pointer: fine)`)**:
+   - Mobile touchscreens trigger synthetic hover events on tap, which can leave buttons stuck in an active/hovered state after interaction.
+   - Wrapping hover pseudo-classes in fine-pointer media queries ensures hover micro-interactions (elevation lift, shadow expansion, color inversion) only execute on mouse/trackpad environments.
+
+4. **Accessibility Landmarks & List Semantics Restoration**:
+   - Applying `list-style: none` to `<ul>` elements causes Safari VoiceOver to strip list semantics in the accessibility tree; adding `role="list"` explicitly restores the correct structural announcements.
+   - Semantic `<article>` tags with `aria-labelledby="service-title-N"` provide discrete landmark navigation boundaries for screen reader users.
+   - Inline decorative SVGs are isolated with `aria-hidden="true"` to prevent unhelpful coordinate strings from cluttering the accessibility tree.
+
+5. **Multi-Line Deliverable Typography Alignment**:
+   - Setting `align-items: flex-start` with a subtle `margin-top: 2px` on custom `::before` pseudo-element checkmark badges prevents icons from floating to the vertical midpoint when deliverable text wraps onto multiple lines.
+
+

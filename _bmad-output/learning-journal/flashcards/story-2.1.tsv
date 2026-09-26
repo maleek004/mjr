@@ -1,0 +1,24 @@
+What CSS Grid function creates a responsive column layout that wraps without media queries?	repeat(auto-fit, minmax(min, max))
+In CSS Grid, what is the difference between auto-fit and auto-fill when there are fewer items than available column tracks?	auto-fit collapses empty tracks to 0px allowing items to expand, whereas auto-fill preserves empty tracks.
+What does the minmax(280px, 1fr) track sizing function specify?	The track minimum width is 280px and its maximum width is 1 fractional share of available space.
+What does the 1fr unit represent in a CSS Grid container?	One fraction of the remaining free space available in the grid track container.
+What is the default value of align-items on a CSS Grid container?	stretch (all grid items in a row expand to match the height of the tallest item).
+How does align-items: stretch in CSS Grid enable equal-height card components?	It automatically stretches each child item to 100% of the computed grid cell track height.
+In a flex container with flex-direction: column, how does margin-top: auto on a child element behave?	It consumes all remaining vertical free space in the flex container, pushing the element to the very bottom.
+Why does margin-top: auto on .service-cta keep buttons aligned across cards with unequal text lengths?	Because the parent card is stretched to full grid height, allowing auto margin to absorb leftover vertical space.
+When should you choose CSS Grid over CSS Flexbox?	Use CSS Grid for 2-dimensional layouts (rows and columns simultaneously), and Flexbox for 1-dimensional flows (single row or single column).
+Why is role="list" added to a <ul> element that has list-style: none in CSS?	Safari VoiceOver removes list semantics when list-style: none is applied; role="list" restores accessibility announcement.
+Why should decorative inline SVG icons carry aria-hidden="true"?	To prevent assistive screen readers from announcing redundant, unhelpful vector coordinate data.
+How does aria-labelledby="service-title-1" on an <article> improve accessibility?	It uses the inner text of the referenced heading element as the accessible name for that article landmark.
+What is the purpose of the CSS media query @media (hover: hover) and (pointer: fine)?	It ensures hover micro-interactions only execute on devices with a fine pointer (like a mouse) rather than touchscreens.
+What bug occurs on mobile touchscreens when card hover effects are not wrapped in a hover media query?	Tapping the card triggers a persistent synthetic hover state that leaves buttons stuck in their highlighted appearance.
+Why should a list item with a bullet icon use align-items: flex-start instead of align-items: center?	To keep the bullet icon pinned to the top-left baseline when the adjacent text wraps across multiple lines.
+Why is transition: all considered a CSS performance anti-pattern?	It forces the browser to evaluate every animatable property during repaints, including expensive layout-triggering properties.
+Which specific CSS properties can the browser animate purely on the GPU Compositor thread?	transform and opacity (they bypass the Layout/Reflow and Paint stages).
+What is the purpose of outline-offset: 2px on a focused interactive element?	It creates visual negative space between the element's border and the focus ring, enhancing visibility.
+What does WCAG 2.1 Success Criterion 2.4.7 require for keyboard navigation?	Any keyboard-operable user interface must have a clearly visible focus indicator.
+How does stroke="currentColor" on an SVG path work in CSS?	The SVG stroke dynamically inherits the computed value of the CSS color property of its parent element.
+What security vulnerability does rel="noopener noreferrer" prevent on target="_blank" links?	Reverse tabnabbing (where the target page gains access to window.opener and can redirect the origin tab to phishing URLs).
+How does the CSS ::before pseudo-element create custom deliverable checkmark badges?	It inserts generated content with display: inline-flex, background color, and border-radius before the element text.
+Why is flex-shrink: 0 required on a fixed-width ::before icon badge inside a flex container?	To prevent the browser from shrinking or squishing the badge when adjacent text expands in narrow viewports.
+How do data-action and data-context attributes support zero-framework architecture?	They encode behavioral intent and context directly into the DOM for centralized event delegation without inline JS handlers.
