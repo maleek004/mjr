@@ -292,4 +292,53 @@ So that real clients enjoy a fast, accessible experience across all devices.
 * **And** Lighthouse audit scores achieve \(\ge 95\) in Performance, Accessibility, Best Practices, and SEO.
 * **And** running `/bmad-frontend-tutor` provides a full sprint retrospective, complete concept quiz, and updates the `_bmad-output/learning-journal/journal.md`.
 
+---
+
+## Epic 5: Case Study Multi-Media Gallery & Continuous Modal Navigation
+
+**Goal**: Transform case studies into rich multi-media showcases with touch-friendly swipeable image sliders and seamless, filter-aware modal navigation.
+
+### Story 5.1: Case Study Multi-Image Data Modeling & Asset Extraction
+As a prospective client inspecting a project,
+I want to see multiple authentic photo proofs of finished work (packaging, stationery, shirts, billboards) for each case study,
+So that I can verify MJr's full physical print craftsmanship.
+
+**Acceptance Criteria:**
+* **Given** the portfolio asset pipeline,
+* **When** case study images are extracted from `mjr portfolio.pdf`,
+* **Then** high-quality image assets are stored in `assets/images/portfolio/` for all flagship case studies (CYMA Homes, Glazing Memoirs, OAB Foundation, Tour of Lagos Waterways, Custom Streetwear Apparel, SkillForge Billboard).
+* **And** `PORTFOLIO_DATA` in `app.js` is structured with an `images: [{ url, caption }]` array containing 2–4 proof photos per project.
+* **And** running `/bmad-frontend-tutor` explains image optimization, responsive formats, and array data structures in first principles.
+
+---
+
+### Story 5.2: Zero-Framework Swipeable Image Slider with Pagination Dots
+As a mobile or desktop visitor inside the case study modal,
+I want to swipe or click through multiple proof photos with pagination dots and slide arrows,
+So that I can smoothly inspect all physical artifacts without cluttering the screen.
+
+**Acceptance Criteria:**
+* **Given** a case study modal is open,
+* **When** viewing the media section,
+* **Then** it renders a swipeable slider with previous/next slide arrow buttons, clickable pagination dot indicators, and an artifact caption bar.
+* **And** on mobile touch screens, horizontal swipe gestures (`touchstart`/`touchend`) smoothly change the active slide.
+* **And** slide transitions execute using smooth CSS hardware-accelerated transforms (`transform: translateX(...)`).
+* **And** running `/bmad-frontend-tutor` breaks down touch coordinate math, CSS transform performance vs left offsets, and `aria-live` accessibility.
+
+---
+
+### Story 5.3: Filter-Aware Continuous Case Study Navigation & Dynamic WhatsApp Sync
+As a visitor browsing case studies in focused view,
+I want to navigate to the Next and Previous case studies within my active category filter and have the WhatsApp CTA dynamically update,
+So that I can browse relevant projects continuously without opening and closing the modal.
+
+**Acceptance Criteria:**
+* **Given** a case study modal is open under an active category filter (e.g., `Brand Identity` or `All Projects`),
+* **When** clicking the `< Prev Case Study` or `Next Case Study >` buttons or pressing `ArrowLeft` / `ArrowRight` on the keyboard,
+* **Then** the modal transitions smoothly to the adjacent case study strictly matching the active category filter.
+* **And** the modal title, client name, image slider, and scope tags update instantaneously.
+* **And** the modal's primary *"Inquire on WhatsApp"* CTA button dynamically updates its message payload to the newly focused project.
+* **And** running `/bmad-frontend-tutor` explains state indexing over filtered arrays, keyboard event listeners, and dynamic DOM attribute updates.
+
+
 
