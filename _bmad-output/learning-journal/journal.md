@@ -252,6 +252,81 @@
    - Structured monotonic heading progression ($<h1> \rightarrow <h2> \rightarrow <h3>$) with zero skipped levels across the entire single-page document.
    - Stabilized mobile viewport boundaries using base `overflow-x: hidden` on `body`.
 
+### Story 5.1: Case Study Multi-Image Data Modeling & Asset Extraction
+* **Date**: 2026-09-28
+* **Files Implemented**: `app.js`, `assets/images/portfolio/*`, `scripts/export_portfolio_assets.py`
+* **Flashcards**: `_bmad-output/learning-journal/flashcards/story-5.1.tsv` (22 cards)
+
+#### Core Concepts Mastered:
+1. **JavaScript Nested Object Immutability & Deep Freezing**:
+   - Deconstructed the mechanics and limitations of `Object.freeze()`: native freezing is **shallow**. Inner arrays (`images: [...]`) and nested objects (`{ url, caption }`) retain full mutability unless individually or recursively frozen.
+   - Implemented composite immutable tree modeling in `PORTFOLIO_DATA` using `Object.freeze([ Object.freeze({ ... images: Object.freeze([ Object.freeze(...) ]) }) ])` to guarantee runtime immutability and prevent side-effect pollution across filter and modal subsystems.
+   - In strict mode (`'use strict'`), attempted mutations on frozen properties trigger immediate `TypeError: Cannot assign to read only property`, catching state divergence bugs at development time.
+
+2. **Asset Pipeline & Browser Image Memory Mechanics**:
+   - Differentiated compressed file storage on disk (JPEG/WebP byte payloads) from **uncompressed in-memory raster allocation** in the browser rendering engine ($W \times H \times 4\text{ bytes}$ for 32-bit RGBA).
+   - Downscaled print-resolution vector exports to max dimension $1400\text{px}$ at $88\%$ quality, reducing RAM consumption per image from $48\text{MB}$ down to $5.6\text{MB}$ and disk size down to $\le 185\text{KB}$.
+   - Handled alpha channel flattening when converting PNG/PDF raster surfaces to JPEG format to eliminate decompression artifacts.
+
+3. **Data Schema Evolution & Backward Compatibility**:
+   - Successfully introduced the multi-image collection schema (`images: [{ url, caption }]`) while preserving legacy `thumbnail` and `fullImage` properties.
+   - Enabled progressive feature rollout, allowing existing card grid components and future multi-image swipeable sliders (Story 5.2) to operate concurrently off the same single source of truth.
+
+### Story 5.2: Zero-Framework Swipeable Image Slider with Pagination Dots
+* **Date**: 2026-09-28
+* **Files Implemented**: `index.html`, `styles.css`, `app.js`
+* **Test Suite**: `_bmad-output/test-artifacts/story-5.2.test.mjs` (6/6 passed, 39/39 total project suite passing)
+* **Flashcards**: `_bmad-output/learning-journal/flashcards/story-5.2.tsv` (22 cards)
+
+#### Core Concepts Mastered:
+1. **GPU Compositing vs Layout/Reflow in Carousel Animation**:
+   - Deconstructed the browser rendering engine cost of animating layout properties (`left`, `margin-left`) versus transform properties (`transform: translateX(-N%)`).
+   - `left` / `margin-left` forces the browser through all four rendering stages: **JavaScript $\rightarrow$ Layout (Geometry recalculation) $\rightarrow$ Paint (Rasterization) $\rightarrow$ Composite**.
+   - `transform: translateX()` skips Layout and Paint entirely, operating exclusively on the **GPU Compositing thread** ($60\text{fps}$ / $120\text{fps}$ zero-jank transitions).
+   - Applied `will-change: transform` to promote `.modal-slider-track` to its own dedicated `CompositedLayer` ahead of interaction.
+
+2. **Touch Coordinate Tracking & Gesture Discrimination**:
+   - Mastered `TouchEvent` coordinate extraction: using `e.touches[0].clientX` during `touchstart` and `e.changedTouches[0].clientX` during `touchend` (since `e.touches` is empty upon finger lift).
+   - Designed vector gesture discrimination: $\Delta X = X_{\text{end}} - X_{\text{start}}$ and $\Delta Y = Y_{\text{end}} - Y_{\text{start}}$. A swipe is only triggered when $|\Delta X| \ge 40\text{px}$ AND $|\Delta X| > |\Delta Y|$, preventing horizontal sliders from blocking vertical scroll intent.
+   - Configured `touch-action: pan-y` in CSS to inform the browser compositor that vertical panning remains native while horizontal gestures are handled in script.
+
+3. **Modulo Arithmetic for Wraparound Navigation**:
+   - Explored JavaScript's `%` operator behavior with negative operands: in JS, `-1 % 3 === -1` (remainder, not modulo).
+   - Implemented the universal zero-bounded modulo wraparound formula: `index = ((targetIndex % total) + total) % total` to ensure seamless bi-directional wrap-around across any index sequence without `if/else` branching.
+
+4. **Screen Reader Live Regions & Accessible Pagination Controls**:
+   - Implemented `aria-live="polite"` on `#modal-slider-caption` so that slide transitions announce updated deliverable captions when the assistive technology is idle, without disrupting screen reader navigation.
+   - Modeled pagination dots with `role="tab"`, `aria-selected="true|false"`, and localized `aria-label="Slide N of Total"`.
+   - Wired keyboard arrow keys (`ArrowLeft`, `ArrowRight`) into the modal keyboard event bus with input field guards.
+
+### Story 5.3: Filter-Aware Continuous Case Study Navigation & Dynamic WhatsApp Sync
+* **Date**: 2026-09-28
+* **Files Implemented**: `index.html`, `styles.css`, `app.js`
+* **Test Suite**: `_bmad-output/test-artifacts/story-5.3.test.mjs` (6/6 passed, 45/45 total project suite passing)
+* **Flashcards**: `_bmad-output/learning-journal/flashcards/story-5.3.tsv` (22 cards)
+
+#### Core Concepts Mastered:
+1. **Filtered State Projections & Circular Pointer Stepping**:
+   - Designed continuous case study navigation that queries `PORTFOLIO_DATA` dynamically against `state.activeFilter` (`getFilteredProjects()`), preserving user intent across active categories (`all`, `branding`, `publications`, `apparel`).
+   - Implemented circular array traversal with zero branch complexity:
+     $$\text{Next Index} = (i + 1) \pmod N, \quad \text{Prev Index} = ((i - 1) \pmod N + N) \pmod N$$
+   - Avoided recreating the modal container DOM tree, updating existing nodes in place to eliminate garbage collection pauses and repaint overhead.
+
+2. **Decoupled Keyboard Event Routing**:
+   - Resolved dual-level keyboard navigation: `ArrowLeft`/`ArrowRight` navigate image slides within the current project, while `Alt+ArrowLeft`/`Alt+ArrowRight` and `P`/`N` keys step across case studies.
+   - Added element tag filters (`INPUT`, `TEXTAREA`) to prevent keyboard shortcut interference during text entry.
+
+3. **Dynamic Context-Aware Lead Generation (RFC 3986 Sync)**:
+   - Synchronized `#modal-whatsapp-cta` with the newly focused project in real-time, executing `generateWhatsAppUrl()` with project-specific URL-encoded payloads.
+   - Updated `dataset.projectId` to maintain analytics and lead context tracking integrity.
+
+4. **WAI-ARIA Accessibility for Continuous Navigation**:
+   - Wired dynamic `aria-label="Previous case study: [Title]"` and `aria-label="Next case study: [Title]"` on navigation triggers.
+   - Attached `aria-live="polite"` to `#modal-project-counter` so screen readers announce position changes (`Project X of Y`) seamlessly.
+   - Handled single-item subsets gracefully by disabling button actions and hiding redundant navigation controls.
+
+
+
 
 
 

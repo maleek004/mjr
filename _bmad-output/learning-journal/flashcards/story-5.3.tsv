@@ -1,0 +1,22 @@
+How does a filter-aware modal navigation engine determine the subset of projects to cycle through?	It queries PORTFOLIO_DATA against state.activeFilter, returning all projects if 'all', or only items where item.category === state.activeFilter.
+Why is stepping through a filtered array subset better UX than cycling through the entire unfiltered collection?	It respects the user's explicit browsing intent (e.g., inspecting only Apparel) without forcing them to view unrelated categories.
+What is the mathematical modulo formula to step to the next item in an array of length N?	(currentIndex + 1) % N
+What is the mathematical modulo formula in JavaScript to step to the previous item in an array of length N, supporting circular wrap-around?	((currentIndex - 1) % N + N) % N
+Why is Array.prototype.findIndex() used instead of Array.prototype.indexOf() when finding an object in an array?	findIndex() allows evaluating a predicate function (e.g., p => p.id === activeId) rather than strict object reference equality.
+What does Array.prototype.findIndex() return if no element satisfies the testing function?	-1
+When stepping to a new case study inside an open modal, what state variables must be updated?	state.activeModalId is set to the new project ID, and state.activeSlideIndex is reset to 0.
+How does the modal WhatsApp CTA dynamically synchronize with the newly focused case study?	Its href is regenerated with generateWhatsAppUrl() using the new project's title and dataset.projectId is updated.
+Why should project counter text (e.g. 'Project 2 of 6') use aria-live="polite"?	To inform screen reader users of their updated position in the collection without interrupting other announcements.
+How should previous and next case study navigation buttons be labeled for assistive technology?	With dynamic aria-label attributes containing the adjacent project titles (e.g., 'Previous case study: CYMA HOMES').
+What should happen to previous and next case study navigation buttons if the filtered subset has only 1 project?	The buttons should be disabled (disabled = true) or the navigation bar hidden (display: none).
+Why is centralized event delegation advantageous when handling 'prev-project' and 'next-project' button clicks?	Clicks on nested SVG icons or text spans bubble to [data-action], eliminating individual event listener attachments.
+How does the application distinguish keyboard arrow navigation for image slides versus case study navigation?	ArrowLeft/ArrowRight navigate image slides within the current project; Alt+ArrowLeft/Alt+ArrowRight or P/N navigate adjacent case studies.
+Why must keyboard shortcuts check if document.activeElement is an INPUT or TEXTAREA before executing?	To prevent accidental navigation when a user is typing inside a text form field.
+What happens to the multi-image slider when a user navigates to a new case study in the modal?	renderModalSlider(project) is called, clearing old slide DOM nodes, mounting new slides and dots, and resetting translateX to 0%.
+In terms of memory management, why is updating existing modal DOM nodes better than destroying and re-creating the entire modal element?	Reusing persistent DOM nodes avoids garbage collection churn and layout recalculations for the modal overlay and backdrop.
+Why is encodeURIComponent() used when generating dynamic WhatsApp URLs for case study titles?	To escape spaces and special characters (like '&', '+', '?') into valid RFC 3986 percent-encoded strings.
+How does the application prevent runtime errors if an unknown project ID is passed to openModal()?	It guards the lookup with a check if project exists, logs a warning, and returns early without altering DOM or state.
+What role does lastFocusedElement play when a user navigates across multiple projects before closing the modal?	It remembers the initial button clicked on the grid page, returning focus to it upon modal dismissal regardless of how many in-modal steps occurred.
+How does CSS min-height: 38px and touch-action: manipulation benefit mobile touch targets on navigation buttons?	It provides a comfortable tap surface and prevents accidental double-tap zoom delays on mobile browsers.
+What CSS property prevents click events from triggering on disabled navigation buttons?	pointer-events: none (combined with the HTML disabled attribute).
+Why is it beneficial to separate getFilteredProjects() into a dedicated helper function?	It provides a single source of truth for both portfolio card grid filtering and continuous modal navigation.

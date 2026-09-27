@@ -1,0 +1,22 @@
+What is the fundamental limitation of JavaScript's native Object.freeze() method?	Object.freeze() is shallow; nested objects and nested arrays remain completely mutable unless explicitly frozen.
+How do you create an immutable nested object array in vanilla JavaScript?	Call Object.freeze() on the outer array and wrap each inner object element in Object.freeze().
+In strict mode ('use strict'), what happens when attempting to mutate a property of an Object.freeze() object?	The JavaScript engine throws a TypeError: Cannot assign to read only property.
+In non-strict mode, what happens when attempting to mutate an Object.freeze() object?	The mutation fails silently without throwing an error, and the object remains unchanged.
+Why does a browser consume significantly more RAM when decoding an unoptimized 4000x3000px image compared to a 1400x1000px image, regardless of file compression?	Decoded images in browser GPU/RAM allocate memory based on uncompressed pixel dimensions (width × height × 4 bytes per pixel for RGBA), not file size on disk.
+How many bytes of uncompressed memory does a decoded 1400x1000px 32-bit RGBA image occupy in browser memory?	5.6 MB (1,400 × 1,000 × 4 bytes = 5,600,000 bytes).
+How many bytes of uncompressed memory does an unoptimized 4000x3000px 32-bit RGBA image occupy in browser memory?	48 MB (4,000 × 3,000 × 4 bytes = 48,000,000 bytes).
+Why must an RGBA image with an alpha channel be flattened against a solid background color before saving as JPEG?	The JPEG image format does not support transparency or an alpha channel.
+What is the primary benefit of maintaining thumbnail and fullImage properties in PORTFOLIO_DATA after adding the images array?	Backward compatibility, ensuring existing UI components (like grid cards) continue rendering without breaking before they are upgraded.
+Which ES6 array method returns the first element that satisfies a provided testing function?	Array.prototype.find().
+Which ES6 array method returns the index of the first element that satisfies a provided testing function, or -1 if not found?	Array.prototype.findIndex().
+What is the return value of Array.prototype.findIndex() when no matching element is found in the array?	-1.
+In JavaScript, how do you verify if an object is frozen?	Object.isFrozen(obj).
+What does Object.isSealed(obj) check compared to Object.isFrozen(obj)?	Object.isSealed() allows modifying existing property values (only prevents adding/deleting properties), whereas Object.isFrozen() also makes all existing properties read-only (writable: false).
+Why should captions and alt descriptions be modeled directly alongside image URLs in the data schema?	It enforces accessibility (A11y) parity and provides rich, contextual metadata for screen readers and UI captions.
+How does optimizing image asset dimensions improve Largest Contentful Paint (LCP)?	Smaller file sizes reduce network download time, and smaller pixel dimensions reduce browser main-thread image decoding and paint time.
+What browser property on the HTMLImageElement interface indicates whether an image has completed downloading and decoding?	img.complete (boolean true or false).
+What event fires on an <img> element when its raster data finishes loading successfully into the DOM?	The load event.
+What event fires on an <img> element if the image URL is broken or fails to download?	The error event.
+Why is client-side data immutability critical in single-page applications without frameworks?	It prevents accidental side-effect mutations across independent components (e.g. filters, modals, sliders) sharing the same state.
+What is the time complexity of searching an item by id in an array of N objects using Array.prototype.find()?	O(N) linear time complexity.
+How can you look up an object by id in O(1) constant time instead of O(N) linear time?	By storing or indexing the objects in a JavaScript Map or a hash object keyed by id.

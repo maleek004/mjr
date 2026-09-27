@@ -13,6 +13,7 @@
   const state = {
     activeCategory: 'all',
     activeModalId: null,
+    activeSlideIndex: 0,
     isMobileNavOpen: false
   };
 
@@ -137,10 +138,38 @@
           closeModal();
           break;
         }
+        case 'next-slide': {
+          event.preventDefault();
+          nextSlide();
+          break;
+        }
+        case 'prev-slide': {
+          event.preventDefault();
+          prevSlide();
+          break;
+        }
+        case 'go-to-slide': {
+          event.preventDefault();
+          const slideIdx = parseInt(actionEl.dataset.slideIndex, 10);
+          if (!isNaN(slideIdx)) {
+            goToSlide(slideIdx);
+          }
+          break;
+        }
         case 'filter-category': {
           event.preventDefault();
           const selectedCategory = actionEl.dataset.category || 'all';
           filterPortfolio(selectedCategory);
+          break;
+        }
+        case 'prev-project': {
+          event.preventDefault();
+          prevProject();
+          break;
+        }
+        case 'next-project': {
+          event.preventDefault();
+          nextProject();
           break;
         }
         case 'toggle-mobile-nav': {
@@ -212,13 +241,40 @@
    */
   if (typeof document !== 'undefined') {
     document.addEventListener('keydown', (event) => {
-      // 1. Modal Escape & Focus Trap Handling
+      // 1. Modal Escape, Arrow Navigation & Focus Trap Handling
       if (state.activeModalId) {
         const modal = document.getElementById('portfolio-modal');
         if (modal) {
           if (event.key === 'Escape') {
             event.preventDefault();
             closeModal();
+            return;
+          }
+
+          // Case study navigation (Alt + Arrow or P/N keys)
+          const isTextInput = event.target && ['INPUT', 'TEXTAREA'].includes(event.target.tagName);
+          if ((event.altKey && event.key === 'ArrowLeft') || (!event.altKey && !event.ctrlKey && !event.metaKey && (event.key === 'p' || event.key === 'P') && !isTextInput)) {
+            event.preventDefault();
+            prevProject();
+            return;
+          }
+
+          if ((event.altKey && event.key === 'ArrowRight') || (!event.altKey && !event.ctrlKey && !event.metaKey && (event.key === 'n' || event.key === 'N') && !isTextInput)) {
+            event.preventDefault();
+            nextProject();
+            return;
+          }
+
+          // Slide navigation within current case study
+          if (event.key === 'ArrowRight' && !event.altKey) {
+            event.preventDefault();
+            nextSlide();
+            return;
+          }
+
+          if (event.key === 'ArrowLeft' && !event.altKey) {
+            event.preventDefault();
+            prevSlide();
             return;
           }
 
@@ -348,8 +404,22 @@
       client: "CYMA HOMES Limited",
       category: "branding",
       categoryLabel: "Brand Identity & Corporate Design",
-      thumbnail: "assets/images/portfolio/cyma-preview.jpg",
-      fullImage: "assets/images/portfolio/cyma-full.jpg",
+      thumbnail: "assets/images/portfolio/cyma-1-hardhat.jpg",
+      fullImage: "assets/images/portfolio/cyma-1-hardhat.jpg",
+      images: Object.freeze([
+        Object.freeze({
+          url: "assets/images/portfolio/cyma-1-hardhat.jpg",
+          caption: "Custom Branded Construction Hard Hats & Logo Mark"
+        }),
+        Object.freeze({
+          url: "assets/images/portfolio/cyma-2-stationery.jpg",
+          caption: "Corporate Identity Suite, Presentation Folders & Stationery"
+        }),
+        Object.freeze({
+          url: "assets/images/portfolio/cyma-3-fleet-apparel.jpg",
+          caption: "Branded Staff Apparel, Caps & Fleet Vehicle Graphics"
+        })
+      ]),
       scope: Object.freeze(["Logo System", "Brand Identity", "Hard Hats & Safety Vests", "Corporate Stationery", "Vehicle Fleet Graphics"]),
       description: "Complete corporate identity system and industrial safety gear branding for a high-profile real estate development firm in Lagos.",
       accentColor: "#FF6B00",
@@ -361,8 +431,22 @@
       client: "Streetwear & Corporate Apparel Clients",
       category: "apparel",
       categoryLabel: "Custom Apparel & Merch",
-      thumbnail: "assets/images/portfolio/apparel-preview.jpg",
-      fullImage: "assets/images/portfolio/apparel-full.jpg",
+      thumbnail: "assets/images/portfolio/apparel-1-branded-tees.jpg",
+      fullImage: "assets/images/portfolio/apparel-1-branded-tees.jpg",
+      images: Object.freeze([
+        Object.freeze({
+          url: "assets/images/portfolio/apparel-1-branded-tees.jpg",
+          caption: "Precision Screen Printed Heavyweight Cotton T-Shirts & Caps"
+        }),
+        Object.freeze({
+          url: "assets/images/portfolio/apparel-2-hoodies-backpacks.jpg",
+          caption: "Custom Branded Hoodies, Backpacks & Event Merch"
+        }),
+        Object.freeze({
+          url: "assets/images/portfolio/apparel-3-custom-aprons.jpg",
+          caption: "Embroidered Aprons & Hospitality Uniform Production"
+        })
+      ]),
       scope: Object.freeze(["Heavyweight Cotton Tees", "Embroidery & Screenprint", "Trucker Caps", "Tote Bags", "Woven Neck Labels"]),
       description: "High-volume custom t-shirt and lifestyle apparel production featuring precision screen printing, heat press, and bespoke brand packaging.",
       accentColor: "#1A1A1A",
@@ -374,8 +458,22 @@
       client: "Glazing Memoirs Food & Beverage",
       category: "branding",
       categoryLabel: "Packaging & Brand Identity",
-      thumbnail: "assets/images/portfolio/glazing-preview.jpg",
-      fullImage: "assets/images/portfolio/glazing-full.jpg",
+      thumbnail: "assets/images/portfolio/glazing-2-packaging.jpg",
+      fullImage: "assets/images/portfolio/glazing-2-packaging.jpg",
+      images: Object.freeze([
+        Object.freeze({
+          url: "assets/images/portfolio/glazing-2-packaging.jpg",
+          caption: "Yoghurt Bottle Labels, Snack Pouches & Takeaway Packaging"
+        }),
+        Object.freeze({
+          url: "assets/images/portfolio/glazing-1-signage.jpg",
+          caption: "Brand Identity Mark & Illuminated Storefront Lightbox"
+        }),
+        Object.freeze({
+          url: "assets/images/portfolio/glazing-3-chef-culinary.jpg",
+          caption: "Culinary Apparel & Food Photography Branding"
+        })
+      ]),
       scope: Object.freeze(["Logo Refresh", "Yoghurt Bottle Labels", "Food Packaging", "Takeaway Bags", "Marketing Flyers"]),
       description: "Vibrant brand identity, custom product bottle labels, and food packaging suites engineered for fast-moving retail consumer appeal.",
       accentColor: "#E05A00",
@@ -387,8 +485,26 @@
       client: "Tour of Lagos Waterways Initiative",
       category: "publications",
       categoryLabel: "Publications & Editorial",
-      thumbnail: "assets/images/portfolio/tolw-preview.jpg",
-      fullImage: "assets/images/portfolio/tolw-full.jpg",
+      thumbnail: "assets/images/portfolio/tolw-1-magazine-cover.jpg",
+      fullImage: "assets/images/portfolio/tolw-1-magazine-cover.jpg",
+      images: Object.freeze([
+        Object.freeze({
+          url: "assets/images/portfolio/tolw-1-magazine-cover.jpg",
+          caption: "5th Edition Magazine Cover & Waterways Feature Spreads"
+        }),
+        Object.freeze({
+          url: "assets/images/portfolio/tolw-2-editorial-spread.jpg",
+          caption: "Luxury Open Editorial Spread — 'See Lagos Differently'"
+        }),
+        Object.freeze({
+          url: "assets/images/portfolio/tolw-3-bound-book.jpg",
+          caption: "Hardcover 3D Bound Compendium & Publication Spine"
+        }),
+        Object.freeze({
+          url: "assets/images/portfolio/tolw-4-highway-gantry.jpg",
+          caption: "Lagos Island Overpass Highway Gantry Billboard"
+        })
+      ]),
       scope: Object.freeze(["5th Edition Magazine", "Editorial Layout", "Event Program Compendium", "VIP Badges", "Outdoor Signage"]),
       description: "High-volume editorial magazine and event publication production with luxury spot UV finishing, perfect binding, and color fidelity.",
       accentColor: "#006699",
@@ -400,8 +516,18 @@
       client: "SkillForge Tech Institute",
       category: "marketing",
       categoryLabel: "Marketing & Billboards",
-      thumbnail: "assets/images/portfolio/skillforge-preview.jpg",
-      fullImage: "assets/images/portfolio/skillforge-full.jpg",
+      thumbnail: "assets/images/portfolio/skillforge-1-billboard.jpg",
+      fullImage: "assets/images/portfolio/skillforge-1-billboard.jpg",
+      images: Object.freeze([
+        Object.freeze({
+          url: "assets/images/portfolio/skillforge-1-billboard.jpg",
+          caption: "Large-Format Highway Billboard Campaign Mockup"
+        }),
+        Object.freeze({
+          url: "assets/images/portfolio/skillforge-2-digital-campaigns.jpg",
+          caption: "Digital Skills Training & Robotics Social Media Collateral"
+        })
+      ]),
       scope: Object.freeze(["Highway Billboard Creative", "Digital Campaign Ads", "Roll-Up Banners", "Course Catalogs"]),
       description: "High-visibility outdoor billboard campaigns and multi-channel marketing collateral designed to maximize student enrollment conversions.",
       accentColor: "#2E5BFF",
@@ -413,8 +539,22 @@
       client: "OAB Philanthropic Foundation",
       category: "branding",
       categoryLabel: "Civic & Editorial Branding",
-      thumbnail: "assets/images/portfolio/oab-preview.jpg",
-      fullImage: "assets/images/portfolio/oab-full.jpg",
+      thumbnail: "assets/images/portfolio/oab-2-apparel-merch.jpg",
+      fullImage: "assets/images/portfolio/oab-2-apparel-merch.jpg",
+      images: Object.freeze([
+        Object.freeze({
+          url: "assets/images/portfolio/oab-2-apparel-merch.jpg",
+          caption: "Custom Branded Backpacks, Desk Calendars & Apparel"
+        }),
+        Object.freeze({
+          url: "assets/images/portfolio/oab-1-identity.jpg",
+          caption: "Primary Brand Identity System & Logo Architecture"
+        }),
+        Object.freeze({
+          url: "assets/images/portfolio/oab-3-editorial-rollup.jpg",
+          caption: "Civic Outreach Rollup Banners & Educational Editorial Design"
+        })
+      ]),
       scope: Object.freeze(["Brand Identity Guidelines", "Annual Report Compendium", "Custom Event Shirts", "Souvenir Gift Sets"]),
       description: "Comprehensive institutional branding, annual report editorial printing, and custom-branded souvenirs for high-impact civic empowerment programs.",
       accentColor: "#00875A",
@@ -574,6 +714,286 @@
   }
 
   /**
+   * Render Multi-Image Modal Slider Track & Dots
+   * @param {Object} project - Portfolio project item
+   */
+  function renderModalSlider(project) {
+    if (!project || typeof document === 'undefined') return;
+
+    const track = document.getElementById('modal-slider-track');
+    const dotsContainer = document.getElementById('modal-slider-dots');
+    const captionEl = document.getElementById('modal-slider-caption');
+    const prevArrow = typeof document.querySelector === 'function' ? document.querySelector('.slider-arrow-prev') : null;
+    const nextArrow = typeof document.querySelector === 'function' ? document.querySelector('.slider-arrow-next') : null;
+
+    const images = Array.isArray(project.images) && project.images.length > 0
+      ? project.images
+      : [{ url: project.fullImage || project.thumbnail, caption: project.title }];
+
+    if (track) {
+      track.innerHTML = images.map((img, idx) => `
+        <div class="modal-slide" data-slide-index="${idx}">
+          <img src="${escapeHtml(img.url)}" 
+               alt="${escapeHtml(img.caption || project.title)}" 
+               class="modal-slide-img" 
+               loading="${idx === 0 ? 'eager' : 'lazy'}"
+               onerror="this.style.opacity='0.4'">
+        </div>
+      `).join('');
+    }
+
+    if (dotsContainer) {
+      dotsContainer.innerHTML = images.map((img, idx) => `
+        <button type="button" 
+                class="slider-dot ${idx === 0 ? 'active' : ''}" 
+                role="tab" 
+                aria-selected="${idx === 0 ? 'true' : 'false'}" 
+                aria-label="Slide ${idx + 1} of ${images.length}" 
+                data-action="go-to-slide" 
+                data-slide-index="${idx}">
+        </button>
+      `).join('');
+      dotsContainer.style.display = images.length > 1 ? 'flex' : 'none';
+    }
+
+    if (prevArrow && nextArrow) {
+      const showArrows = images.length > 1 ? 'flex' : 'none';
+      prevArrow.style.display = showArrows;
+      nextArrow.style.display = showArrows;
+    }
+
+    state.activeSlideIndex = 0;
+    goToSlide(0);
+  }
+
+  /**
+   * Transition to Specific Slide Index in Modal
+   * @param {number} targetIndex - Target slide index
+   */
+  function goToSlide(targetIndex) {
+    if (typeof targetIndex !== 'number' || isNaN(targetIndex)) return;
+    if (typeof document === 'undefined') return;
+
+    const project = PORTFOLIO_DATA.find(item => item.id === state.activeModalId);
+    if (!project) return;
+
+    const images = Array.isArray(project.images) && project.images.length > 0
+      ? project.images
+      : [{ url: project.fullImage || project.thumbnail, caption: project.title }];
+
+    const total = images.length;
+    const index = ((targetIndex % total) + total) % total;
+    state.activeSlideIndex = index;
+
+    // 1. Hardware-accelerated CSS TranslateX Transform
+    const track = document.getElementById('modal-slider-track');
+    if (track) {
+      track.style.transform = `translateX(-${index * 100}%)`;
+    }
+
+    // 2. Synchronize Active Dot Class & ARIA Selected
+    const dots = typeof document.querySelectorAll === 'function'
+      ? document.querySelectorAll('#modal-slider-dots .slider-dot')
+      : [];
+    if (dots && typeof dots.forEach === 'function') {
+      dots.forEach((dot, idx) => {
+        const isActive = idx === index;
+        if (dot.classList && typeof dot.classList.toggle === 'function') {
+          dot.classList.toggle('active', isActive);
+        }
+        if (typeof dot.setAttribute === 'function') {
+          dot.setAttribute('aria-selected', isActive ? 'true' : 'false');
+        }
+      });
+    }
+
+    // 3. Update Accessible Live Caption
+    const captionEl = document.getElementById('modal-slider-caption');
+    if (captionEl) {
+      const currentCaption = images[index].caption || project.title;
+      captionEl.textContent = currentCaption;
+    }
+  }
+
+  /**
+   * Navigate to Next Slide
+   */
+  function nextSlide() {
+    goToSlide(state.activeSlideIndex + 1);
+  }
+
+  /**
+   * Navigate to Previous Slide
+   */
+  function prevSlide() {
+    goToSlide(state.activeSlideIndex - 1);
+  }
+
+  /**
+   * Initialize Touch Gestures on Modal Media Wrapper
+   */
+  let touchStartX = 0;
+  let touchStartY = 0;
+  let touchEndX = 0;
+  let touchEndY = 0;
+
+  function initTouchGestures() {
+    if (typeof document === 'undefined') return;
+    const mediaWrap = document.getElementById('modal-media-wrap');
+    if (!mediaWrap) return;
+
+    mediaWrap.addEventListener('touchstart', (e) => {
+      if (e.touches && e.touches.length > 0) {
+        touchStartX = e.touches[0].clientX;
+        touchStartY = e.touches[0].clientY;
+        touchEndX = touchStartX;
+        touchEndY = touchStartY;
+      }
+    }, { passive: true });
+
+    mediaWrap.addEventListener('touchmove', (e) => {
+      if (e.touches && e.touches.length > 0) {
+        touchEndX = e.touches[0].clientX;
+        touchEndY = e.touches[0].clientY;
+      }
+    }, { passive: true });
+
+    mediaWrap.addEventListener('touchend', () => {
+      const dx = touchEndX - touchStartX;
+      const dy = touchEndY - touchStartY;
+      // Require minimum 40px swipe distance and horizontal dominant vector
+      if (Math.abs(dx) >= 40 && Math.abs(dx) > Math.abs(dy)) {
+        if (dx < 0) {
+          nextSlide();
+        } else {
+          prevSlide();
+        }
+      }
+    }, { passive: true });
+  }
+
+  /**
+   * Retrieve active filtered projects subset
+   * @returns {Array} Filtered list of portfolio projects
+   */
+  function getFilteredProjects() {
+    if (!state.activeFilter || state.activeFilter === 'all') {
+      return PORTFOLIO_DATA;
+    }
+    const filtered = PORTFOLIO_DATA.filter(item => item.category === state.activeFilter);
+    return filtered.length > 0 ? filtered : PORTFOLIO_DATA;
+  }
+
+  /**
+   * Populate Modal DOM with Case Study Data
+   * @param {Object} project - Portfolio project item
+   */
+  function populateModalContent(project) {
+    if (!project || typeof document === 'undefined') return;
+
+    state.activeModalId = project.id;
+
+    // 1. Populate Text Metadata & Badges
+    const titleEl = document.getElementById('modal-title');
+    const clientEl = document.getElementById('modal-client-name');
+    const descEl = document.getElementById('modal-desc');
+    const catBadgeEl = document.getElementById('modal-category-badge');
+    const monogramEl = document.getElementById('modal-media-monogram');
+    const scopeListEl = document.getElementById('modal-scope-list');
+    const ctaBtn = document.getElementById('modal-whatsapp-cta');
+
+    if (titleEl) titleEl.textContent = project.title;
+    if (clientEl) clientEl.textContent = project.client || project.title;
+    if (descEl) descEl.textContent = project.description;
+    if (catBadgeEl) catBadgeEl.textContent = project.categoryLabel;
+    if (monogramEl) monogramEl.textContent = (project.client || project.title || 'MJ').substring(0, 2).toUpperCase();
+
+    if (scopeListEl) {
+      scopeListEl.innerHTML = (Array.isArray(project.scope) ? project.scope : [])
+        .map(tag => `<li class="modal-scope-chip">#${escapeHtml(String(tag))}</li>`)
+        .join('');
+    }
+
+    // 2. Dynamically Synchronize WhatsApp CTA
+    if (ctaBtn) {
+      ctaBtn.href = generateWhatsAppUrl(WHATSAPP_CONFIG.defaultPhone, 'modal', { projectTitle: project.title });
+      ctaBtn.dataset.context = 'modal';
+      ctaBtn.dataset.projectId = project.id;
+    }
+
+    // 3. Update Continuous Project Navigation Controls & Counter
+    const filteredProjects = getFilteredProjects();
+    const currentIndex = filteredProjects.findIndex(p => p.id === project.id);
+    const counterEl = document.getElementById('modal-project-counter');
+    const prevProjBtn = typeof document.querySelector === 'function' ? document.querySelector('[data-action="prev-project"]') : null;
+    const nextProjBtn = typeof document.querySelector === 'function' ? document.querySelector('[data-action="next-project"]') : null;
+    const projectNavContainer = document.getElementById('modal-project-nav');
+
+    if (counterEl && currentIndex !== -1) {
+      counterEl.textContent = `Project ${currentIndex + 1} of ${filteredProjects.length}`;
+    }
+
+    if (prevProjBtn && nextProjBtn) {
+      if (filteredProjects.length <= 1) {
+        prevProjBtn.disabled = true;
+        nextProjBtn.disabled = true;
+        if (projectNavContainer) projectNavContainer.style.display = 'none';
+      } else {
+        prevProjBtn.disabled = false;
+        nextProjBtn.disabled = false;
+        if (projectNavContainer) projectNavContainer.style.display = 'flex';
+
+        const prevIdx = ((currentIndex - 1) % filteredProjects.length + filteredProjects.length) % filteredProjects.length;
+        const nextIdx = (currentIndex + 1) % filteredProjects.length;
+        const prevProj = filteredProjects[prevIdx];
+        const nextProj = filteredProjects[nextIdx];
+
+        if (prevProj) prevProjBtn.setAttribute('aria-label', `Previous case study: ${prevProj.title}`);
+        if (nextProj) nextProjBtn.setAttribute('aria-label', `Next case study: ${nextProj.title}`);
+      }
+    }
+
+    // 4. Render Interactive Image Slider for new project
+    renderModalSlider(project);
+  }
+
+  /**
+   * Navigate to Next Filtered Case Study
+   */
+  function nextProject() {
+    if (!state.activeModalId) return;
+    const filtered = getFilteredProjects();
+    if (!filtered || filtered.length <= 1) return;
+
+    const currentIndex = filtered.findIndex(p => p.id === state.activeModalId);
+    if (currentIndex === -1) return;
+
+    const nextIndex = (currentIndex + 1) % filtered.length;
+    const targetProject = filtered[nextIndex];
+    if (targetProject) {
+      populateModalContent(targetProject);
+    }
+  }
+
+  /**
+   * Navigate to Previous Filtered Case Study
+   */
+  function prevProject() {
+    if (!state.activeModalId) return;
+    const filtered = getFilteredProjects();
+    if (!filtered || filtered.length <= 1) return;
+
+    const currentIndex = filtered.findIndex(p => p.id === state.activeModalId);
+    if (currentIndex === -1) return;
+
+    const prevIndex = ((currentIndex - 1) % filtered.length + filtered.length) % filtered.length;
+    const targetProject = filtered[prevIndex];
+    if (targetProject) {
+      populateModalContent(targetProject);
+    }
+  }
+
+  /**
    * Open Accessible Portfolio Case Study Lightbox Modal
    * @param {string} projectId - Unique project identifier
    */
@@ -595,46 +1015,17 @@
 
     // Cache current focused element to restore upon modal close
     lastFocusedElement = document.activeElement;
-    state.activeModalId = project.id;
 
-    // 1. Populate Modal Content
-    const titleEl = document.getElementById('modal-title');
-    const clientEl = document.getElementById('modal-client-name');
-    const descEl = document.getElementById('modal-desc');
-    const catBadgeEl = document.getElementById('modal-category-badge');
-    const monogramEl = document.getElementById('modal-media-monogram');
-    const placeholderEl = document.getElementById('modal-media-placeholder');
-    const scopeListEl = document.getElementById('modal-scope-list');
-    const ctaBtn = document.getElementById('modal-whatsapp-cta');
+    // Populate Modal Content
+    populateModalContent(project);
 
-    if (titleEl) titleEl.textContent = project.title;
-    if (clientEl) clientEl.textContent = project.client || project.title;
-    if (descEl) descEl.textContent = project.description;
-    if (catBadgeEl) catBadgeEl.textContent = project.categoryLabel;
-    if (monogramEl) monogramEl.textContent = project.title.substring(0, 2).toUpperCase();
-    if (placeholderEl && placeholderEl.style) {
-      placeholderEl.style.setProperty('--modal-accent', project.accentColor || '#FF6B00');
-    }
-
-    if (scopeListEl) {
-      scopeListEl.innerHTML = (Array.isArray(project.scope) ? project.scope : [])
-        .map(tag => `<li class="modal-scope-chip">#${escapeHtml(String(tag))}</li>`)
-        .join('');
-    }
-
-    if (ctaBtn) {
-      ctaBtn.href = generateWhatsAppUrl(WHATSAPP_CONFIG.defaultPhone, 'modal', { projectTitle: project.title });
-      ctaBtn.dataset.context = 'modal';
-      ctaBtn.dataset.projectId = project.id;
-    }
-
-    // 2. Display Modal & Lock Body Scroll
+    // Display Modal & Lock Body Scroll
     modal.removeAttribute('hidden');
     if (document.body && document.body.classList) {
       document.body.classList.add('modal-open');
     }
 
-    // 3. Move initial focus into Modal for Accessibility
+    // Move initial focus into Modal for Accessibility
     const focusTarget = modal.querySelector('.modal-close-btn') || modal.querySelector('button, [href]');
     if (focusTarget && typeof focusTarget.focus === 'function') {
       focusTarget.focus();
@@ -671,6 +1062,7 @@
   if (typeof document !== 'undefined') {
     document.addEventListener('DOMContentLoaded', () => {
       renderPortfolioCards(PORTFOLIO_DATA);
+      initTouchGestures();
     });
   }
 
@@ -683,6 +1075,14 @@
     window.filterPortfolio = filterPortfolio;
     window.openModal = openModal;
     window.closeModal = closeModal;
+    window.renderModalSlider = renderModalSlider;
+    window.goToSlide = goToSlide;
+    window.nextSlide = nextSlide;
+    window.prevSlide = prevSlide;
+    window.getFilteredProjects = getFilteredProjects;
+    window.populateModalContent = populateModalContent;
+    window.nextProject = nextProject;
+    window.prevProject = prevProject;
     window.state = state;
     window.WHATSAPP_CONFIG = WHATSAPP_CONFIG;
     window.WHATSAPP_TEMPLATES = WHATSAPP_TEMPLATES;
@@ -701,6 +1101,14 @@
       filterPortfolio,
       openModal,
       closeModal,
+      renderModalSlider,
+      goToSlide,
+      nextSlide,
+      prevSlide,
+      getFilteredProjects,
+      populateModalContent,
+      nextProject,
+      prevProject,
       state,
       WHATSAPP_CONFIG,
       WHATSAPP_TEMPLATES,
