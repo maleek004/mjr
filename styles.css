@@ -274,6 +274,7 @@ ul, ol {
   text-align: center;
   white-space: nowrap;
   min-height: 48px; /* Touch target size guideline */
+  max-width: 100%;
 }
 
 .btn:active {
@@ -1039,6 +1040,13 @@ ul, ol {
   text-align: center;
   color: var(--color-text-inverse);
   box-shadow: var(--shadow-xl);
+  overflow: hidden;
+}
+
+@media (max-width: 639px) {
+  .contact-card {
+    padding: var(--space-2xl) var(--space-md);
+  }
 }
 
 .contact-headline {
@@ -1056,6 +1064,16 @@ ul, ol {
   margin-left: auto;
   margin-right: auto;
   margin-bottom: var(--space-xl);
+}
+
+.contact-actions {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.contact-actions .btn {
+  max-width: 100%;
 }
 
 /* --------------------------------------------------------------------------
