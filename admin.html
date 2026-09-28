@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MJr Admin | Pricing &amp; Margin Control Center</title>
+  <meta name="description" content="Administrative pricing manager, live simulation sandbox, and visual ES6 code generator for MJr Designs & Print Solutions.">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body class="admin-body">
+
+  <!-- Admin Header Bar -->
+  <header class="admin-header">
+    <div class="admin-header-container">
+      <div class="admin-brand-wrap">
+        <a href="index.html" class="admin-brand-logo" title="Back to Live Website">
+          <span class="logo-accent">MJr</span>
+          <span class="logo-text">ADMIN</span>
+        </a>
+        <span class="admin-badge">Pricing &amp; Margin Center</span>
+      </div>
+
+      <nav class="admin-top-actions" aria-label="Administrative Actions">
+        <a href="index.html" class="admin-btn admin-btn-ghost">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+          </svg>
+          <span>Live Website</span>
+        </a>
+        <button type="button" class="admin-btn admin-btn-secondary" id="btn-copy-code" data-action="copy-es6-code">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="16 18 22 12 16 6"></polyline>
+            <polyline points="8 6 2 12 8 18"></polyline>
+          </svg>
+          <span>Generate ES6 Code</span>
+        </button>
+        <button type="button" class="admin-btn admin-btn-secondary" id="btn-export-json" data-action="export-json">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+          <span>Export JSON</span>
+        </button>
+        <button type="button" class="admin-btn admin-btn-secondary" id="btn-import-json" data-action="open-import-modal">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="17 8 12 3 7 8"></polyline>
+            <line x1="12" y1="3" x2="12" y2="15"></line>
+          </svg>
+          <span>Import JSON</span>
+        </button>
+        <button type="button" class="admin-btn admin-btn-primary" id="btn-save-local" data-action="save-local-pricing">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+            <polyline points="17 21 17 13 7 13 7 21"></polyline>
+            <polyline points="7 3 7 8 15 8"></polyline>
+          </svg>
+          <span>Apply to Live Site</span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Admin Main Workspace Layout -->
+  <main class="admin-workspace">
+    <div class="admin-container">
+      
+      <!-- Product Navigation Tabs -->
+      <section class="admin-product-nav" aria-label="Select Product to Tune">
+        <div class="admin-tabs-list" id="admin-product-tabs" role="tablist">
+          <button type="button" class="admin-tab active" role="tab" id="admin-tab-cards" aria-selected="true" data-action="admin-select-product" data-product-id="business-cards">
+            <span class="admin-tab-icon" aria-hidden="true">📇</span>
+            <div class="admin-tab-info">
+              <span class="admin-tab-title">Business Cards</span>
+              <span class="admin-tab-meta">Stationery</span>
+            </div>
+          </button>
+          <button type="button" class="admin-tab" role="tab" id="admin-tab-brochures" aria-selected="false" data-action="admin-select-product" data-product-id="brochures">
+            <span class="admin-tab-icon" aria-hidden="true">📖</span>
+            <div class="admin-tab-info">
+              <span class="admin-tab-title">Brochures &amp; Booklets</span>
+              <span class="admin-tab-meta">Publications</span>
+            </div>
+          </button>
+          <button type="button" class="admin-tab" role="tab" id="admin-tab-apparel" aria-selected="false" data-action="admin-select-product" data-product-id="t-shirts">
+            <span class="admin-tab-icon" aria-hidden="true">👕</span>
+            <div class="admin-tab-info">
+              <span class="admin-tab-title">Custom Apparel</span>
+              <span class="admin-tab-meta">Shirts &amp; Merch</span>
+            </div>
+          </button>
+          <button type="button" class="admin-tab" role="tab" id="admin-tab-banners" aria-selected="false" data-action="admin-select-product" data-product-id="banners">
+            <span class="admin-tab-icon" aria-hidden="true">🚩</span>
+            <div class="admin-tab-info">
+              <span class="admin-tab-title">Roll-Up Banners</span>
+              <span class="admin-tab-meta">Signage &amp; Events</span>
+            </div>
+          </button>
+        </div>
+      </section>
+
+      <!-- 2-Column Dashboard Grid -->
+      <div class="admin-grid">
+        
+        <!-- Left Column: Product Configuration Form Canvas -->
+        <div class="admin-config-col">
+          
+          <!-- Card 1: Base Unit Economics & Volume Limits -->
+          <div class="admin-card">
+            <div class="admin-card-header">
+              <div class="admin-card-title-wrap">
+                <span class="admin-step-num">01</span>
+                <div>
+                  <h2 class="admin-card-title">Base Unit Economics &amp; Quantity Bounds</h2>
+                  <p class="admin-card-desc">Configure starting unit cost and production volume limits.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="admin-card-body">
+              <div class="admin-fields-grid">
+                <div class="admin-field">
+                  <label for="admin-unit-price" class="admin-label">Base Unit Price (₦)</label>
+                  <div class="admin-input-prefix-wrap">
+                    <span class="admin-prefix">₦</span>
+                    <input type="number" id="admin-unit-price" class="admin-input" min="1" step="1" value="85" data-param="unitBasePrice">
+                  </div>
+                  <span class="admin-help">Starting cost before add-ons and volume discounts.</span>
+                </div>
+
+                <div class="admin-field">
+                  <label for="admin-default-qty" class="admin-label">Default Initial Quantity</label>
+                  <input type="number" id="admin-default-qty" class="admin-input" min="1" step="1" value="250" data-param="defaultQty">
+                  <span class="admin-help">Initial slider position on website load.</span>
+                </div>
+
+                <div class="admin-field">
+                  <label for="admin-min-qty" class="admin-label">Minimum Order Qty</label>
+                  <input type="number" id="admin-min-qty" class="admin-input" min="1" step="1" value="100" data-param="minQty">
+                </div>
+
+                <div class="admin-field">
+                  <label for="admin-max-qty" class="admin-label">Maximum Order Qty</label>
+                  <input type="number" id="admin-max-qty" class="admin-input" min="1" step="10" value="5000" data-param="maxQty">
+                </div>
+
+                <div class="admin-field">
+                  <label for="admin-step-qty" class="admin-label">Slider Step Increment</label>
+                  <input type="number" id="admin-step-qty" class="admin-input" min="1" step="1" value="50" data-param="stepQty">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 2: Specification Options & Price Delta Modifiers -->
+          <div class="admin-card">
+            <div class="admin-card-header">
+              <div class="admin-card-title-wrap">
+                <span class="admin-step-num">02</span>
+                <div>
+                  <h2 class="admin-card-title">Specification Options &amp; Price Deltas</h2>
+                  <p class="admin-card-desc">Adjust finishing upcharges (sides, lamination, substrates).</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="admin-card-body">
+              <div id="admin-options-editor" class="admin-options-list">
+                <!-- Dynamically populated by admin.js -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 3: Tiered Volume Discount Matrix -->
+          <div class="admin-card">
+            <div class="admin-card-header">
+              <div class="admin-card-title-wrap">
+                <span class="admin-step-num">03</span>
+                <div>
+                  <h2 class="admin-card-title">Tiered Volume Discount Matrix</h2>
+                  <p class="admin-card-desc">Economies of scale rewarding high-volume client orders.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="admin-card-body">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th>Minimum Order Threshold</th>
+                    <th>Discount Rate (%)</th>
+                    <th>Example Unit Savings</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-discounts-body">
+                  <!-- Dynamically populated by admin.js -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Card 4: Global Multipliers & Turnaround Surcharges -->
+          <div class="admin-card">
+            <div class="admin-card-header">
+              <div class="admin-card-title-wrap">
+                <span class="admin-step-num">04</span>
+                <div>
+                  <h2 class="admin-card-title">Turnaround Speed Surcharge</h2>
+                  <p class="admin-card-desc">Configure rush surcharge percentage for 24-48 hour delivery.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="admin-card-body">
+              <div class="admin-rush-row">
+                <div class="admin-field" style="max-width: 260px;">
+                  <label for="admin-rush-rate" class="admin-label">Express Rush Surcharge (%)</label>
+                  <div class="admin-input-suffix-wrap">
+                    <input type="number" id="admin-rush-rate" class="admin-input" min="0" max="100" step="5" value="25">
+                    <span class="admin-suffix">%</span>
+                  </div>
+                </div>
+                <div class="admin-rush-info">
+                  <strong>⚡ Rush Production Multiplier:</strong>
+                  <p>Standard orders (3-5 days) have 0% surcharge. Express orders apply a 25% surcharge to the subtotal.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Reset to Defaults Button -->
+          <div class="admin-danger-zone">
+            <button type="button" class="admin-btn admin-btn-danger" data-action="reset-defaults">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="1 4 1 10 7 10"></polyline>
+                <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+              </svg>
+              <span>Reset All Products to Factory Baseline</span>
+            </button>
+          </div>
+
+        </div>
+
+        <!-- Right Column: Live Simulation Sandbox -->
+        <div class="admin-sandbox-col">
+          <aside class="admin-sandbox" id="admin-sandbox" aria-label="Live Simulation Sandbox">
+            <div class="sandbox-header">
+              <span class="sandbox-tag">Live Sandbox Simulator</span>
+              <h3 id="sandbox-product-title" class="sandbox-title">Premium Business Cards</h3>
+              <p class="sandbox-subhead">Test real-time calculations against live customer parameters.</p>
+            </div>
+
+            <!-- Sandbox Quantity Control -->
+            <div class="sandbox-field">
+              <div class="sandbox-qty-header">
+                <label for="sandbox-qty-slider" class="sandbox-label">Test Order Quantity:</label>
+                <span id="sandbox-qty-badge" class="sandbox-qty-badge">250 units</span>
+              </div>
+              <input type="range" id="sandbox-qty-slider" class="calc-range-slider" min="100" max="5000" step="50" value="250">
+            </div>
+
+            <!-- Dynamic Sandbox Options -->
+            <div id="sandbox-options-container" class="sandbox-options-container">
+              <!-- Dynamically rendered -->
+            </div>
+
+            <!-- Sandbox Rush Toggle -->
+            <div class="sandbox-field">
+              <label class="admin-checkbox-label">
+                <input type="checkbox" id="sandbox-rush-toggle">
+                <span>⚡ Test with Express Rush Turnaround</span>
+              </label>
+            </div>
+
+            <hr class="calc-divider">
+
+            <!-- Sandbox Calculation Receipt -->
+            <div class="sandbox-receipt">
+              <div class="sandbox-row">
+                <span>Base Unit Price</span>
+                <span id="sb-unit-base" class="sandbox-val">₦85 / unit</span>
+              </div>
+              <div class="sandbox-row">
+                <span>Selected Options Delta</span>
+                <span id="sb-options-delta" class="sandbox-val">+₦40 / unit</span>
+              </div>
+              <div class="sandbox-row">
+                <span>Effective Unit Price</span>
+                <span id="sb-effective-unit" class="sandbox-val">₦125 / unit</span>
+              </div>
+              <div class="sandbox-row">
+                <span>Gross Subtotal</span>
+                <span id="sb-gross-subtotal" class="sandbox-val">₦31,250</span>
+              </div>
+              <div class="sandbox-row sandbox-discount-row" id="sb-discount-line" style="display: none;">
+                <span class="discount-tag">Volume Savings (<span id="sb-discount-pct">10%</span>)</span>
+                <span id="sb-discount-amt" class="sandbox-val discount-val">-₦3,125</span>
+              </div>
+              <div class="sandbox-row" id="sb-rush-line" style="display: none;">
+                <span>Express Surcharge (+25%)</span>
+                <span id="sb-rush-fee" class="sandbox-val">+₦7,031</span>
+              </div>
+
+              <div class="sandbox-total-box">
+                <span class="sandbox-total-label">Estimated Customer Total:</span>
+                <span id="sb-final-total" class="sandbox-total-amt">₦28,125</span>
+              </div>
+            </div>
+
+            <!-- Quick Action: Copy Code -->
+            <button type="button" class="admin-btn admin-btn-primary admin-btn-block" data-action="copy-es6-code">
+              <span>View &amp; Copy ES6 Code</span>
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="16 18 22 12 16 6"></polyline>
+                <polyline points="8 6 2 12 8 18"></polyline>
+              </svg>
+            </button>
+          </aside>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- Modal: ES6 Code Viewer -->
+  <div id="code-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="code-modal-title" hidden>
+    <div class="modal-backdrop" data-action="close-code-modal"></div>
+    <div class="admin-modal-container">
+      <div class="admin-modal-header">
+        <h3 id="code-modal-title" class="admin-modal-title">Generated ES6 PRICING_MODEL Code</h3>
+        <button type="button" class="modal-close-btn" data-action="close-code-modal" aria-label="Close dialog">&times;</button>
+      </div>
+      <div class="admin-modal-body">
+        <p class="admin-modal-desc">This clean ES6 configuration reflects your tuned pricing. Copy and paste into <code>app.js</code> or apply directly to your browser.</p>
+        <pre class="admin-code-block"><code id="code-output"></code></pre>
+      </div>
+      <div class="admin-modal-footer">
+        <button type="button" class="admin-btn admin-btn-secondary" data-action="close-code-modal">Close</button>
+        <button type="button" class="admin-btn admin-btn-primary" id="btn-modal-copy" data-action="copy-code-text">
+          <span>Copy to Clipboard</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: JSON Import -->
+  <div id="import-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="import-modal-title" hidden>
+    <div class="modal-backdrop" data-action="close-import-modal"></div>
+    <div class="admin-modal-container">
+      <div class="admin-modal-header">
+        <h3 id="import-modal-title" class="admin-modal-title">Import Pricing Configuration</h3>
+        <button type="button" class="modal-close-btn" data-action="close-import-modal" aria-label="Close dialog">&times;</button>
+      </div>
+      <div class="admin-modal-body">
+        <p class="admin-modal-desc">Paste a valid JSON pricing configuration below or select a file to import.</p>
+        <textarea id="import-json-text" class="admin-textarea" rows="8" placeholder='{"business-cards": { ... }}'></textarea>
+      </div>
+      <div class="admin-modal-footer">
+        <button type="button" class="admin-btn admin-btn-secondary" data-action="close-import-modal">Cancel</button>
+        <button type="button" class="admin-btn admin-btn-primary" data-action="execute-import-json">
+          <span>Load Configuration</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="admin-toast" class="admin-toast" role="status" aria-live="polite" hidden></div>
+
+  <!-- Core Scripts -->
+  <script src="app.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>

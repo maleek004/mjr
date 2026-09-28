@@ -1376,6 +1376,25 @@
   }
 
   /**
+   * Get active pricing model with fallback to localStorage overrides
+   * @returns {Object} Active pricing model configuration
+   */
+  function getActivePricing() {
+    if (typeof localStorage !== 'undefined') {
+      try {
+        const stored = localStorage.getItem('mjr_custom_pricing');
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          if (parsed && typeof parsed === 'object') return parsed;
+        }
+      } catch (e) {
+        // Fallback gracefully
+      }
+    }
+    return PRICING_MODEL;
+  }
+
+  /**
    * Format numerical currency into Nigerian Naira (NGN)
    * @param {number} amount
    * @returns {string} Formatted currency string
@@ -1400,7 +1419,8 @@
    * @returns {number} Fractional discount (0.00 to 1.00)
    */
   function calculateVolumeDiscount(productId, quantity) {
-    const product = PRICING_MODEL[productId];
+    const pricing = getActivePricing();
+    const product = pricing[productId] || PRICING_MODEL[productId];
     if (!product || !Array.isArray(product.discounts)) return 0;
     const qty = Math.max(1, parseInt(quantity, 10) || 1);
     for (const tier of product.discounts) {
@@ -1417,7 +1437,8 @@
    * @returns {Object} Itemized estimate breakdown
    */
   function calculateEstimate({ productId, quantity, options = {}, isRush = false }) {
-    const product = PRICING_MODEL[productId] || PRICING_MODEL['business-cards'];
+    const pricing = getActivePricing();
+    const product = pricing[productId] || PRICING_MODEL[productId] || PRICING_MODEL['business-cards'];
     let qty = parseInt(quantity, 10);
     if (isNaN(qty) || qty < product.minQty) qty = product.minQty;
     if (qty > product.maxQty) qty = product.maxQty;
@@ -1579,7 +1600,8 @@
    * @param {number} currentQty
    */
   function renderCalculatorPresets(productId, currentQty) {
-    const product = PRICING_MODEL[productId];
+    const pricing = getActivePricing();
+    const product = pricing[productId] || PRICING_MODEL[productId];
     if (typeof document === 'undefined') return;
     const container = document.getElementById('calc-qty-presets');
     if (!product || !container || !Array.isArray(product.qtyPresets)) return;
@@ -1613,7 +1635,8 @@
       isRush: calculatorState.isRush
     });
 
-    const product = PRICING_MODEL[calculatorState.productId] || PRICING_MODEL['business-cards'];
+    const pricing = getActivePricing();
+    const product = pricing[calculatorState.productId] || PRICING_MODEL[calculatorState.productId] || PRICING_MODEL['business-cards'];
 
     // 1. Product Title
     const titleEl = document.getElementById('calc-summary-product-title');
@@ -1705,7 +1728,8 @@
    * @param {string} productId
    */
   function setCalculatorProduct(productId) {
-    const product = PRICING_MODEL[productId];
+    const pricing = getActivePricing();
+    const product = pricing[productId] || PRICING_MODEL[productId];
     if (!product) return;
 
     calculatorState.productId = productId;

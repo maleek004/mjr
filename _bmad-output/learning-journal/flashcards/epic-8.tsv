@@ -1,0 +1,22 @@
+What Web API is used to convert an in-memory JavaScript object into a downloadable file blob without a backend server?	new Blob([jsonString], { type: 'application/json' }) combined with URL.createObjectURL(blob)
+How does an anchor tag trigger a client-side file download programmatically in JavaScript?	Setting a.download = 'filename.json', a.href = objectUrl, and invoking a.click()
+Why should URL.revokeObjectURL(url) be called after initiating a file download in JavaScript?	It releases the browser memory associated with the created Blob URL, preventing memory leaks.
+How is complex nested state safely deep-cloned without external libraries in vanilla JavaScript?	JSON.parse(JSON.stringify(object)) (or structuredClone(object) in modern engines)
+What JavaScript method copies arbitrary text to the user's system clipboard using modern asynchronous Web APIs?	navigator.clipboard.writeText(textString)
+Why does localStorage data persist across browser restarts and page refreshes?	localStorage stores key-value pairs in the browser's persistent origin-bound Web Storage partition with no expiration date.
+How can a client-side application check for and parse localStorage data safely without crashing if corrupted?	Wrapping localStorage.getItem() and JSON.parse() inside a try...catch block.
+How is an ES6 code string generated dynamically from an in-memory JavaScript data structure?	String templating / line concatenation iterating through object keys and formatting nested arrays with proper indentation.
+What HTML5 attribute on a table cell spans across multiple columns?	colspan (e.g., colspan="3")
+How does dataset property mapping group indexed form fields in administrative table lists?	Using custom data attributes like data-group-idx and data-choice-idx to identify array positions on event.target.
+Why should numbers from HTML input fields be validated with parseInt() or parseFloat() before arithmetic operations?	HTML input values are returned as string types; adding strings performs string concatenation rather than numeric addition.
+What CSS property prevents an administrative sticky sidebar from scrolling out of view on tall viewports?	position: sticky; top: 80px;
+How is a temporary visual toast notification animated in vanilla CSS?	Transitioning opacity from 0 to 1 and transform from translateY(10px) to translateY(0) when removing the hidden attribute.
+What HTML5 tag represents non-vital, supplementary content like a sidebar or simulation tool?	<aside>
+Why is role="status" and aria-live="polite" important on an administrative toast message?	It ensures screen readers automatically announce success messages (e.g. 'Configuration saved!') without interrupting focus.
+How does admin.js synchronize changes made in the admin configurator with index.html without touching the codebase?	Saving the tuned model to localStorage.setItem('mjr_custom_pricing', ...) which app.js automatically checks on load.
+What method clears all administrative overrides and restores baseline factory pricing?	localStorage.removeItem('mjr_custom_pricing') followed by re-populating state from factory defaults.
+Why is user input sanitized with escapeHtml() before being interpolated into innerHTML?	To prevent Cross-Site Scripting (XSS) attacks by converting special characters (&, <, >, ", ') into HTML entities.
+How does a range slider and badge pair stay synchronized in the admin simulation sandbox?	An input event listener on the range slider updates the badge textContent and immediately executes calculateAdminSandbox().
+What is the purpose of Object.freeze() in the generated ES6 pricing code?	It locks the data structure at runtime to prevent unintended mutations from buggy application code.
+How does the admin rush rate field dynamically modify calculation math across products?	finalTotal = Math.round(discountedSubtotal * (1 + (adminState.rushRate / 100)))
+Why is JSON.stringify(data, null, 2) preferred when exporting JSON files or formatting code outputs?	The third argument (2) formats the JSON string with 2-space indentation, making it human-readable.

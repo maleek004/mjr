@@ -392,3 +392,26 @@
 
 4. **1-Click WhatsApp Proposal Deep-Linking (RFC 3986)**:
    - Generated structured, itemized WhatsApp quote inquiries that pass product specifications, exact quantity, turnaround speed, and calculated total directly to MJr's sales desk.
+
+## Sprint 8: Standalone Admin Pricing Center & Visual Code Configurator
+
+### Epic 8: Standalone Admin Pricing Center & Visual Code Configurator
+* **Date**: 2026-09-28
+* **Stories Implemented**: Story 8.1, Story 8.2, Story 8.3
+* **Files Implemented**: `admin.html`, `admin.css`, `admin.js`, `app.js`, `index.html`
+* **Test Suite**: `_bmad-output/test-artifacts/epic-8.test.mjs` (3/3 passed, 57/57 total project suite passing)
+* **Flashcards**: `_bmad-output/learning-journal/flashcards/epic-8.tsv` (22 cards)
+
+#### Core Concepts Mastered:
+1. **Standalone Admin UI Architecture & CSS Dashboard Design**:
+   - Built a high-density, accessible standalone dashboard in `admin.html` & `admin.css` with dark-mode aesthetic, contrast badges, and responsive 2-column layout.
+   - Preserved zero-framework vanilla invariants while providing desktop-class configuration ergonomics.
+
+2. **Reactive Administrative State & Live Simulation Sandbox**:
+   - Engineered `admin.js` to manage mutable draft models with real-time recalculation of base unit economics, option price deltas ($\pm ₦$), volume discount matrix tiers, and express rush turnaround percentages.
+   - Connected sticky sandbox simulator with dynamic sample controls to immediately test margin outcomes before publishing.
+
+3. **Client-Side ES6 Code Generation & Web Storage Bridge**:
+   - Developed `generateES6PricingCode()` to serialize in-memory pricing structures into clean, deeply frozen, production-grade ES6 JavaScript code blocks (`const PRICING_MODEL = Object.freeze(...)`).
+   - Integrated client-side `localStorage` sync adapter (`mjr_custom_pricing`) with graceful fallback in `app.js`, allowing instant live site testing with zero build steps or server deployments.
+   - Added zero-backend file export (`new Blob(...)`, `URL.createObjectURL()`) and clipboard API integration (`navigator.clipboard.writeText`).
