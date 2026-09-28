@@ -17,6 +17,183 @@
     isMobileNavOpen: false
   };
 
+  // Dynamic Pricing Model Registry (Deeply Immutable)
+  const PRICING_MODEL = Object.freeze({
+    'business-cards': Object.freeze({
+      id: 'business-cards',
+      title: 'Premium Business Cards',
+      category: 'Branding & Stationery',
+      unitBasePrice: 85,
+      minQty: 100,
+      maxQty: 5000,
+      stepQty: 50,
+      defaultQty: 250,
+      qtyPresets: [100, 250, 500, 1000, 2500],
+      discounts: [
+        { minQty: 1000, rate: 0.20 },
+        { minQty: 500, rate: 0.15 },
+        { minQty: 250, rate: 0.10 },
+        { minQty: 100, rate: 0.00 }
+      ],
+      options: [
+        {
+          id: 'sides',
+          label: 'Print Sides',
+          type: 'radio',
+          choices: [
+            { value: 'single', label: 'Single-Sided', priceDelta: 0, desc: 'Front full color only' },
+            { value: 'double', label: 'Double-Sided', priceDelta: 25, desc: 'Front & back full color (+₦25/unit)' }
+          ],
+          default: 'double'
+        },
+        {
+          id: 'finish',
+          label: 'Surface Finish',
+          type: 'radio',
+          choices: [
+            { value: 'matte', label: 'Matte Lamination', priceDelta: 15, desc: 'Silky smooth anti-glare' },
+            { value: 'gloss', label: 'Gloss Lamination', priceDelta: 10, desc: 'High-shine reflective sheen' },
+            { value: 'spot-uv', label: 'Matte + Raised Spot UV', priceDelta: 45, desc: 'Tactile gloss accent (+₦45/unit)' }
+          ],
+          default: 'matte'
+        }
+      ]
+    }),
+    'brochures': Object.freeze({
+      id: 'brochures',
+      title: 'Corporate Brochures & Catalogues',
+      category: 'Editorial & Publications',
+      unitBasePrice: 420,
+      minQty: 50,
+      maxQty: 5000,
+      stepQty: 50,
+      defaultQty: 250,
+      qtyPresets: [50, 100, 250, 500, 1000],
+      discounts: [
+        { minQty: 1000, rate: 0.25 },
+        { minQty: 500, rate: 0.18 },
+        { minQty: 250, rate: 0.12 },
+        { minQty: 100, rate: 0.05 },
+        { minQty: 50, rate: 0.00 }
+      ],
+      options: [
+        {
+          id: 'pages',
+          label: 'Page Extent (A4/A5)',
+          type: 'radio',
+          choices: [
+            { value: '8pp', label: '8-Page Compendium', priceDelta: 0, desc: 'Saddle-stitched booklet' },
+            { value: '16pp', label: '16-Page Booklet', priceDelta: 280, desc: 'Standard company profile' },
+            { value: '24pp', label: '24-Page Catalogue', priceDelta: 520, desc: 'Comprehensive annual report' }
+          ],
+          default: '16pp'
+        },
+        {
+          id: 'lamination',
+          label: 'Cover Finish',
+          type: 'radio',
+          choices: [
+            { value: 'matte', label: 'Matte Lamination', priceDelta: 50, desc: 'Executive matte coating' },
+            { value: 'gloss', label: 'Gloss Lamination', priceDelta: 40, desc: 'Vibrant glossy sheen' },
+            { value: 'foil', label: 'Gold / Silver Foil Accent', priceDelta: 120, desc: 'Metallic luxury foil stamping' }
+          ],
+          default: 'matte'
+        }
+      ]
+    }),
+    't-shirts': Object.freeze({
+      id: 't-shirts',
+      title: 'Custom Branded Shirts & Merch',
+      category: 'Apparel & Uniforms',
+      unitBasePrice: 4500,
+      minQty: 20,
+      maxQty: 1000,
+      stepQty: 10,
+      defaultQty: 50,
+      qtyPresets: [20, 50, 100, 200, 500],
+      discounts: [
+        { minQty: 500, rate: 0.20 },
+        { minQty: 200, rate: 0.15 },
+        { minQty: 100, rate: 0.10 },
+        { minQty: 50, rate: 0.05 },
+        { minQty: 20, rate: 0.00 }
+      ],
+      options: [
+        {
+          id: 'printLocation',
+          label: 'Print Placements',
+          type: 'radio',
+          choices: [
+            { value: 'chest', label: 'Front Chest Only', priceDelta: 0, desc: 'High-res DTF / Screenprint' },
+            { value: 'front-back', label: 'Front + Back Print', priceDelta: 950, desc: 'Dual-side branding' },
+            { value: 'full-custom', label: 'Front, Back + Sleeve', priceDelta: 1600, desc: 'Complete 3-point corporate branding' }
+          ],
+          default: 'front-back'
+        },
+        {
+          id: 'fabric',
+          label: 'Fabric Weight',
+          type: 'radio',
+          choices: [
+            { value: 'standard', label: '180gsm Combed Cotton', priceDelta: 0, desc: 'Lightweight & breathable' },
+            { value: 'heavyweight', label: '220gsm Heavyweight Cotton', priceDelta: 750, desc: 'Luxury streetwear density' }
+          ],
+          default: 'heavyweight'
+        }
+      ]
+    }),
+    'banners': Object.freeze({
+      id: 'banners',
+      title: 'Roll-Up Display Banners & Signage',
+      category: 'Large Format & Events',
+      unitBasePrice: 24500,
+      minQty: 1,
+      maxQty: 50,
+      stepQty: 1,
+      defaultQty: 2,
+      qtyPresets: [1, 2, 4, 8, 15],
+      discounts: [
+        { minQty: 20, rate: 0.18 },
+        { minQty: 10, rate: 0.12 },
+        { minQty: 4, rate: 0.08 },
+        { minQty: 1, rate: 0.00 }
+      ],
+      options: [
+        {
+          id: 'baseType',
+          label: 'Roll-up Stand Base',
+          type: 'radio',
+          choices: [
+            { value: 'standard', label: 'Standard Aluminium Base', priceDelta: 0, desc: 'Lightweight dual-foot stand' },
+            { value: 'luxury', label: 'Luxury Broad Base Stand', priceDelta: 6500, desc: 'Chrome teardrop base + padded bag' }
+          ],
+          default: 'luxury'
+        },
+        {
+          id: 'material',
+          label: 'Banner Substrate',
+          type: 'radio',
+          choices: [
+            { value: 'matte-vinyl', label: 'Matte Anti-Glare Solvo', priceDelta: 0, desc: 'Zero reflection under hall lighting' },
+            { value: 'pvc-canvas', label: 'Heavy Duty PVC Canvas', priceDelta: 3500, desc: 'Textured outdoor tear-resistant' }
+          ],
+          default: 'matte-vinyl'
+        }
+      ]
+    })
+  });
+
+  // Calculator Runtime State
+  const calculatorState = {
+    productId: 'business-cards',
+    quantity: 250,
+    options: {
+      sides: 'double',
+      finish: 'matte'
+    },
+    isRush: false
+  };
+
   // Cached trigger element for focus restoration
   let lastFocusedElement = null;
 
@@ -186,6 +363,26 @@
           nextProject();
           break;
         }
+        case 'calc-select-product': {
+          event.preventDefault();
+          const prodId = actionEl.dataset.productId;
+          if (prodId) {
+            setCalculatorProduct(prodId);
+          }
+          break;
+        }
+        case 'calc-qty-preset': {
+          event.preventDefault();
+          const presetQty = parseInt(actionEl.dataset.qty, 10);
+          if (!isNaN(presetQty)) {
+            setCalculatorQuantity(presetQty);
+          }
+          break;
+        }
+        case 'calc-whatsapp-inquire': {
+          handleCalculatorWhatsAppInquiry(actionEl);
+          break;
+        }
         case 'toggle-mobile-nav': {
           event.preventDefault();
           toggleMobileNav();
@@ -197,6 +394,55 @@
         }
         default:
           break;
+      }
+    });
+
+    // Delegated Input & Change Listeners for Calculator
+    document.addEventListener('input', (event) => {
+      const target = event.target;
+      if (!target) return;
+
+      if (target.id === 'calc-quantity-range') {
+        const val = parseInt(target.value, 10);
+        const numberInput = document.getElementById('calc-quantity');
+        if (numberInput) numberInput.value = val;
+        setCalculatorQuantity(val, false);
+      } else if (target.id === 'calc-quantity') {
+        const val = parseInt(target.value, 10);
+        const rangeSlider = document.getElementById('calc-quantity-range');
+        if (rangeSlider && !isNaN(val)) rangeSlider.value = val;
+        setCalculatorQuantity(val, false);
+      }
+    });
+
+    document.addEventListener('change', (event) => {
+      const target = event.target;
+      if (!target) return;
+
+      if (target.name === 'calc-turnaround') {
+        calculatorState.isRush = (target.value === 'rush');
+        const pillLabels = document.querySelectorAll('.calc-turnaround-options .calc-radio-pill');
+        pillLabels.forEach(label => {
+          const radio = label.querySelector('input[type="radio"]');
+          if (radio) {
+            label.classList.toggle('active', radio.checked);
+          }
+        });
+        updateCalculatorSummary();
+      } else if (target.name && target.name.startsWith('calc-opt-')) {
+        const optGroupId = target.dataset.optionGroup;
+        if (optGroupId) {
+          calculatorState.options[optGroupId] = target.value;
+          const groupContainer = target.closest('.calc-pill-options-grid');
+          if (groupContainer) {
+            const pills = groupContainer.querySelectorAll('.calc-radio-pill');
+            pills.forEach(p => {
+              const r = p.querySelector('input[type="radio"]');
+              if (r) p.classList.toggle('active', r.checked);
+            });
+          }
+          updateCalculatorSummary();
+        }
       }
     });
   }
@@ -1130,12 +1376,423 @@
   }
 
   /**
+   * Format numerical currency into Nigerian Naira (NGN)
+   * @param {number} amount
+   * @returns {string} Formatted currency string
+   */
+  function formatCurrency(amount) {
+    const val = typeof amount === 'number' && !isNaN(amount) ? amount : 0;
+    try {
+      return new Intl.NumberFormat('en-NG', {
+        style: 'currency',
+        currency: 'NGN',
+        maximumFractionDigits: 0
+      }).format(val);
+    } catch {
+      return `₦${Math.round(val).toLocaleString()}`;
+    }
+  }
+
+  /**
+   * Calculate volume discount fraction for a given product and quantity
+   * @param {string} productId
+   * @param {number} quantity
+   * @returns {number} Fractional discount (0.00 to 1.00)
+   */
+  function calculateVolumeDiscount(productId, quantity) {
+    const product = PRICING_MODEL[productId];
+    if (!product || !Array.isArray(product.discounts)) return 0;
+    const qty = Math.max(1, parseInt(quantity, 10) || 1);
+    for (const tier of product.discounts) {
+      if (qty >= tier.minQty) {
+        return tier.rate;
+      }
+    }
+    return 0;
+  }
+
+  /**
+   * Pure estimate calculation function
+   * @param {Object} params - { productId, quantity, options, isRush }
+   * @returns {Object} Itemized estimate breakdown
+   */
+  function calculateEstimate({ productId, quantity, options = {}, isRush = false }) {
+    const product = PRICING_MODEL[productId] || PRICING_MODEL['business-cards'];
+    let qty = parseInt(quantity, 10);
+    if (isNaN(qty) || qty < product.minQty) qty = product.minQty;
+    if (qty > product.maxQty) qty = product.maxQty;
+
+    let unitOptionDeltas = 0;
+    if (Array.isArray(product.options)) {
+      product.options.forEach(optGroup => {
+        const chosenVal = options[optGroup.id] || optGroup.default;
+        const match = optGroup.choices.find(c => c.value === chosenVal);
+        if (match && typeof match.priceDelta === 'number') {
+          unitOptionDeltas += match.priceDelta;
+        }
+      });
+    }
+
+    const unitPrice = product.unitBasePrice + unitOptionDeltas;
+    const subtotal = unitPrice * qty;
+    const discountRate = calculateVolumeDiscount(product.id, qty);
+    const discountAmount = Math.round(subtotal * discountRate);
+    const discountedSubtotal = subtotal - discountAmount;
+    const rushMultiplier = isRush ? 1.25 : 1.0;
+    const finalTotal = Math.round(discountedSubtotal * rushMultiplier);
+    const rushFee = isRush ? (finalTotal - discountedSubtotal) : 0;
+
+    return {
+      productId: product.id,
+      productTitle: product.title,
+      quantity: qty,
+      unitPrice,
+      subtotal,
+      discountRate,
+      discountAmount,
+      isRush: Boolean(isRush),
+      rushFee,
+      finalTotal
+    };
+  }
+
+  /**
+   * Generate itemized WhatsApp RFC 3986 payload for Calculator quote
+   * @param {Object} params
+   * @returns {string} WhatsApp message text
+   */
+  function generateCalculatorWhatsAppText({ productId, quantity, options = {}, isRush = false, estimate }) {
+    const product = PRICING_MODEL[productId] || PRICING_MODEL['business-cards'];
+    const est = estimate || calculateEstimate({ productId, quantity, options, isRush });
+
+    const specLines = [];
+    if (Array.isArray(product.options)) {
+      product.options.forEach(optGroup => {
+        const chosenVal = options[optGroup.id] || optGroup.default;
+        const match = optGroup.choices.find(c => c.value === chosenVal);
+        if (match) {
+          specLines.push(`${optGroup.label}: ${match.label}`);
+        }
+      });
+    }
+
+    const turnaroundStr = isRush ? '⚡ Express Rush (24–48 Hours)' : 'Standard Production (3–5 Days)';
+    const totalFormatted = formatCurrency(est.finalTotal);
+
+    const message = [
+      `Hello MJr Designs & Print Solutions,`,
+      ``,
+      `I calculated a project quote on your website estimator:`,
+      `• Product: ${product.title}`,
+      `• Quantity: ${est.quantity.toLocaleString()} units`,
+      `• Specs: ${specLines.join(' | ')}`,
+      `• Schedule: ${turnaroundStr}`,
+      `• Estimated Total: ${totalFormatted}`,
+      ``,
+      `Please verify this configuration and let me know the next steps to proceed.`
+    ].join('\n');
+
+    return message;
+  }
+
+  /**
+   * Handle WhatsApp inquiry for the dynamic calculator
+   * @param {HTMLElement} actionEl
+   */
+  function handleCalculatorWhatsAppInquiry(actionEl) {
+    if (!actionEl) return;
+    const message = generateCalculatorWhatsAppText({
+      productId: calculatorState.productId,
+      quantity: calculatorState.quantity,
+      options: calculatorState.options,
+      isRush: calculatorState.isRush
+    });
+    const cleanPhone = sanitizePhoneNumber(WHATSAPP_CONFIG.defaultPhone);
+    const encodedText = encodeURIComponent(message);
+    const url = `${WHATSAPP_CONFIG.baseUrl}${cleanPhone}?text=${encodedText}`;
+
+    if (actionEl.tagName && actionEl.tagName.toLowerCase() === 'a') {
+      actionEl.href = url;
+      actionEl.target = '_blank';
+      actionEl.rel = 'noopener noreferrer';
+    } else if (typeof window !== 'undefined' && typeof window.open === 'function') {
+      window.open(url, '_blank', 'noopener,noreferrer');
+    }
+  }
+
+  /**
+   * Render dynamic option fields for the selected product
+   * @param {string} productId
+   */
+  function renderCalculatorOptions(productId) {
+    const product = PRICING_MODEL[productId];
+    if (typeof document === 'undefined') return;
+    const container = document.getElementById('calc-dynamic-options');
+    if (!product || !container) return;
+
+    if (!calculatorState.options || typeof calculatorState.options !== 'object') {
+      calculatorState.options = {};
+    }
+
+    let markup = '';
+    if (Array.isArray(product.options)) {
+      product.options.forEach(optGroup => {
+        if (!calculatorState.options[optGroup.id]) {
+          calculatorState.options[optGroup.id] = optGroup.default;
+        }
+        const activeVal = calculatorState.options[optGroup.id];
+
+        markup += `
+          <div class="calc-field-group">
+            <span class="calc-opt-group-label">${escapeHtml(optGroup.label)}</span>
+            <div class="calc-pill-options-grid" role="radiogroup" aria-label="${escapeHtml(optGroup.label)}">
+        `;
+
+        optGroup.choices.forEach(choice => {
+          const isChecked = (choice.value === activeVal);
+          markup += `
+            <label class="calc-radio-pill ${isChecked ? 'active' : ''}">
+              <input type="radio" 
+                     name="calc-opt-${escapeHtml(optGroup.id)}" 
+                     value="${escapeHtml(choice.value)}" 
+                     data-option-group="${escapeHtml(optGroup.id)}"
+                     ${isChecked ? 'checked' : ''}>
+              <span class="pill-title">${escapeHtml(choice.label)}</span>
+              <span class="pill-desc">${escapeHtml(choice.desc || '')}</span>
+            </label>
+          `;
+        });
+
+        markup += `
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    container.innerHTML = markup;
+  }
+
+  /**
+   * Render preset quantity chips for active product
+   * @param {string} productId
+   * @param {number} currentQty
+   */
+  function renderCalculatorPresets(productId, currentQty) {
+    const product = PRICING_MODEL[productId];
+    if (typeof document === 'undefined') return;
+    const container = document.getElementById('calc-qty-presets');
+    if (!product || !container || !Array.isArray(product.qtyPresets)) return;
+
+    let markup = '';
+    product.qtyPresets.forEach(preset => {
+      const isActive = (preset === currentQty);
+      markup += `
+        <button type="button" 
+                class="calc-preset-chip ${isActive ? 'active' : ''}" 
+                data-action="calc-qty-preset" 
+                data-qty="${preset}">
+          ${preset.toLocaleString()} pcs
+        </button>
+      `;
+    });
+
+    container.innerHTML = markup;
+  }
+
+  /**
+   * Update the live estimate summary card in DOM
+   */
+  function updateCalculatorSummary() {
+    if (typeof document === 'undefined') return;
+
+    const est = calculateEstimate({
+      productId: calculatorState.productId,
+      quantity: calculatorState.quantity,
+      options: calculatorState.options,
+      isRush: calculatorState.isRush
+    });
+
+    const product = PRICING_MODEL[calculatorState.productId] || PRICING_MODEL['business-cards'];
+
+    // 1. Product Title
+    const titleEl = document.getElementById('calc-summary-product-title');
+    if (titleEl) titleEl.textContent = product.title;
+
+    // 2. Qty Display Badge
+    const qtyDisplay = document.getElementById('calc-qty-display');
+    if (qtyDisplay) qtyDisplay.textContent = `${est.quantity.toLocaleString()} units`;
+
+    // 3. Spec Pills
+    const specsContainer = document.getElementById('calc-summary-specs');
+    if (specsContainer && Array.isArray(product.options)) {
+      const specPills = [];
+      product.options.forEach(optGroup => {
+        const val = calculatorState.options[optGroup.id] || optGroup.default;
+        const choice = optGroup.choices.find(c => c.value === val);
+        if (choice) specPills.push(choice.label);
+      });
+      specPills.push(est.isRush ? '⚡ Express Rush' : 'Standard Turnaround');
+
+      specsContainer.innerHTML = specPills
+        .map(pill => `<span class="spec-pill">${escapeHtml(pill)}</span>`)
+        .join('');
+    }
+
+    // 4. Line Items
+    const unitPriceEl = document.getElementById('calc-unit-price');
+    if (unitPriceEl) unitPriceEl.textContent = `${formatCurrency(est.unitPrice)} / unit`;
+
+    const subtotalEl = document.getElementById('calc-subtotal');
+    if (subtotalEl) subtotalEl.textContent = formatCurrency(est.subtotal);
+
+    // 5. Volume Discount Line
+    const discountLine = document.getElementById('calc-discount-line');
+    const discountRateEl = document.getElementById('calc-discount-rate');
+    const discountAmountEl = document.getElementById('calc-discount-amount');
+    if (discountLine && discountRateEl && discountAmountEl) {
+      if (est.discountRate > 0) {
+        discountLine.style.display = 'flex';
+        discountRateEl.textContent = `-${Math.round(est.discountRate * 100)}%`;
+        discountAmountEl.textContent = `-${formatCurrency(est.discountAmount)}`;
+      } else {
+        discountLine.style.display = 'none';
+      }
+    }
+
+    // 6. Rush Fee Line
+    const rushLine = document.getElementById('calc-rush-line');
+    const rushFeeEl = document.getElementById('calc-rush-fee');
+    if (rushLine && rushFeeEl) {
+      if (est.isRush) {
+        rushLine.style.display = 'flex';
+        rushFeeEl.textContent = `+${formatCurrency(est.rushFee)}`;
+      } else {
+        rushLine.style.display = 'none';
+      }
+    }
+
+    // 7. Total Amount
+    const totalAmountEl = document.getElementById('calc-total-amount');
+    if (totalAmountEl) {
+      totalAmountEl.textContent = formatCurrency(est.finalTotal);
+    }
+
+    // 8. Update WhatsApp Button Link
+    const whatsappBtn = document.getElementById('calc-whatsapp-btn');
+    if (whatsappBtn) {
+      const message = generateCalculatorWhatsAppText({
+        productId: calculatorState.productId,
+        quantity: calculatorState.quantity,
+        options: calculatorState.options,
+        isRush: calculatorState.isRush,
+        estimate: est
+      });
+      const cleanPhone = sanitizePhoneNumber(WHATSAPP_CONFIG.defaultPhone);
+      whatsappBtn.href = `${WHATSAPP_CONFIG.baseUrl}${cleanPhone}?text=${encodeURIComponent(message)}`;
+    }
+
+    // 9. Sync Preset Chips Active State
+    const presetButtons = document.querySelectorAll('.calc-preset-chip');
+    presetButtons.forEach(btn => {
+      const q = parseInt(btn.dataset.qty, 10);
+      btn.classList.toggle('active', q === est.quantity);
+    });
+  }
+
+  /**
+   * Set active calculator product and reconfigure form controls
+   * @param {string} productId
+   */
+  function setCalculatorProduct(productId) {
+    const product = PRICING_MODEL[productId];
+    if (!product) return;
+
+    calculatorState.productId = productId;
+    calculatorState.quantity = product.defaultQty;
+    calculatorState.options = {};
+    if (Array.isArray(product.options)) {
+      product.options.forEach(opt => {
+        calculatorState.options[opt.id] = opt.default;
+      });
+    }
+
+    // Update Product Tabs Active State
+    if (typeof document !== 'undefined') {
+      const tabs = document.querySelectorAll('.calc-product-tab');
+      tabs.forEach(tab => {
+        const isActive = (tab.dataset.productId === productId);
+        tab.classList.toggle('active', isActive);
+        tab.setAttribute('aria-selected', isActive ? 'true' : 'false');
+      });
+
+      // Update Slider Bounds & Value
+      const rangeSlider = document.getElementById('calc-quantity-range');
+      const numberInput = document.getElementById('calc-quantity');
+      if (rangeSlider) {
+        rangeSlider.min = product.minQty;
+        rangeSlider.max = product.maxQty;
+        rangeSlider.step = product.stepQty || 1;
+        rangeSlider.value = product.defaultQty;
+      }
+      if (numberInput) {
+        numberInput.min = product.minQty;
+        numberInput.max = product.maxQty;
+        numberInput.step = product.stepQty || 1;
+        numberInput.value = product.defaultQty;
+      }
+
+      renderCalculatorOptions(productId);
+      renderCalculatorPresets(productId, product.defaultQty);
+      updateCalculatorSummary();
+    }
+  }
+
+  /**
+   * Set quantity and update slider/input/summary
+   * @param {number} qty
+   * @param {boolean} [updateInputs=true]
+   */
+  function setCalculatorQuantity(qty, updateInputs = true) {
+    const product = PRICING_MODEL[calculatorState.productId] || PRICING_MODEL['business-cards'];
+    let val = parseInt(qty, 10);
+    if (isNaN(val)) val = product.minQty;
+    if (val < product.minQty) val = product.minQty;
+    if (val > product.maxQty) val = product.maxQty;
+
+    calculatorState.quantity = val;
+
+    if (typeof document !== 'undefined') {
+      if (updateInputs) {
+        const rangeSlider = document.getElementById('calc-quantity-range');
+        const numberInput = document.getElementById('calc-quantity');
+        if (rangeSlider) rangeSlider.value = val;
+        if (numberInput) numberInput.value = val;
+      }
+
+      updateCalculatorSummary();
+    }
+  }
+
+  /**
+   * Initialize Calculator on page load
+   */
+  function initCalculator() {
+    if (typeof document === 'undefined') return;
+    const calcSection = document.getElementById('calculator');
+    if (!calcSection) return;
+
+    setCalculatorProduct(calculatorState.productId);
+  }
+
+  /**
    * Initialize Application on DOM Ready
    */
   if (typeof document !== 'undefined') {
     document.addEventListener('DOMContentLoaded', () => {
       renderPortfolioCards(PORTFOLIO_DATA);
       initTouchGestures();
+      initCalculator();
     });
   }
 
@@ -1157,6 +1814,16 @@
     window.nextProject = nextProject;
     window.prevProject = prevProject;
     window.state = state;
+    window.PRICING_MODEL = PRICING_MODEL;
+    window.calculatorState = calculatorState;
+    window.calculateEstimate = calculateEstimate;
+    window.calculateVolumeDiscount = calculateVolumeDiscount;
+    window.formatCurrency = formatCurrency;
+    window.generateCalculatorWhatsAppText = generateCalculatorWhatsAppText;
+    window.setCalculatorProduct = setCalculatorProduct;
+    window.setCalculatorQuantity = setCalculatorQuantity;
+    window.updateCalculatorSummary = updateCalculatorSummary;
+    window.initCalculator = initCalculator;
     window.WHATSAPP_CONFIG = WHATSAPP_CONFIG;
     window.WHATSAPP_TEMPLATES = WHATSAPP_TEMPLATES;
     window.sanitizePhoneNumber = sanitizePhoneNumber;
@@ -1183,6 +1850,16 @@
       nextProject,
       prevProject,
       state,
+      PRICING_MODEL,
+      calculatorState,
+      calculateEstimate,
+      calculateVolumeDiscount,
+      formatCurrency,
+      generateCalculatorWhatsAppText,
+      setCalculatorProduct,
+      setCalculatorQuantity,
+      updateCalculatorSummary,
+      initCalculator,
       WHATSAPP_CONFIG,
       WHATSAPP_TEMPLATES,
       sanitizePhoneNumber,
@@ -1192,3 +1869,4 @@
     };
   }
 })();
+

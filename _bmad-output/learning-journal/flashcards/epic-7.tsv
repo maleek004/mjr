@@ -1,0 +1,22 @@
+What JavaScript method creates deeply immutable objects where properties cannot be added, removed, or modified?	Object.freeze()
+Why is Object.freeze() shallow by default in JavaScript?	It only freezes the immediate properties of the object; nested objects or arrays remain mutable unless recursively frozen.
+How is currency formatted to Nigerian Naira (NGN) without decimals using modern Web APIs?	new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN', maximumFractionDigits: 0 }).format(value)
+What is the difference between the 'input' and 'change' events on an <input type="range"> slider?	The 'input' event fires continuously as the user drags the thumb, whereas 'change' only fires when the user releases the thumb or commits the value.
+Why should event delegation be preferred over attaching separate 'input' listeners to multiple form fields?	It attaches a single listener on an ancestor element (or document), reducing memory footprint and automatically handling dynamically rendered inputs.
+How is volume discount calculated from tiered threshold arrays in PRICING_MODEL?	Iterating through tiers sorted by descending minQty and selecting the rate for the first tier where current quantity >= minQty.
+What formula calculates total price with an optional rush turnaround surcharge?	finalTotal = Math.round((subtotal - discountAmount) * (isRush ? 1.25 : 1.0))
+What ARIA attribute ensures assistive technologies announce dynamic price changes when the total updates?	aria-live="polite"
+Why is type="button" mandatory on non-submitting <button> elements inside a <form>?	In HTML5, the default button type inside a form is 'submit', which would trigger form submission and page reloads on click.
+How do synchronized range slider and number input fields stay in step during bidirectional user input?	The 'input' event listener reads target.value and updates the sibling control's .value property before dispatching the state recalculation.
+What CSS property controls the tint color of native range sliders, checkboxes, and radio buttons?	accent-color: var(--color-primary);
+What CSS display property allows the summary card to stick during scrolling while remaining in document flow?	position: sticky; top: 90px;
+What CSS selector pseudoclass applies focus rings strictly for keyboard users while suppressing them on mouse clicks?	:focus-visible
+How is a custom radio pill styled to reflect its checked state cleanly in CSS?	Using the hidden input with label styling or checking radio.checked in JavaScript to toggle an .active class on the label container.
+Why should encodeURIComponent() be used when building WhatsApp URL query strings?	It converts spaces and special characters (newlines, colons, bullets, currency symbols) into RFC 3986 percent-encoded strings (%20, %0A, %E2%82%A6).
+What HTML5 attribute groups a set of related radio buttons together so only one can be checked at a time?	The name attribute (e.g., name="calc-turnaround").
+How does dataset property mapping connect HTML markup to JavaScript event handling?	Data attributes like data-action="calc-select-product" and data-product-id="brochures" are read via event.target.closest('[data-action]').dataset.
+Why is Math.round() or Math.floor() necessary when computing currency discounts in JavaScript?	Floating-point arithmetic in JavaScript can produce tiny decimal imprecisions (e.g., 0.1 + 0.2 = 0.30000000000000004); rounding ensures exact integer currency values.
+What is the purpose of role="radiogroup" on a dynamic pill options container?	It communicates to assistive screen readers that the group of custom pills represents a mutually exclusive set of choices.
+What DOM property on input elements defines the minimum allowable numerical value?	The min attribute (e.g., min="100").
+What DOM property on input elements defines the granularity of allowable value increments?	The step attribute (e.g., step="50").
+Why is rel="noopener noreferrer" essential when opening WhatsApp links with target="_blank"?	It prevents the opened page from accessing window.opener (avoiding tabnabbing security vulnerabilities) and omits the Referer HTTP header.

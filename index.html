@@ -35,6 +35,7 @@
       <nav class="site-nav" aria-label="Main Navigation">
         <ul class="nav-list" role="list">
           <li><a href="#portfolio" class="nav-link">Portfolio &amp; Proofs</a></li>
+          <li><a href="#calculator" class="nav-link">Cost Estimator</a></li>
           <li><a href="#services" class="nav-link">Services &amp; Capabilities</a></li>
           <li><a href="#about" class="nav-link">About &amp; Clients</a></li>
           <li><a href="#contact" class="nav-link">Contact</a></li>
@@ -70,6 +71,7 @@
         <div class="mobile-drawer-content">
           <ul class="mobile-nav-list" role="list">
             <li><a href="#portfolio" class="mobile-nav-link" data-action="close-mobile-nav">Portfolio &amp; Proofs</a></li>
+            <li><a href="#calculator" class="mobile-nav-link" data-action="close-mobile-nav">Cost Estimator</a></li>
             <li><a href="#services" class="mobile-nav-link" data-action="close-mobile-nav">Services &amp; Capabilities</a></li>
             <li><a href="#about" class="mobile-nav-link" data-action="close-mobile-nav">About &amp; Clients</a></li>
             <li><a href="#contact" class="mobile-nav-link" data-action="close-mobile-nav">Contact</a></li>
@@ -165,6 +167,170 @@
         <!-- Dynamic 2D Portfolio Grid Container -->
         <div class="portfolio-grid" id="portfolio-grid">
           <!-- Populated dynamically by app.js -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Dynamic Print & Branding Cost Estimator Section Landmark -->
+    <section id="calculator" class="section calculator-section" aria-labelledby="calc-title">
+      <div class="container">
+        <div class="section-header">
+          <p class="section-tag">Instant Quote Calculator</p>
+          <h2 id="calc-title" class="section-title">Calculate Your Production Costs</h2>
+          <p class="section-desc">Select your product, configure specifications, and adjust volume to get an immediate, transparent estimate.</p>
+        </div>
+
+        <!-- Product Switcher Tabs -->
+        <div class="calc-product-tabs" role="tablist" aria-label="Select Print Product">
+          <button type="button" class="calc-product-tab active" role="tab" id="calc-tab-business-cards" aria-selected="true" data-action="calc-select-product" data-product-id="business-cards">
+            <span class="calc-tab-icon" aria-hidden="true">📇</span>
+            <span class="calc-tab-label">Business Cards</span>
+          </button>
+          <button type="button" class="calc-product-tab" role="tab" id="calc-tab-brochures" aria-selected="false" data-action="calc-select-product" data-product-id="brochures">
+            <span class="calc-tab-icon" aria-hidden="true">📖</span>
+            <span class="calc-tab-label">Brochures &amp; Booklets</span>
+          </button>
+          <button type="button" class="calc-product-tab" role="tab" id="calc-tab-t-shirts" aria-selected="false" data-action="calc-select-product" data-product-id="t-shirts">
+            <span class="calc-tab-icon" aria-hidden="true">👕</span>
+            <span class="calc-tab-label">Branded Shirts</span>
+          </button>
+          <button type="button" class="calc-product-tab" role="tab" id="calc-tab-banners" aria-selected="false" data-action="calc-select-product" data-product-id="banners">
+            <span class="calc-tab-icon" aria-hidden="true">🚩</span>
+            <span class="calc-tab-label">Roll-Up Banners</span>
+          </button>
+        </div>
+
+        <!-- 2-Column Responsive Layout -->
+        <div class="calc-grid">
+          
+          <!-- Left Column: Interactive Form Controls -->
+          <div class="calc-form-wrap">
+            <form id="calc-form" class="calc-form" onsubmit="return false;">
+              
+              <!-- Quantity Slider & Numeric Stepper -->
+              <div class="calc-field-group">
+                <div class="calc-field-header">
+                  <label for="calc-quantity" class="calc-field-label">Production Quantity</label>
+                  <span id="calc-qty-display" class="calc-qty-badge">250 units</span>
+                </div>
+                
+                <div class="calc-qty-control-row">
+                  <input type="range" id="calc-quantity-range" class="calc-range-slider" min="100" max="5000" step="50" value="250" aria-label="Quantity Slider">
+                  <div class="calc-number-input-wrap">
+                    <input type="number" id="calc-quantity" class="calc-number-input" min="100" max="5000" step="50" value="250" aria-label="Exact Quantity">
+                    <span class="calc-unit-tag">pcs</span>
+                  </div>
+                </div>
+
+                <!-- Quick Quantity Preset Chips -->
+                <div class="calc-presets-row" id="calc-qty-presets" aria-label="Quick Quantity Presets">
+                  <!-- Populated dynamically by app.js -->
+                </div>
+              </div>
+
+              <!-- Dynamic Product Options Fieldset Container -->
+              <div id="calc-dynamic-options" class="calc-options-container">
+                <!-- Dynamically populated by renderCalculatorOptions() in app.js -->
+              </div>
+
+              <!-- Turnaround Speed Field -->
+              <div class="calc-field-group calc-turnaround-group">
+                <label class="calc-field-label">Turnaround Schedule</label>
+                <div class="calc-turnaround-options">
+                  <label class="calc-radio-pill active">
+                    <input type="radio" name="calc-turnaround" value="standard" checked data-action="calc-option-change">
+                    <span class="pill-title">Standard Production</span>
+                    <span class="pill-desc">3 – 5 Business Days</span>
+                  </label>
+                  <label class="calc-radio-pill">
+                    <input type="radio" name="calc-turnaround" value="rush" data-action="calc-option-change">
+                    <span class="pill-title">⚡ Express Rush (+25%)</span>
+                    <span class="pill-desc">24 – 48 Hours Priority</span>
+                  </label>
+                </div>
+              </div>
+
+            </form>
+          </div>
+
+          <!-- Right Column: Live Estimate Receipt Card -->
+          <div class="calc-summary-col">
+            <aside class="calc-summary-card" aria-label="Cost Estimate Breakdown">
+              <div class="calc-summary-header">
+                <div class="calc-summary-title-wrap">
+                  <span class="calc-summary-eyebrow">Itemized Estimate</span>
+                  <h3 id="calc-summary-product-title" class="calc-summary-title">Premium Business Cards</h3>
+                </div>
+                <span class="calc-badge-live">Live Reactive</span>
+              </div>
+
+              <!-- Configuration Breakdown Badges -->
+              <div id="calc-summary-specs" class="calc-summary-specs">
+                <!-- Populated dynamically by app.js -->
+              </div>
+
+              <hr class="calc-divider">
+
+              <!-- Itemized Lines -->
+              <div class="calc-line-items">
+                <div class="calc-line-row">
+                  <span class="line-label">Base Unit Price</span>
+                  <span id="calc-unit-price" class="line-val">₦110 / unit</span>
+                </div>
+                <div class="calc-line-row">
+                  <span class="line-label">Quantity Subtotal</span>
+                  <span id="calc-subtotal" class="line-val">₦27,500</span>
+                </div>
+                <div class="calc-line-row calc-discount-row" id="calc-discount-line" style="display: none;">
+                  <span class="line-label">
+                    <span class="discount-tag">Volume Savings</span>
+                    <span id="calc-discount-rate" class="discount-rate-badge">-10%</span>
+                  </span>
+                  <span id="calc-discount-amount" class="line-val discount-val">-₦2,750</span>
+                </div>
+                <div class="calc-line-row calc-rush-row" id="calc-rush-line" style="display: none;">
+                  <span class="line-label">Express Rush Priority (+25%)</span>
+                  <span id="calc-rush-fee" class="line-val">+₦6,188</span>
+                </div>
+              </div>
+
+              <hr class="calc-divider">
+
+              <!-- Big Total Display -->
+              <div class="calc-total-box">
+                <div class="calc-total-header">
+                  <span class="calc-total-label">Estimated Total:</span>
+                  <span class="calc-vat-note">(Inclusive of finishing)</span>
+                </div>
+                <div id="calc-total-amount" class="calc-total-amount" aria-live="polite">₦24,750</div>
+              </div>
+
+              <!-- Conversion WhatsApp Action Button -->
+              <div class="calc-actions">
+                <a href="#" 
+                   id="calc-whatsapp-btn" 
+                   class="btn btn-primary btn-block btn-lg calc-cta-btn" 
+                   target="_blank" 
+                   rel="noopener noreferrer" 
+                   data-action="calc-whatsapp-inquire">
+                  <span>Inquire on WhatsApp</span>
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                    <polyline points="12 5 19 12 12 19"></polyline>
+                  </svg>
+                </a>
+                <p class="calc-disclaimer">
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="16" x2="12" y2="12"></line>
+                    <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                  </svg>
+                  <span>Non-binding estimate. Final quotation confirmed upon artwork review and file prepress checks.</span>
+                </p>
+              </div>
+            </aside>
+          </div>
+
         </div>
       </div>
     </section>

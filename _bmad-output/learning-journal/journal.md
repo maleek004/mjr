@@ -366,3 +366,29 @@
 4. **Ergonomic CTA & Defensive Multi-Element Sync**:
    - Streamlined mobile CTA copy to `"Inquire on WhatsApp"` to eliminate line-wrapping and preserve button tap-target ergonomics.
    - Upgraded `populateModalContent()` with `document.querySelectorAll()` to defensively synchronize both lateral rail buttons and in-modal navigation buttons simultaneously across DOM environments.
+
+## Sprint 7: Interactive Print Estimator & WhatsApp Quote Engine
+
+### Epic 7: Interactive Print Estimator & WhatsApp Quote Engine
+* **Date**: 2026-09-28
+* **Stories Implemented**: Story 7.1, Story 7.2, Story 7.3
+* **Files Implemented**: `index.html`, `styles.css`, `app.js`
+* **Test Suite**: `_bmad-output/test-artifacts/epic-7.test.mjs` (4/4 passed, 53/53 total project suite passing)
+* **Flashcards**: `_bmad-output/learning-journal/flashcards/epic-7.tsv` (22 cards)
+
+#### Core Concepts Mastered:
+1. **Dynamic Pricing Modeling & Deep Immutability**:
+   - Structured `PRICING_MODEL` covering 4 key product lines (Business Cards, Brochures, Branded Shirts, Roll-Up Banners) frozen via `Object.freeze()` to prevent state tampering.
+   - Implemented commercial print volume discount curves:
+     $$\text{Volume Discount} = f(\text{Quantity}, \text{Tiers}) \in [0.00, 0.25]$$
+   - Computed itemized pricing with unit option deltas, subtotal, volume savings, and express rush turnaround (+25%) modifiers.
+
+2. **Native Currency Formatting with `Intl.NumberFormat`**:
+   - Used standard Web API `Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN', maximumFractionDigits: 0 })` with graceful fallback to ensure consistent `₦` formatting across all browser engines.
+
+3. **Event-Driven Bidirectional Form Synchronization**:
+   - Wired delegated `input` and `change` listeners to synchronize range slider with numeric input fields in real time without infinite event loops.
+   - Leveraged `aria-live="polite"` on `#calc-total-amount` for screen reader accessibility.
+
+4. **1-Click WhatsApp Proposal Deep-Linking (RFC 3986)**:
+   - Generated structured, itemized WhatsApp quote inquiries that pass product specifications, exact quantity, turnaround speed, and calculated total directly to MJr's sales desk.
