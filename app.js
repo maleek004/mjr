@@ -162,6 +162,20 @@
           filterPortfolio(selectedCategory);
           break;
         }
+        case 'jump-to-category': {
+          event.preventDefault();
+          const selectedCategory = actionEl.dataset.category || 'all';
+          filterPortfolio(selectedCategory);
+          const portfolioEl = document.getElementById('portfolio');
+          if (portfolioEl && typeof portfolioEl.scrollIntoView === 'function') {
+            portfolioEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+          const activeTab = document.getElementById(`filter-tab-${selectedCategory}`);
+          if (activeTab && typeof activeTab.focus === 'function') {
+            activeTab.focus();
+          }
+          break;
+        }
         case 'prev-project': {
           event.preventDefault();
           prevProject();
@@ -675,6 +689,7 @@
 
     // 1. Update State
     state.activeCategory = category;
+    state.activeFilter = category;
 
     // 2. Synchronize Filter Tab Buttons UI & ARIA Attributes (Roving Tabindex)
     if (typeof document !== 'undefined') {

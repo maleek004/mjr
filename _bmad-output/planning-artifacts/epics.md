@@ -340,5 +340,52 @@ So that I can browse relevant projects continuously without opening and closing 
 * **And** the modal's primary *"Inquire on WhatsApp"* CTA button dynamically updates its message payload to the newly focused project.
 * **And** running `/bmad-frontend-tutor` explains state indexing over filtered arrays, keyboard event listeners, and dynamic DOM attribute updates.
 
+---
+
+## Epic 6: Proof-First Conversion Architecture & Mobile Layout Optimization
+
+**Goal**: Maximize mobile lead conversion and minimize time-to-proof by elevating the interactive portfolio to the immediate top-of-funnel fold and streamlining service capability discovery.
+
+### Story 6.1: Semantic Section Inversion & Hero Anchor Optimization
+As a mobile visitor landing on the website,
+I want the interactive portfolio and authentic work proofs to appear immediately below the hero fold,
+So that I can evaluate physical craftsmanship within 1 scroll without digging through dense service descriptions.
+
+**Acceptance Criteria:**
+* **Given** the main document structure in `index.html`,
+* **When** a user scrolls down past the `#hero` landmark,
+* **Then** `#portfolio` renders as the immediate first content section (`Hero` $\rightarrow$ `Portfolio` $\rightarrow$ `Services` $\rightarrow$ `About` $\rightarrow$ `Contact`).
+* **And** the primary hero CTA button links directly to `#portfolio` with smooth scrolling.
+* **And** desktop and mobile header navigation links are ordered logically (`Portfolio`, `Services`, `About`, `Contact`).
+
+---
+
+### Story 6.2: Compact Mobile Service Capabilities Grid & Filter Cross-Linking
+As a prospective client interested in specific production capabilities,
+I want to view compact, high-density service cards that link directly to filtered portfolio proofs,
+So that I can seamlessly transition between learning about a service and seeing its authentic deliverables.
+
+**Acceptance Criteria:**
+* **Given** the `#services` section positioned after the portfolio,
+* **When** viewed on mobile and desktop devices,
+* **Then** service cards render in an ergonomic, high-density grid with iconography, concise descriptions, and deliverable badges.
+* **And** each service card features a *"View [Category] Proofs"* action (`data-action="jump-to-category"`) that activates the corresponding filter and smooth-scrolls to the `#portfolio` gallery.
+* **And** WhatsApp inquiry buttons on service cards remain directly accessible with context-aware payloads.
+
+---
+
+### Story 6.3: Zero-Scroll Featured Proof Peek Strip in Hero
+As a prospective client evaluating MJr from the top fold,
+I want to see interactive proof pill badges for flagship client projects inside the hero,
+So that I can tap and inspect full case study mockups instantly without any scrolling.
+
+**Acceptance Criteria:**
+* **Given** the `#hero` section landmark,
+* **When** the page loads,
+* **Then** a *"Featured Case Studies"* proof strip renders directly below the hero CTA buttons with badges for flagship clients (CYMA Homes, TOLW Magazine, Glazing Memoirs, Custom Apparel).
+* **And** clicking any proof badge immediately opens the lightbox modal (`openModal(projectId)`) for that project.
+* **And** all buttons are fully accessible with `:focus-visible` styling and minimum $\ge 44\text{px}$ touch targets.
+
+
 
 

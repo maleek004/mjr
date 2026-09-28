@@ -633,7 +633,70 @@ ul, ol {
   gap: var(--space-md);
   width: 100%;
   max-width: 440px;
-  margin-bottom: var(--space-3xl);
+  margin-bottom: var(--space-lg);
+}
+
+/* Zero-Scroll Featured Proof Peek Strip */
+.hero-proof-strip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);
+  margin-bottom: var(--space-2xl);
+  width: 100%;
+}
+
+.proof-strip-label {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.proof-pills-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  max-width: 700px;
+}
+
+.proof-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  padding: 6px 14px;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-charcoal);
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-fast);
+  min-height: 40px;
+}
+
+.proof-pill:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.proof-pill:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.proof-pill-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-primary);
 }
 
 .hero-proof-metrics {
@@ -786,8 +849,30 @@ ul, ol {
   margin-top: 2px;
 }
 
-.service-cta {
+.service-actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
   margin-top: auto;
+}
+
+.service-jump-btn {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-charcoal);
+  border-color: var(--color-border);
+  background-color: var(--color-bg);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.service-jump-btn:hover {
+  background-color: var(--color-surface);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.service-cta {
   font-weight: var(--font-weight-semibold);
   transition: background-color var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast), box-shadow var(--transition-fast), transform var(--transition-fast);
 }
