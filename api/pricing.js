@@ -201,17 +201,37 @@ async function fetchKv(command, ...args) {
 
   try {
     const cleanUrl = url.replace(/\/$/, '');
-    const endpoint = `${cleanUrl}/${command}/${args.map(a => encodeURIComponent(typeof a === 'object' ? JSON.stringify(a) : a)).join('/')}`;
-    const res = await fetch(endpoint, {
+    const cmd = String(command).toUpperCase();
+
+    // GET command: /get/key
+    if (cmd === 'GET') {
+      const key = args[0];
+      const endpoint = `${cleanUrl}/get/${encodeURIComponent(key)}`;
+      const res = await fetch(endpoint, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      if (!res.ok) return null;
+      const json = await res.json();
+      return json.result;
+    }
+
+    // Command array format (e.g. ['SET', key, value]):
+    const res = await fetch(cleanUrl, {
+      method: 'POST',
       headers: {
-        Authorization: `Bearer ${token}`
-      }
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify([cmd, ...args])
     });
+
     if (!res.ok) return null;
     const json = await res.json();
     return json.result;
   } catch (err) {
-    console.warn('[Vercel KV] REST fetch error:', err.message);
+    console.warn('[Vercel Upstash KV] REST fetch error:', err.message);
     return null;
   }
 }
