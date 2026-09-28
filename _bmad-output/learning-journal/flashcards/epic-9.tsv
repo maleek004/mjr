@@ -23,3 +23,10 @@ Why should mobile swipe hint badges be hidden on desktop viewports via media que
 What CSS property prevents text selection while dragging or swiping on mobile touch surfaces?	user-select: none; (-webkit-user-select: none;)
 How does CSS scroll-snap improve performance over JavaScript-based touch carousel libraries?	CSS scroll-snap runs entirely on the browser's compositor thread, achieving 60/120fps smooth scrolling without main thread overhead.
 What browser metric is preserved at 0 by using CSS scroll-snap instead of dynamic JavaScript DOM carousel rewrites?	Cumulative Layout Shift (CLS = 0) and Total Blocking Time (TBT = 0ms).
+What width sizing formula creates a compact 60% width peek for client partner logos in a scroll rail?	flex: 0 0 calc(60vw - 16px); min-width: 180px; max-width: 240px;
+How do you completely hide the visual scrollbar while keeping horizontal touch scroll functional on mobile?	scrollbar-width: none; and &::-webkit-scrollbar { display: none; }
+Why should calculator product tab buttons use white-space: nowrap inside a horizontal scroll rail?	To prevent tab button labels (e.g. 'Brochures & Booklets') from breaking into multiple awkward lines.
+What scroll-snap-align value is best suited for tab buttons in an edge-aligned horizontal nav bar?	scroll-snap-align: start;
+How does horizontalizing the Hero proof metrics section reduce initial scroll depth on mobile?	It condenses 3 stacked metric cards into a single 100px-tall horizontal swipe track instead of a 300px vertical block.
+Why should desktop media queries reset width and max-width when moving from mobile flex rails back to CSS grid?	Because mobile flex child sizing (e.g. flex: 0 0 70vw) will otherwise constrain grid items and prevent them from filling their allocated grid tracks.
+What CSS property ensures smooth scrolling inertia on touch devices without stuttering?	-webkit-overflow-scrolling: touch;

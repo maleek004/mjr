@@ -448,3 +448,14 @@ As a prospective corporate client,
 I want the 4 core service pillars displayed in a horizontal swipeable track on mobile,  
 So that I can compare capabilities side-by-side in one compact viewport region.
 
+### Story 9.3: Client Trust Matrix Horizontal Scroll-Snap Rail
+As a mobile visitor reviewing brand credentials,  
+I want the 8 client pedigree partner cards in the `#about` section to scroll horizontally in an ergonomic single-row snap rail,  
+So that I can quickly verify prestigious client endorsements without scrolling through a tall 8-card vertical grid.
+
+### Story 9.4: Hero Metrics & Calculator Product Tabs Horizontal Snap Rail
+As a mobile user navigating the top fold and quote estimator,  
+I want the hero proof metrics and calculator product tabs to slide smoothly along the horizontal axis with snap points,  
+So that the hero fold and calculator controls remain compact, high-density, and free of multi-line wrapping clutter.
+
+

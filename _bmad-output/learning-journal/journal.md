@@ -430,27 +430,30 @@
 
 ### Epic 9: Mobile Viewport Horizontalization & Zero-Fatigue Swipe Layouts
 * **Date**: 2026-09-28
-* **Stories Implemented**: Story 9.1 (Portfolio Horizontal Scroll-Snap Card Rail), Story 9.2 (Services 4-Pillar Horizontal Carousel)
+* **Stories Implemented**: Story 9.1 (Portfolio Horizontal Scroll-Snap Card Rail), Story 9.2 (Services 4-Pillar Horizontal Carousel), Story 9.3 (Client Trust Matrix Horizontal Rail), Story 9.4 (Hero Metrics & Calculator Product Tabs Horizontal Rail)
 * **Files Implemented**: `index.html`, `styles.css`, `app.js`, `_bmad-output/test-artifacts/epic-9.test.mjs`
-* **Test Suite**: `_bmad-output/test-artifacts/epic-9.test.mjs` (2/2 passed, 67/67 total project suite passing)
-* **Flashcards**: `_bmad-output/learning-journal/flashcards/epic-9.tsv` (25 cards)
+* **Test Suite**: `_bmad-output/test-artifacts/epic-9.test.mjs` (4/4 passed, 69/69 total project suite passing)
+* **Flashcards**: `_bmad-output/learning-journal/flashcards/epic-9.tsv` (32 cards)
 
 #### Core Concepts Mastered:
 1. **Compositor-Driven CSS Scroll-Snap Architecture**:
-   - Implemented `scroll-snap-type: x mandatory` with `scroll-padding: 0 16px` on `#portfolio .portfolio-grid` and `#services .services-grid`.
-   - Achieved 60/120fps hardware-accelerated touch swipe performance running on the browser compositor thread without JavaScript carousel overhead ($\text{TBT} = 0\text{ms}$, $\text{CLS} = 0$).
-   - Eliminated over 4,500 vertical pixels of mobile scrolling fatigue by condensing multi-card vertical columns into compact, horizontal single-row swipe tracks.
+   - Implemented `scroll-snap-type: x mandatory` with `scroll-padding: 0 16px` across all high-density sections (`#portfolio .portfolio-grid`, `#services .services-grid`, `#about .client-trust-grid`, `.hero-proof-metrics`, and `.calc-product-tabs`).
+   - Achieved 60/120fps hardware-accelerated touch swipe performance running entirely on the browser compositor thread without JavaScript carousel overhead ($\text{TBT} = 0\text{ms}$, $\text{CLS} = 0$).
+   - Eliminated over 6,000 vertical pixels of mobile scrolling fatigue by condensing multi-card vertical columns into compact, horizontal single-row swipe tracks.
 
-2. **Visual Peek Affordance Formula**:
-   - Sized cards with `flex: 0 0 calc(85vw - 16px)` and `scroll-snap-align: center`.
-   - The $85\% / 15\%$ width distribution guarantees that the trailing card is always partially visible on screen, signaling horizontal discoverability without intrusive overlay tutorials.
-   - Combined negative container margins (`margin-inline: -16px`) with padding to achieve edge-to-edge bleed scrolling on mobile viewports.
+2. **Visual Peek Affordance Formulas**:
+   - Portfolio & Services: `flex: 0 0 calc(85vw - 16px)` with `scroll-snap-align: center` ($85\% / 15\%$ active/peek distribution).
+   - Client Trust Matrix: `flex: 0 0 calc(60vw - 16px)` with `scroll-snap-align: center` ($60\% / 40\%$ active/peek distribution for high-density logo scanning).
+   - Hero Metrics: `flex: 0 0 calc(70vw - 16px)` with `scroll-snap-align: center`.
+   - Combined negative container margins (`margin-inline: -16px`) with matching padding to achieve clean edge-to-edge bleed scrolling on mobile viewports.
 
 3. **Subtle Custom Scrollbars & Non-Intrusive Swipe Cues**:
-   - Styled minimalist 5px scrollbars (`scrollbar-width: thin`, `scrollbar-color: var(--color-primary-subtle) transparent`) to provide visual rail depth across Android and desktop emulators.
+   - Styled minimalist 5px scrollbars (`scrollbar-width: thin`, `scrollbar-color: var(--color-primary-subtle) transparent`) on case study and partner grids.
+   - Used invisible scrollbars (`scrollbar-width: none; &::-webkit-scrollbar { display: none; }`) for compact UI controls like hero metric chips and calculator product tabs.
    - Added pulsing `.mobile-swipe-hint` badge cues (`aria-hidden="true"`) that inform mobile users while hiding automatically on desktop screens ($\ge 768\text{px}$) via `display: none !important`.
 
 4. **Defensive Dynamic Scroll Reset & Desktop Grid Restoration**:
    - Updated `filterPortfolio()` in `app.js` with defensive checks (`typeof document.getElementById === 'function'`) to smoothly reset horizontal scroll to origin (`scrollLeft = 0`) upon category tab selection.
-   - Restored full responsive multi-column 2D grids at `@media (min-width: 768px)` (`display: grid`, `flex: initial`, `overflow-x: visible`) preserving desktop design integrity.
+   - Restored full responsive multi-column 2D grids at `@media (min-width: 640px)` and `@media (min-width: 768px)` (`display: grid`, `flex: initial`, `overflow-x: visible`) preserving desktop design integrity.
+
 
