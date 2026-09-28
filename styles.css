@@ -1453,6 +1453,81 @@ body.modal-open {
   cursor: pointer;
 }
 
+/* Desktop Lateral Floating Project Navigation Rails */
+.modal-side-nav {
+  display: none;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 52px;
+  height: 52px;
+  border-radius: var(--radius-full);
+  background-color: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--color-border);
+  color: var(--color-charcoal);
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: calc(var(--z-index-modal) + 2);
+  box-shadow: var(--shadow-lg);
+  transition: all var(--transition-fast);
+}
+
+.modal-side-nav:hover {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+  color: var(--color-surface);
+  transform: translateY(-50%) scale(1.08);
+}
+
+.modal-side-nav:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 3px;
+}
+
+.modal-side-nav:disabled {
+  opacity: 0.2;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.modal-side-nav-prev {
+  left: max(16px, calc((100vw - 720px) / 2 - 70px));
+}
+
+.modal-side-nav-next {
+  right: max(16px, calc((100vw - 720px) / 2 - 70px));
+}
+
+@media (min-width: 900px) {
+  .modal-side-nav {
+    display: flex;
+  }
+}
+
+.side-nav-tooltip {
+  position: absolute;
+  top: 110%;
+  background-color: rgba(15, 15, 15, 0.9);
+  color: var(--color-surface);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity var(--transition-fast), transform var(--transition-fast);
+}
+
+.modal-side-nav:hover .side-nav-tooltip {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 .modal-container {
   position: relative;
   z-index: 1;

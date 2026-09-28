@@ -1,0 +1,22 @@
+In mobile conversion rate optimization (CRO), what is 'time-to-proof'?	The elapsed time and scroll distance required for a user to see tangible evidence of physical product quality.
+Why does moving the portfolio directly beneath the hero section reduce mobile bounce rates?	It immediately validates the hero's value proposition with authentic visual proof before user interest wanes.
+How many pixels of vertical scroll distance were saved on mobile by inverting the portfolio and services sections?	Approximately 2,400px (reducing scroll depth from 6–9 thumb swipes down to 1 swipe).
+What is the semantic document order of sections in the proof-first architecture?	<header> -> <main> -> #hero -> #portfolio -> #services -> #about -> #contact -> <footer>
+Why should the order of <nav> links in the header mirror the exact top-down document order of sections?	To ensure predictable navigation for keyboard users, screen readers, and visual users without cognitive dissonance.
+What JavaScript DOM method smoothly scrolls the viewport to a target element in modern browsers?	element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+What is the advantage of using element.scrollIntoView({ behavior: 'smooth' }) over window.location.hash = '#portfolio'?	scrollIntoView smooth-scrolls cleanly without triggering a disruptive URL hash change or popstate history entry.
+In accessibility, what must happen immediately after a button programmatically filters and scrolls to another section?	Focus must be programmatically transferred to the active UI control (e.g., activeTab.focus()) so keyboard users maintain focus context.
+Why are proof pills in the hero section modeled as <button> elements rather than anchor <a> tags?	They perform an immediate in-page JavaScript modal dialog action (openModal) rather than navigating to a new URL.
+What CSS property enables glassmorphic transparency and background blurring on modern UI pills?	backdrop-filter: blur(Npx) (with -webkit-backdrop-filter for WebKit compatibility) and a semi-transparent background color.
+What is the purpose of the proof-pill-dot pseudo-indicator element inside a proof pill?	To provide an immediate visual cue resembling an active live proof badge or status indicator.
+What is the minimum recommended touch target dimension under WCAG 2.1 AA and Apple HIG?	44 × 44 pixels (or 48 × 48 pixels under Google Material Guidelines).
+What does the CSS property touch-action: manipulation do on interactive buttons?	It disables double-tap to zoom on mobile browsers, eliminating the default 300ms tap delay.
+How does the jump-to-category event delegation action in app.js work?	It reads dataset.category from the clicked button, invokes filterPortfolio(category), smooth-scrolls to #portfolio, and focuses the matching filter tab.
+Why is roving tabindex used on tablist buttons (tabindex="0" for active, tabindex="-1" for inactive)?	It allows the Tab key to enter/exit the tablist as a single stop, while arrow keys navigate between individual tabs.
+What does aria-label="Featured Client Proofs" communicate on the hero proof strip container?	It provides an accessible name for screen reader landmark and region navigation, identifying the collection of proof shortcuts.
+How does in-place DOM hydration for modal case studies prevent memory leaks?	It re-populates existing persistent DOM nodes rather than repeatedly creating and discarding DOM subtrees.
+What happens if a user clicks a service jump button for a category that does not exist?	VALID_PORTFOLIO_CATEGORIES validates the input and gracefully falls back to 'all', preventing runtime crashes.
+Why does scroll-margin-top: 80px prevent sticky header occlusion during anchor jumps?	It reserves an 80px scroll margin above the section box, ensuring sticky header bars do not overlap section headings.
+What is the primary architectural purpose of the Core Services section when placed after the Portfolio?	To detail technical capabilities and custom production specifications for the deliverables the visitor just observed in the portfolio.
+How does centralized click event delegation improve performance when adding numerous proof pills and service buttons?	A single root listener on document intercepts all bubbling events via event.target.closest('[data-action]'), avoiding individual listener memory allocations.
+Why should decorative icons and status dots have aria-hidden="true"?	To prevent screen readers from announcing redundant or non-semantic character codes to assistive technology users.

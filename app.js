@@ -845,7 +845,7 @@
   }
 
   /**
-   * Initialize Touch Gestures on Modal Media Wrapper
+   * Initialize Touch Gestures on Modal Media & Content Body
    */
   let touchStartX = 0;
   let touchStartY = 0;
@@ -855,36 +855,74 @@
   function initTouchGestures() {
     if (typeof document === 'undefined') return;
     const mediaWrap = document.getElementById('modal-media-wrap');
-    if (!mediaWrap) return;
+    const modalContent = document.querySelector('#portfolio-modal .modal-content');
 
-    mediaWrap.addEventListener('touchstart', (e) => {
+    const recordTouchStart = (e) => {
       if (e.touches && e.touches.length > 0) {
         touchStartX = e.touches[0].clientX;
         touchStartY = e.touches[0].clientY;
         touchEndX = touchStartX;
         touchEndY = touchStartY;
       }
-    }, { passive: true });
+    };
 
-    mediaWrap.addEventListener('touchmove', (e) => {
+    const recordTouchMove = (e) => {
       if (e.touches && e.touches.length > 0) {
         touchEndX = e.touches[0].clientX;
         touchEndY = e.touches[0].clientY;
       }
-    }, { passive: true });
+    };
 
-    mediaWrap.addEventListener('touchend', () => {
-      const dx = touchEndX - touchStartX;
-      const dy = touchEndY - touchStartY;
-      // Require minimum 40px swipe distance and horizontal dominant vector
-      if (Math.abs(dx) >= 40 && Math.abs(dx) > Math.abs(dy)) {
-        if (dx < 0) {
-          nextSlide();
-        } else {
-          prevSlide();
+    // 1. Image Slider Swipe with Boundary-Aware Project Transitions
+    if (mediaWrap) {
+      mediaWrap.addEventListener('touchstart', recordTouchStart, { passive: true });
+      mediaWrap.addEventListener('touchmove', recordTouchMove, { passive: true });
+      mediaWrap.addEventListener('touchend', () => {
+        const dx = touchEndX - touchStartX;
+        const dy = touchEndY - touchStartY;
+        // Require minimum 40px swipe distance and horizontal dominant vector
+        if (Math.abs(dx) >= 40 && Math.abs(dx) > Math.abs(dy)) {
+          const project = PORTFOLIO_DATA.find(p => p.id === state.activeModalId);
+          const totalSlides = (project && Array.isArray(project.images) && project.images.length > 0)
+            ? project.images.length
+            : 1;
+
+          if (dx < 0) {
+            // Swiping left (forward)
+            if (state.activeSlideIndex >= totalSlides - 1) {
+              nextProject(); // Seamlessly advance to next case study
+            } else {
+              nextSlide();
+            }
+          } else {
+            // Swiping right (backward)
+            if (state.activeSlideIndex <= 0) {
+              prevProject(); // Step back to previous case study
+            } else {
+              prevSlide();
+            }
+          }
         }
-      }
-    }, { passive: true });
+      }, { passive: true });
+    }
+
+    // 2. Modal Body Swipe (Direct Inter-Project Case Study Navigation)
+    if (modalContent) {
+      modalContent.addEventListener('touchstart', recordTouchStart, { passive: true });
+      modalContent.addEventListener('touchmove', recordTouchMove, { passive: true });
+      modalContent.addEventListener('touchend', (e) => {
+        if (mediaWrap && mediaWrap.contains(e.target)) return;
+        const dx = touchEndX - touchStartX;
+        const dy = touchEndY - touchStartY;
+        if (Math.abs(dx) >= 45 && Math.abs(dx) > Math.abs(dy) * 1.2) {
+          if (dx < 0) {
+            nextProject();
+          } else {
+            prevProject();
+          }
+        }
+      }, { passive: true });
+    }
   }
 
   /**
@@ -892,10 +930,11 @@
    * @returns {Array} Filtered list of portfolio projects
    */
   function getFilteredProjects() {
-    if (!state.activeFilter || state.activeFilter === 'all') {
+    const filter = state.activeFilter || state.activeCategory || 'all';
+    if (filter === 'all') {
       return PORTFOLIO_DATA;
     }
-    const filtered = PORTFOLIO_DATA.filter(item => item.category === state.activeFilter);
+    const filtered = PORTFOLIO_DATA.filter(item => item.category === filter);
     return filtered.length > 0 ? filtered : PORTFOLIO_DATA;
   }
 
@@ -940,32 +979,51 @@
     const filteredProjects = getFilteredProjects();
     const currentIndex = filteredProjects.findIndex(p => p.id === project.id);
     const counterEl = document.getElementById('modal-project-counter');
-    const prevProjBtn = typeof document.querySelector === 'function' ? document.querySelector('[data-action="prev-project"]') : null;
-    const nextProjBtn = typeof document.querySelector === 'function' ? document.querySelector('[data-action="next-project"]') : null;
-    const projectNavContainer = document.getElementById('modal-project-nav');
+    let prevProjBtns = typeof document.querySelectorAll === 'function' ? Array.from(document.querySelectorAll('[data-action="prev-project"]')) : [];
+    let nextProjBtns = typeof document.querySelectorAll === 'function' ? Array.from(document.querySelectorAll('[data-action="next-project"]')) : [];
+
+    if (prevProjBtns.length === 0 && typeof document.querySelector === 'function') {
+      const single = document.querySelector('[data-action="prev-project"]');
+      if (single) prevProjBtns = [single];
+    }
+    if (nextProjBtns.length === 0 && typeof document.querySelector === 'function') {
+      const single = document.querySelector('[data-action="next-project"]');
+      if (single) nextProjBtns = [single];
+    }
+
+    const sidePrevTitle = document.getElementById('modal-side-prev-title');
+    const sideNextTitle = document.getElementById('modal-side-next-title');
 
     if (counterEl && currentIndex !== -1) {
       counterEl.textContent = `Project ${currentIndex + 1} of ${filteredProjects.length}`;
     }
 
-    if (prevProjBtn && nextProjBtn) {
-      if (filteredProjects.length <= 1) {
-        prevProjBtn.disabled = true;
-        nextProjBtn.disabled = true;
-        if (projectNavContainer) projectNavContainer.style.display = 'none';
-      } else {
-        prevProjBtn.disabled = false;
-        nextProjBtn.disabled = false;
-        if (projectNavContainer) projectNavContainer.style.display = 'flex';
+    const prevIdx = ((currentIndex - 1) % filteredProjects.length + filteredProjects.length) % filteredProjects.length;
+    const nextIdx = (currentIndex + 1) % filteredProjects.length;
+    const prevProj = filteredProjects[prevIdx];
+    const nextProj = filteredProjects[nextIdx];
 
-        const prevIdx = ((currentIndex - 1) % filteredProjects.length + filteredProjects.length) % filteredProjects.length;
-        const nextIdx = (currentIndex + 1) % filteredProjects.length;
-        const prevProj = filteredProjects[prevIdx];
-        const nextProj = filteredProjects[nextIdx];
+    if (sidePrevTitle && prevProj) sidePrevTitle.textContent = prevProj.title;
+    if (sideNextTitle && nextProj) sideNextTitle.textContent = nextProj.title;
 
-        if (prevProj) prevProjBtn.setAttribute('aria-label', `Previous case study: ${prevProj.title}`);
-        if (nextProj) nextProjBtn.setAttribute('aria-label', `Next case study: ${nextProj.title}`);
-      }
+    const isSingle = filteredProjects.length <= 1;
+
+    if (prevProjBtns && typeof prevProjBtns.forEach === 'function') {
+      prevProjBtns.forEach(btn => {
+        if (typeof btn.setAttribute === 'function') {
+          btn.disabled = isSingle;
+          if (prevProj) btn.setAttribute('aria-label', `Previous case study: ${prevProj.title}`);
+        }
+      });
+    }
+
+    if (nextProjBtns && typeof nextProjBtns.forEach === 'function') {
+      nextProjBtns.forEach(btn => {
+        if (typeof btn.setAttribute === 'function') {
+          btn.disabled = isSingle;
+          if (nextProj) btn.setAttribute('aria-label', `Next case study: ${nextProj.title}`);
+        }
+      });
     }
 
     // 4. Render Interactive Image Slider for new project

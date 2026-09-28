@@ -550,6 +550,27 @@
   <div id="portfolio-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-describedby="modal-desc" hidden>
     <div class="modal-backdrop" data-action="close-modal" tabindex="-1"></div>
     
+    <!-- Desktop Floating Lateral Project Navigation Rails -->
+    <button type="button" 
+            class="modal-side-nav modal-side-nav-prev" 
+            data-action="prev-project" 
+            aria-label="Previous Case Study">
+      <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <polyline points="15 18 9 12 15 6"></polyline>
+      </svg>
+      <span class="side-nav-tooltip" id="modal-side-prev-title">Previous Project</span>
+    </button>
+
+    <button type="button" 
+            class="modal-side-nav modal-side-nav-next" 
+            data-action="next-project" 
+            aria-label="Next Case Study">
+      <span class="side-nav-tooltip" id="modal-side-next-title">Next Project</span>
+      <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <polyline points="9 18 15 12 9 6"></polyline>
+      </svg>
+    </button>
+
     <div class="modal-container">
       <!-- Modal Close Button -->
       <button type="button" 
@@ -642,7 +663,7 @@
                rel="noopener noreferrer" 
                data-action="whatsapp-inquire" 
                data-context="modal">
-              Request a Similar Quote on WhatsApp
+              Inquire on WhatsApp
             </a>
             <button type="button" 
                     class="btn btn-outline btn-block modal-dismiss-btn" 
