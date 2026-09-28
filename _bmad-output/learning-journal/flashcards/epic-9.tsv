@@ -1,0 +1,25 @@
+What CSS property enables native container-level scroll snapping along the horizontal axis?	scroll-snap-type: x mandatory;
+What is the difference between scroll-snap-type: x mandatory and scroll-snap-type: x proximity?	mandatory forces the viewport to snap to a point immediately after scrolling stops, while proximity snaps only if the scroll position is near a snap point.
+What CSS property defines how an individual child element aligns inside a scroll-snap container?	scroll-snap-align: center; (or start, end)
+How do negative margins combined with matching horizontal padding create an edge-to-edge bleed scroll rail?	margin-left: -16px; margin-right: -16px; padding: 0 16px; allows cards to scroll flush to screen edges while preserving container alignment.
+What viewport-relative CSS width formula creates a 15% card peek affordance on mobile screens?	flex: 0 0 calc(85vw - 16px);
+Why is visual card peeking critical for horizontal scroll tracks on mobile?	It provides a visual affordance that more content exists horizontally, eliminating the need for complex tutorial animations.
+What CSS property enables hardware-accelerated momentum scrolling on iOS WebKit devices?	-webkit-overflow-scrolling: touch;
+What CSS properties customize scrollbar appearance across modern browsers without heavy JavaScript libraries?	scrollbar-width: thin; scrollbar-color: <thumb> <track>; and ::-webkit-scrollbar pseudo-elements.
+Why should scroll-snap-type be removed or reset at desktop breakpoints (e.g., min-width: 768px)?	To restore standard multi-column 2D grid wrapping and natural vertical page flow on wide screens.
+How does @media (min-width: 768px) restore a multi-column CSS grid from a mobile horizontal flex track?	Setting display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); and flex: initial; on children.
+Why should JavaScript category filtering reset horizontal scroll on a scroll-snap container?	To ensure filtered items are viewed starting from the first card rather than an arbitrary mid-rail scroll offset.
+What is the defensive JavaScript pattern to smoothly reset element scroll position across all environments?	if (typeof el.scrollTo === 'function') { el.scrollTo({ left: 0, behavior: 'smooth' }); } else { el.scrollLeft = 0; }
+What CSS pseudo-element targets the draggable handle of a scrollbar in Chromium/WebKit engines?	::-webkit-scrollbar-thumb
+What accessibility attribute hides visual swipe hints from screen readers when they are purely decorative?	aria-hidden="true"
+Why does reducing vertical mobile scroll depth by horizontalizing sections improve user engagement?	It eliminates vertical thumb fatigue, shortens the total page height, and allows users to explore categories in parallel.
+What CSS property defines the safe snapping boundary inside a scroll container with fixed padding?	scroll-padding: 0 16px; (or scroll-padding-inline: 16px;)
+Why is flex: 0 0 <width> preferred over width: <width> inside horizontal flex scroll containers?	flex-shrink: 0 prevents flexbox from shrinking child cards when total card width exceeds the parent container width.
+How does overflow-y: hidden paired with overflow-x: auto benefit mobile horizontal touch tracks?	It isolates horizontal swipe gestures and prevents vertical scroll jitter within the track container.
+What is the minimum recommended touch target size according to WCAG 2.1 AA guidelines?	44px by 44px (or 48px by 48px in Google Material Design guidelines)
+Why should buttons inside a horizontal swipe track prevent unwanted navigation during drag gestures?	To avoid accidental clicks when the user intends to swipe/scroll through the card carousel.
+How does @keyframes pulseSwipe provide non-intrusive micro-interaction feedback?	It gently pulses opacity (e.g. 0.85 to 1.0) and subtle scale to catch the user's eye without obstructing content.
+Why should mobile swipe hint badges be hidden on desktop viewports via media queries?	Desktop users navigate via mouse wheel / scrollbar; mobile swipe prompts are irrelevant and clutter desktop layouts.
+What CSS property prevents text selection while dragging or swiping on mobile touch surfaces?	user-select: none; (-webkit-user-select: none;)
+How does CSS scroll-snap improve performance over JavaScript-based touch carousel libraries?	CSS scroll-snap runs entirely on the browser's compositor thread, achieving 60/120fps smooth scrolling without main thread overhead.
+What browser metric is preserved at 0 by using CSS scroll-snap instead of dynamic JavaScript DOM carousel rewrites?	Cumulative Layout Shift (CLS = 0) and Total Blocking Time (TBT = 0ms).

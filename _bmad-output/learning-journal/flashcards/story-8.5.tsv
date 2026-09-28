@@ -1,0 +1,24 @@
+What Web API method computes a cryptographic one-way SHA-256 hash in modern browser environments?	window.crypto.subtle.digest('SHA-256', dataBuffer)
+Why must input strings be converted to Uint8Array via TextEncoder before passing to crypto.subtle.digest()?	The Web Crypto API operates on raw binary ArrayBuffers, not JavaScript character string objects.
+How is an ArrayBuffer hash converted into a standard 64-character hexadecimal digest string in JavaScript?	Array.from(new Uint8Array(buffer)).map(b => b.toString(16).padStart(2, '0')).join('')
+What is the default Master PIN hash hardcoded as a fallback baseline in the MJr admin system?	d6dac16e6ddfeddf2388c92a4013e58a24a0468b6501264c7d6bb60f2ff1cf1b (SHA-256 of 246748)
+What is the lifecycle scope of window.sessionStorage compared to window.localStorage?	sessionStorage data is isolated to the specific browser tab and erased when the tab closes; localStorage persists indefinitely.
+Why is authentication state stored in sessionStorage rather than localStorage for the admin center?	Closing the administrative browser tab automatically terminates the authenticated session, preventing unauthorized access.
+What CSS pseudo-class matches an element when it receives keyboard focus, but not mouse clicks?	:focus-visible
+What CSS animation property creates a rhythmic lateral vibration effect on invalid authentication?	@keyframes with transform: translateX(-8px) and translateX(8px) steps
+Why is void element.offsetWidth accessed before re-adding an animation CSS class in JavaScript?	Reading a layout geometry property forces an immediate synchronous reflow, resetting and restarting the CSS animation.
+What WAI-ARIA live region politeness level interrupts the screen reader immediately for security alert messages?	aria-live="assertive"
+What HTTP request method is used by the Vercel serverless function /api/pricing to read global pricing?	GET
+What HTTP request method is used by the Vercel serverless function /api/pricing to update global pricing?	POST
+What HTTP response status code is returned by /api/pricing when the x-admin-pin header is missing?	401 Unauthorized
+What HTTP response status code is returned by /api/pricing when the provided PIN does not match the master hash?	403 Forbidden
+What HTTP response status code is returned by /api/pricing when the JSON payload fails pricing model schema validation?	422 Unprocessable Entity
+What Cache-Control directive instructs CDN edge nodes to serve cached data while asynchronously updating in the background?	stale-while-revalidate (e.g., s-maxage=30, stale-while-revalidate=120)
+Why does index.html render the calculator immediately with local defaults before awaiting the /api/pricing fetch?	It eliminates network blocking, guarantees zero Cumulative Layout Shift (CLS), and provides instantaneous First Contentful Paint (FCP).
+What header is sent to Upstash Redis REST endpoints to authenticate serverless database requests?	Authorization: Bearer <TOKEN>
+How does the Upstash Redis REST API execute atomic Redis commands via HTTP POST?	By sending a JSON array of command arguments, e.g., ["SET", "mjr_global_pricing", jsonString]
+What method safely closes and resets a modal HTML <form> element in vanilla JavaScript?	formElement.reset() combined with modalElement.setAttribute('hidden', '')
+What browser event fires when the initial HTML document has been completely parsed without waiting for stylesheets or images?	DOMContentLoaded
+Why is JSON.parse(JSON.stringify(object)) used when passing pricing models between admin state and live calculator?	It produces a deep clone that severs all object references, preventing mutations from leaking between draft and active states.
+How can a password <input> element dynamically toggle between hidden dots and readable plaintext?	By modifying the element's type attribute between 'password' and 'text'.
+What HTTP header prevents clickjacking attacks on modern web applications?	X-Frame-Options: DENY (or Content-Security-Policy frame-ancestors 'none')

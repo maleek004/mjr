@@ -434,3 +434,17 @@ As an MJr business administrator,
 I want pricing adjustments published in the admin center to instantly update across all website visitors worldwide,  
 So that the public price estimator always reflects current live commercial rates without manual code redeployments.
 
+---
+
+## Epic 9: Mobile Viewport Horizontalization & Zero-Fatigue Swipe Layouts
+
+### Story 9.1: Portfolio Section Horizontal Scroll-Snap Card Rail
+As a mobile visitor browsing MJr's past work,  
+I want the portfolio case study cards to slide horizontally in a smooth swipeable rail with snap points and peek previews,  
+So that I can rapidly inspect diverse projects across categories without excessive vertical page scrolling.
+
+### Story 9.2: Services 4-Pillar Horizontal Carousel with Snap Points
+As a prospective corporate client,  
+I want the 4 core service pillars displayed in a horizontal swipeable track on mobile,  
+So that I can compare capabilities side-by-side in one compact viewport region.
+

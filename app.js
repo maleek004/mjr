@@ -971,6 +971,18 @@
           }
         }
       });
+
+      // 4. Reset Horizontal Scroll Position on Portfolio Grid
+      const grid = (typeof document.getElementById === 'function') 
+        ? document.getElementById('portfolio-grid') 
+        : null;
+      if (grid) {
+        if (typeof grid.scrollTo === 'function') {
+          grid.scrollTo({ left: 0, behavior: 'smooth' });
+        } else {
+          grid.scrollLeft = 0;
+        }
+      }
     }
   }
 

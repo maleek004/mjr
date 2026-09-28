@@ -425,3 +425,32 @@
    - Built `/api/pricing.js` serverless function with edge caching (`s-maxage=30, stale-while-revalidate=120`) and REST Upstash/Vercel KV integration.
    - Decoupled public visitor render path from backend latency via synchronous factory baseline hydration followed by background API synchronization (`fetchGlobalPricing()`).
    - Enabled 1-click global pricing publication from `admin.html` with authenticated `POST` and instant cross-device synchronization.
+
+## Sprint 9: Mobile Viewport Horizontalization & Zero-Fatigue Swipe Layouts
+
+### Epic 9: Mobile Viewport Horizontalization & Zero-Fatigue Swipe Layouts
+* **Date**: 2026-09-28
+* **Stories Implemented**: Story 9.1 (Portfolio Horizontal Scroll-Snap Card Rail), Story 9.2 (Services 4-Pillar Horizontal Carousel)
+* **Files Implemented**: `index.html`, `styles.css`, `app.js`, `_bmad-output/test-artifacts/epic-9.test.mjs`
+* **Test Suite**: `_bmad-output/test-artifacts/epic-9.test.mjs` (2/2 passed, 67/67 total project suite passing)
+* **Flashcards**: `_bmad-output/learning-journal/flashcards/epic-9.tsv` (25 cards)
+
+#### Core Concepts Mastered:
+1. **Compositor-Driven CSS Scroll-Snap Architecture**:
+   - Implemented `scroll-snap-type: x mandatory` with `scroll-padding: 0 16px` on `#portfolio .portfolio-grid` and `#services .services-grid`.
+   - Achieved 60/120fps hardware-accelerated touch swipe performance running on the browser compositor thread without JavaScript carousel overhead ($\text{TBT} = 0\text{ms}$, $\text{CLS} = 0$).
+   - Eliminated over 4,500 vertical pixels of mobile scrolling fatigue by condensing multi-card vertical columns into compact, horizontal single-row swipe tracks.
+
+2. **Visual Peek Affordance Formula**:
+   - Sized cards with `flex: 0 0 calc(85vw - 16px)` and `scroll-snap-align: center`.
+   - The $85\% / 15\%$ width distribution guarantees that the trailing card is always partially visible on screen, signaling horizontal discoverability without intrusive overlay tutorials.
+   - Combined negative container margins (`margin-inline: -16px`) with padding to achieve edge-to-edge bleed scrolling on mobile viewports.
+
+3. **Subtle Custom Scrollbars & Non-Intrusive Swipe Cues**:
+   - Styled minimalist 5px scrollbars (`scrollbar-width: thin`, `scrollbar-color: var(--color-primary-subtle) transparent`) to provide visual rail depth across Android and desktop emulators.
+   - Added pulsing `.mobile-swipe-hint` badge cues (`aria-hidden="true"`) that inform mobile users while hiding automatically on desktop screens ($\ge 768\text{px}$) via `display: none !important`.
+
+4. **Defensive Dynamic Scroll Reset & Desktop Grid Restoration**:
+   - Updated `filterPortfolio()` in `app.js` with defensive checks (`typeof document.getElementById === 'function'`) to smoothly reset horizontal scroll to origin (`scrollLeft = 0`) upon category tab selection.
+   - Restored full responsive multi-column 2D grids at `@media (min-width: 768px)` (`display: grid`, `flex: initial`, `overflow-x: visible`) preserving desktop design integrity.
+
