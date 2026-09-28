@@ -386,6 +386,21 @@ So that I can tap and inspect full case study mockups instantly without any scro
 * **And** clicking any proof badge immediately opens the lightbox modal (`openModal(projectId)`) for that project.
 * **And** all buttons are fully accessible with `:focus-visible` styling and minimum $\ge 44\text{px}$ touch targets.
 
+---
 
+## Epic 7: Interactive Print Estimator & WhatsApp Quote Engine
 
+### Story 7.1: Pricing Engine Data Model & Calculation Rules
+As a commercial buyer visiting the website,  
+I want transparent, mathematically sound print pricing calculations with volume discounts,  
+So that I can understand realistic project costs and budget accurately before contacting sales.
 
+### Story 7.2: Semantic Calculator Layout & CSS Styling
+As a mobile or desktop visitor,  
+I want an intuitive, responsive, and accessible calculator interface with sliders, tabs, and live receipts,  
+So that I can effortlessly configure print specifications and see immediate pricing feedback.
+
+### Story 7.3: Reactive Calculator Event Engine & WhatsApp Quote Sync
+As a ready-to-buy customer,  
+I want my configured specifications and calculated total exported directly into a 1-click WhatsApp message,  
+So that I can initiate an official quote verification with MJr's sales team in seconds without retyping details.
