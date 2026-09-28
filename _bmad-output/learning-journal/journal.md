@@ -342,14 +342,27 @@
    - Implemented cross-section routing: clicking capability cards in `#services` activates category filters in `#portfolio` (`filterPortfolio(category)`), triggers smooth viewport auto-scrolling, and moves focus to the active tab button for accessible keyboard workflows.
 
 3. **Zero-Scroll Top-of-Fold Proof Teleportation**:
-   - Embedded `.hero-proof-strip` containing glassmorphic proof pills directly inside the Hero fold, enabling visitors to inspect high-resolution case study mockups instantly in 0 scrolls.
+### Focused View Polish: Desktop Lateral Rails & Edge-Aware Touch Engine
+* **Date**: 2026-09-28
+* **Files Implemented**: `index.html`, `styles.css`, `app.js`
+* **Flashcards**: `_bmad-output/learning-journal/flashcards/modal-lateral-touch.tsv` (22 cards)
 
+#### Core Concepts Mastered:
+1. **Mathematical Dynamic Offset for Lateral Rails**:
+   - Calculated floating lateral button offsets anchored relative to a centered 720px modal dialog:
+     $$\text{left} = \max\left(16\text{px}, \frac{100\text{vw} - 720\text{px}}{2} - 70\text{px}\right)$$
+   - Bound by `max(16px, ...)` to ensure on intermediate desktop viewports (900px–1000px) the controls never collide with the viewport edge or overlap the modal content.
+   - Leveraged `backdrop-filter: blur(8px)` with high z-index and GPU-composited `transform: translateY(-50%) scale(1.08)` hover transitions.
 
+2. **Touch Vector Math & Intent Discrimination**:
+   - Tracked swipe vectors across `touchstart`, `touchmove`, and `touchend` lifecycles:
+     $$\Delta X = X_{\text{end}} - X_{\text{start}}, \quad \Delta Y = Y_{\text{end}} - Y_{\text{start}}$$
+   - Implemented strict directional discrimination ($|\Delta X| \ge 45\text{px} \land |\Delta X| > 1.2 \cdot |\Delta Y|$) to differentiate deliberate horizontal project swipes from natural vertical reading scrolls.
+   - Enforced `{ passive: true }` on touch event listeners, ensuring zero lag on the browser compositor thread during scrolling.
 
+3. **Boundary-Aware Slider-to-Project Chaining**:
+   - Engineered state-aware transitions: when the user swipes forward at the terminal image slide ($\text{activeSlideIndex} = \text{totalSlides} - 1$), the engine smoothly transitions to the next case study (`nextProject()`). Swiping backward at slide 0 transitions to the previous case study (`prevProject()`).
 
-
-
-
-
-
-
+4. **Ergonomic CTA & Defensive Multi-Element Sync**:
+   - Streamlined mobile CTA copy to `"Inquire on WhatsApp"` to eliminate line-wrapping and preserve button tap-target ergonomics.
+   - Upgraded `populateModalContent()` with `document.querySelectorAll()` to defensively synchronize both lateral rail buttons and in-modal navigation buttons simultaneously across DOM environments.

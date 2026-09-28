@@ -1,0 +1,22 @@
+What is the CSS math formula used to position floating side rails symmetrically outside a 720px centered container?	left: max(16px, calc((100vw - 720px) / 2 - 70px));
+Why is the CSS max() function used when calculating lateral rail offsets from the viewport edge?	It prevents the buttons from being pushed offscreen or overlapping edges when the viewport width is close to the container width.
+Why should touch event listeners like touchstart and touchmove use { passive: true }?	It tells the browser the listener will never call preventDefault(), allowing the compositor thread to scroll immediately without waiting for JavaScript execution.
+What mathematical condition discriminates an intentional horizontal swipe from a vertical scroll in the modal body touch engine?	Math.abs(dx) >= 45 && Math.abs(dx) > Math.abs(dy) * 1.2
+How is the horizontal displacement (dx) calculated during a touch gesture lifecycle?	dx = touchEndX - touchStartX;
+What does a negative dx (dx < 0) indicate in Cartesian screen coordinate touch tracking?	A swipe gesture moving to the left (finger dragging leftwards towards lower X values).
+What does a positive dx (dx > 0) indicate in Cartesian screen coordinate touch tracking?	A swipe gesture moving to the right (finger dragging rightwards towards higher X values).
+How does boundary-aware slider touch handling determine when to switch projects instead of slides on a left swipe?	When the user swipes left while state.activeSlideIndex is already at totalSlides - 1 (the last image).
+How does boundary-aware slider touch handling determine when to switch projects instead of slides on a right swipe?	When the user swipes right while state.activeSlideIndex is at 0 (the first image).
+Why is contains(e.target) checked in the modal body touch listener before handling a case study swipe?	To prevent triggering project navigation when the user is actively swiping inside the image slider component (mediaWrap).
+What CSS media query feature ensures desktop lateral rails only display on screens capable of accommodating them?	@media (min-width: 900px)
+What CSS transform is used to center an absolutely positioned element vertically at top: 50%?	transform: translateY(-50%)
+What CSS property prevents tooltip hover flickers by disallowing mouse interaction on the tooltip element itself?	pointer-events: none;
+Why should a tooltip container have white-space: nowrap?	To prevent multi-word titles from wrapping awkwardly into multiple lines inside the floating bubble.
+How does the modulo wrap formula ((i - 1) % N + N) % N prevent negative index bugs in JavaScript?	JavaScript's % operator returns negative numbers for negative dividends; adding N and taking % N again guarantees a positive cyclical index in [0, N-1].
+What ARIA attribute on the project counter element announces project position changes to screen readers?	aria-live="polite"
+Why is shortened CTA text like 'Inquire on WhatsApp' preferred over long text on mobile devices?	It prevents multi-line text wrapping on small viewports, ensuring predictable button height and clean vertical rhythm.
+What CSS property creates a frosted-glass blur effect behind a semi-transparent floating button?	backdrop-filter: blur(8px);
+What property in TouchEvent.touches contains the horizontal coordinate relative to the browser viewport?	clientX (accessed via e.touches[0].clientX).
+Why must touch coordinates be recorded from e.touches[0] during touchmove rather than relying only on touchend?	In touchend, e.touches is empty because the finger has left the screen; the last active coordinate must be cached from touchmove or e.changedTouches[0].
+What DOM method is used to query all matching navigation buttons defensively in both single and multi-element environments?	document.querySelectorAll() converted to an array or looped via forEach.
+Why are tooltips for lateral rails hidden by default using opacity: 0 and transform instead of display: none?	Animating opacity and transform allows smooth CSS hardware-accelerated transitions on hover, which display: none cannot do.
