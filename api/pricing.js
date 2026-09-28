@@ -194,13 +194,14 @@ function sha256(text) {
  * Fetch helper for Vercel KV REST API
  */
 async function fetchKv(command, ...args) {
-  const url = process.env.KV_REST_API_URL;
-  const token = process.env.KV_REST_API_TOKEN;
+  const url = process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL;
+  const token = process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN;
 
   if (!url || !token) return null;
 
   try {
-    const endpoint = `${url}/${command}/${args.map(a => encodeURIComponent(typeof a === 'object' ? JSON.stringify(a) : a)).join('/')}`;
+    const cleanUrl = url.replace(/\/$/, '');
+    const endpoint = `${cleanUrl}/${command}/${args.map(a => encodeURIComponent(typeof a === 'object' ? JSON.stringify(a) : a)).join('/')}`;
     const res = await fetch(endpoint, {
       headers: {
         Authorization: `Bearer ${token}`
