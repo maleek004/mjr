@@ -661,3 +661,147 @@
   z-index: 1000;
   transition: opacity 0.2s ease, transform 0.2s ease;
 }
+
+/* --------------------------------------------------------------------------
+   ADMIN AUTHENTICATION GATE & LOCK OVERLAY
+   -------------------------------------------------------------------------- */
+.admin-auth-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background-color: rgba(15, 17, 21, 0.96);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.admin-auth-overlay[hidden],
+.modal-overlay[hidden] {
+  display: none !important;
+}
+
+.admin-auth-card {
+  background-color: #161A22;
+  border: 1.5px solid #2D3748;
+  border-radius: var(--radius-xl, 16px);
+  padding: 36px 32px;
+  max-width: 440px;
+  width: 100%;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+  text-align: center;
+}
+
+.admin-auth-shield {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 16px;
+  border-radius: 50%;
+  background-color: rgba(255, 107, 0, 0.12);
+  border: 1px solid rgba(255, 107, 0, 0.3);
+  color: var(--color-primary, #FF6B00);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.admin-auth-title {
+  font-size: 20px;
+  font-weight: 800;
+  color: #FFFFFF;
+  margin: 0 0 6px;
+}
+
+.admin-auth-subtitle {
+  font-size: 13px;
+  color: #A0AEC0;
+  line-height: 1.4;
+  margin: 0 0 24px;
+}
+
+.admin-pin-input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.admin-pin-input {
+  text-align: center;
+  font-size: 22px;
+  letter-spacing: 0.25em;
+  padding: 12px 48px 12px 16px;
+}
+
+.admin-pin-toggle {
+  position: absolute;
+  right: 12px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  color: #718096;
+  padding: 4px;
+}
+
+.admin-pin-toggle:hover {
+  color: #FFFFFF;
+}
+
+.admin-auth-error {
+  color: #F87171;
+  background-color: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  border-radius: var(--radius-md, 8px);
+  padding: 8px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  margin-top: 8px;
+  text-align: left;
+}
+
+.admin-auth-footer {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+}
+
+.admin-auth-hint {
+  font-size: 12px;
+  color: #718096;
+}
+
+.admin-auth-hint code {
+  color: var(--color-primary, #FF6B00);
+  background-color: rgba(255, 107, 0, 0.1);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: 700;
+}
+
+.admin-auth-back-link {
+  color: #A0AEC0;
+  font-size: 13px;
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.admin-auth-back-link:hover {
+  color: #FFFFFF;
+  text-decoration: underline;
+}
+
+/* Shake Animation on Wrong PIN */
+@keyframes adminShake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-8px); }
+  40%, 80% { transform: translateX(8px); }
+}
+
+.admin-shake {
+  animation: adminShake 0.4s ease-in-out;
+}
+

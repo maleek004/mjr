@@ -397,10 +397,10 @@
 
 ### Epic 8: Standalone Admin Pricing Center & Visual Code Configurator
 * **Date**: 2026-09-28
-* **Stories Implemented**: Story 8.1, Story 8.2, Story 8.3
+* **Stories Implemented**: Story 8.1, Story 8.2, Story 8.3, Story 8.4
 * **Files Implemented**: `admin.html`, `admin.css`, `admin.js`, `app.js`, `index.html`
-* **Test Suite**: `_bmad-output/test-artifacts/epic-8.test.mjs` (3/3 passed, 57/57 total project suite passing)
-* **Flashcards**: `_bmad-output/learning-journal/flashcards/epic-8.tsv` (22 cards)
+* **Test Suite**: `_bmad-output/test-artifacts/epic-8.test.mjs` (4/4 passed, 58/58 total project suite passing)
+* **Flashcards**: `_bmad-output/learning-journal/flashcards/epic-8.tsv` (28 cards)
 
 #### Core Concepts Mastered:
 1. **Standalone Admin UI Architecture & CSS Dashboard Design**:
@@ -415,3 +415,8 @@
    - Developed `generateES6PricingCode()` to serialize in-memory pricing structures into clean, deeply frozen, production-grade ES6 JavaScript code blocks (`const PRICING_MODEL = Object.freeze(...)`).
    - Integrated client-side `localStorage` sync adapter (`mjr_custom_pricing`) with graceful fallback in `app.js`, allowing instant live site testing with zero build steps or server deployments.
    - Added zero-backend file export (`new Blob(...)`, `URL.createObjectURL()`) and clipboard API integration (`navigator.clipboard.writeText`).
+
+4. **Web Crypto API SHA-256 Authentication & Session Persistence**:
+   - Implemented zero-dependency client-side password/PIN verification using `window.crypto.subtle.digest('SHA-256', textBuffer)` to compare one-way hashes rather than plaintext strings.
+   - Utilized `sessionStorage.setItem('mjr_admin_session', 'authenticated')` for tab-scoped ephemeral login persistence, cleared immediately on Lock/Logout.
+   - Implemented accessible modal workflows for Master PIN updates with validation and error messaging announced via `aria-live="assertive"`.

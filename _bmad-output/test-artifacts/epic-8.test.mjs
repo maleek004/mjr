@@ -12,7 +12,19 @@ const {
   exportPricingJson,
   importPricingJson,
   saveLocalPricing,
-  resetToBaseline
+  resetToBaseline,
+  DEFAULT_PIN_HASH,
+  SESSION_STORAGE_KEY,
+  PIN_STORAGE_KEY,
+  hashPin,
+  getStoredPinHash,
+  isAuthenticated,
+  unlockAdminUI,
+  lockAdminUI,
+  loginWithPin,
+  logoutAdmin,
+  checkAuth,
+  changeAdminPin
 } = adminModule;
 
 const projectRoot = process.cwd();
@@ -61,5 +73,50 @@ test('Epic 8: Standalone Admin Pricing Center & Visual Code Configurator', async
 
     assert.match(appJs, /mjr_custom_pricing|localStorage/i, 'app.js must check localStorage for custom pricing overrides');
     assert.match(indexHtml, /href="admin\.html"/i, 'index.html footer must link to admin.html');
+  });
+
+  await t.test('Story 8.4: PIN-Protected Access Control & Session Management', async () => {
+    const adminHtml = fs.readFileSync(adminHtmlPath, 'utf8');
+    const adminCss = fs.readFileSync(adminCssPath, 'utf8');
+
+    // Markup assertions
+    assert.match(adminHtml, /id="admin-auth-overlay"/i, 'admin.html must have PIN auth gate overlay');
+    assert.match(adminHtml, /id="admin-pin-input"/i, 'admin.html must have PIN password input');
+    assert.match(adminHtml, /id="admin-auth-form"/i, 'admin.html must have PIN form');
+    assert.match(adminHtml, /id="admin-auth-error"/i, 'admin.html must have auth error alert');
+    assert.match(adminHtml, /data-action="admin-logout"/i, 'admin.html must have lock/logout button');
+    assert.match(adminHtml, /data-action="open-pin-modal"/i, 'admin.html must have change PIN trigger');
+    assert.match(adminHtml, /id="change-pin-modal"/i, 'admin.html must have change PIN modal');
+
+    // Style assertions
+    assert.match(adminCss, /\.admin-auth-overlay/i, 'admin.css must have auth overlay style');
+    assert.match(adminCss, /\.admin-auth-card/i, 'admin.css must have auth card style');
+    assert.match(adminCss, /\.admin-shake/i, 'admin.css must have shake animation style');
+
+    // Logic & Hashing assertions
+    assert.equal(typeof hashPin, 'function', 'hashPin must be exported as a function');
+    const hash = await hashPin('246748');
+    assert.equal(hash, DEFAULT_PIN_HASH, 'hashPin of default PIN 246748 must match DEFAULT_PIN_HASH');
+
+    const wrongHash = await hashPin('000000');
+    assert.notEqual(wrongHash, DEFAULT_PIN_HASH, 'hashPin of wrong PIN must not match default hash');
+
+    // Authentication tests
+    const validLogin = await loginWithPin('246748');
+    assert.equal(validLogin.success, true, 'loginWithPin should succeed with correct master PIN');
+
+    const invalidLogin = await loginWithPin('999999');
+    assert.equal(invalidLogin.success, false, 'loginWithPin should fail with incorrect master PIN');
+    assert.equal(invalidLogin.error, 'Incorrect PIN', 'loginWithPin should return appropriate error message');
+
+    // Change PIN validation
+    const shortPinResult = await changeAdminPin('246748', '12', '12');
+    assert.equal(shortPinResult.success, false, 'changeAdminPin must reject PIN shorter than 4 digits');
+
+    const mismatchResult = await changeAdminPin('246748', '123456', '654321');
+    assert.equal(mismatchResult.success, false, 'changeAdminPin must reject mismatched confirmation PIN');
+
+    const wrongCurrentResult = await changeAdminPin('000000', '123456', '123456');
+    assert.equal(wrongCurrentResult.success, false, 'changeAdminPin must reject invalid current PIN');
   });
 });

@@ -681,12 +681,254 @@
   }
 
   /**
+   * ==========================================================================
+   * AUTHENTICATION & SESSION MANAGEMENT (STORY 8.4)
+   * ==========================================================================
+   */
+  const DEFAULT_PIN_HASH = 'd6dac16e6ddfeddf2388c92a4013e58a24a0468b6501264c7d6bb60f2ff1cf1b';
+  const SESSION_STORAGE_KEY = 'mjr_admin_session';
+  const PIN_STORAGE_KEY = 'mjr_admin_pin_hash';
+
+  /**
+   * Compute SHA-256 hex digest for a PIN string using Web Crypto API or Node crypto
+   */
+  async function hashPin(pin) {
+    const pinStr = String(pin !== undefined && pin !== null ? pin : '').trim();
+    if (typeof window !== 'undefined' && window.crypto && window.crypto.subtle) {
+      const encoder = new TextEncoder();
+      const data = encoder.encode(pinStr);
+      const hashBuffer = await window.crypto.subtle.digest('SHA-256', data);
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+    if (typeof require !== 'undefined') {
+      try {
+        const crypto = require('crypto');
+        return crypto.createHash('sha256').update(pinStr).digest('hex');
+      } catch (err) {
+        // Fallback
+      }
+    }
+    return '';
+  }
+
+  /**
+   * Retrieve active PIN hash from localStorage or fallback to default factory PIN hash
+   */
+  function getStoredPinHash() {
+    try {
+      if (typeof localStorage !== 'undefined') {
+        const stored = localStorage.getItem(PIN_STORAGE_KEY);
+        if (stored && typeof stored === 'string' && stored.length === 64) {
+          return stored;
+        }
+      }
+    } catch (e) {
+      console.warn('[Admin Auth] Unable to read stored PIN hash:', e);
+    }
+    return DEFAULT_PIN_HASH;
+  }
+
+  /**
+   * Check if current session is authenticated
+   */
+  function isAuthenticated() {
+    try {
+      if (typeof sessionStorage !== 'undefined') {
+        return sessionStorage.getItem(SESSION_STORAGE_KEY) === 'authenticated';
+      }
+    } catch (e) {
+      console.warn('[Admin Auth] Unable to read session storage:', e);
+    }
+    return false;
+  }
+
+  /**
+   * Unlock admin UI and remove authentication gate overlay
+   */
+  function unlockAdminUI() {
+    try {
+      if (typeof sessionStorage !== 'undefined') {
+        sessionStorage.setItem(SESSION_STORAGE_KEY, 'authenticated');
+      }
+    } catch (e) {
+      console.warn('[Admin Auth] Unable to persist session storage:', e);
+    }
+
+    if (typeof document !== 'undefined') {
+      const overlay = document.getElementById('admin-auth-overlay');
+      if (overlay) {
+        overlay.setAttribute('hidden', '');
+        overlay.style.display = 'none';
+      }
+      const pinInput = document.getElementById('admin-pin-input');
+      if (pinInput) pinInput.value = '';
+      const errEl = document.getElementById('admin-auth-error');
+      if (errEl) errEl.setAttribute('hidden', '');
+    }
+  }
+
+  /**
+   * Lock admin UI and present the authentication gate overlay
+   */
+  function lockAdminUI() {
+    try {
+      if (typeof sessionStorage !== 'undefined') {
+        sessionStorage.removeItem(SESSION_STORAGE_KEY);
+      }
+    } catch (e) {
+      console.warn('[Admin Auth] Unable to clear session storage:', e);
+    }
+
+    if (typeof document !== 'undefined') {
+      const overlay = document.getElementById('admin-auth-overlay');
+      if (overlay) {
+        overlay.removeAttribute('hidden');
+        overlay.style.display = 'flex';
+      }
+      const pinInput = document.getElementById('admin-pin-input');
+      if (pinInput) {
+        pinInput.value = '';
+        setTimeout(() => pinInput.focus(), 50);
+      }
+      const errEl = document.getElementById('admin-auth-error');
+      if (errEl) errEl.setAttribute('hidden', '');
+    }
+  }
+
+  /**
+   * Authenticate user with provided PIN
+   */
+  async function loginWithPin(pin) {
+    const hash = await hashPin(pin);
+    const targetHash = getStoredPinHash();
+
+    if (hash && hash === targetHash) {
+      unlockAdminUI();
+      showToast('Authenticated as Administrator.');
+      return { success: true };
+    }
+
+    if (typeof document !== 'undefined') {
+      const errEl = document.getElementById('admin-auth-error');
+      if (errEl) {
+        errEl.textContent = 'Incorrect PIN. Please verify your credentials and try again.';
+        errEl.removeAttribute('hidden');
+      }
+      const card = document.querySelector('.admin-auth-card');
+      if (card) {
+        card.classList.remove('admin-shake');
+        void card.offsetWidth; // Force reflow
+        card.classList.add('admin-shake');
+      }
+      const pinInput = document.getElementById('admin-pin-input');
+      if (pinInput) {
+        pinInput.select();
+      }
+    }
+    return { success: false, error: 'Incorrect PIN' };
+  }
+
+  /**
+   * Lock workspace and reset credentials
+   */
+  function logoutAdmin() {
+    lockAdminUI();
+    showToast('Admin workspace locked.');
+  }
+
+  /**
+   * Check authentication state on page load
+   */
+  function checkAuth() {
+    if (isAuthenticated()) {
+      unlockAdminUI();
+    } else {
+      lockAdminUI();
+    }
+  }
+
+  /**
+   * Update Master PIN after validating current credentials
+   */
+  async function changeAdminPin(currentPin, newPin, confirmPin) {
+    const errEl = (typeof document !== 'undefined') ? document.getElementById('change-pin-error') : null;
+    const showError = (msg) => {
+      if (errEl) {
+        errEl.textContent = msg;
+        errEl.removeAttribute('hidden');
+      }
+      return { success: false, error: msg };
+    };
+
+    if (!newPin || String(newPin).trim().length < 4) {
+      return showError('New PIN must be at least 4 digits/characters.');
+    }
+
+    if (newPin !== confirmPin) {
+      return showError('New PIN and confirmation PIN do not match.');
+    }
+
+    const currentHash = await hashPin(currentPin);
+    const storedHash = getStoredPinHash();
+
+    if (currentHash !== storedHash) {
+      return showError('Current Master PIN is incorrect.');
+    }
+
+    const newHash = await hashPin(newPin);
+    try {
+      if (typeof localStorage !== 'undefined') {
+        localStorage.setItem(PIN_STORAGE_KEY, newHash);
+      }
+    } catch (e) {
+      return showError('Unable to save new PIN to storage.');
+    }
+
+    if (typeof document !== 'undefined') {
+      if (errEl) errEl.setAttribute('hidden', '');
+      const modal = document.getElementById('change-pin-modal');
+      if (modal) modal.setAttribute('hidden', '');
+      const form = document.getElementById('change-pin-form');
+      if (form && typeof form.reset === 'function') form.reset();
+    }
+
+    showToast('Master PIN updated successfully.');
+    return { success: true };
+  }
+
+  /**
    * Event Delegation Setup
    */
   if (typeof document !== 'undefined') {
     document.addEventListener('DOMContentLoaded', () => {
+      checkAuth();
       loadPersistedModel();
       loadProductIntoForm(adminState.activeProductId);
+    });
+
+    // Form Submit Handlers
+    document.addEventListener('submit', async (e) => {
+      const target = e.target;
+      if (!target) return;
+
+      if (target.id === 'admin-auth-form') {
+        e.preventDefault();
+        const pinInput = document.getElementById('admin-pin-input');
+        if (pinInput) {
+          await loginWithPin(pinInput.value);
+        }
+      }
+
+      if (target.id === 'change-pin-form') {
+        e.preventDefault();
+        const cur = document.getElementById('current-pin-input');
+        const np = document.getElementById('new-pin-input');
+        const cnp = document.getElementById('confirm-new-pin-input');
+        if (cur && np && cnp) {
+          await changeAdminPin(cur.value, np.value, cnp.value);
+        }
+      }
     });
 
     // Delegated Click Handlers
@@ -697,6 +939,68 @@
       const action = actionEl.dataset.action;
 
       switch (action) {
+        case 'toggle-pin-visibility': {
+          e.preventDefault();
+          const pinInput = document.getElementById('admin-pin-input');
+          const btnToggle = document.getElementById('btn-toggle-pin');
+          if (pinInput) {
+            const isPass = pinInput.type === 'password';
+            pinInput.type = isPass ? 'text' : 'password';
+            if (btnToggle) {
+              btnToggle.textContent = isPass ? '🙈' : '👁️';
+              btnToggle.setAttribute('aria-label', isPass ? 'Hide PIN' : 'Show PIN');
+            }
+          }
+          break;
+        }
+        case 'submit-pin': {
+          e.preventDefault();
+          const pinInput = document.getElementById('admin-pin-input');
+          if (pinInput) {
+            loginWithPin(pinInput.value);
+          }
+          break;
+        }
+        case 'admin-logout': {
+          e.preventDefault();
+          logoutAdmin();
+          break;
+        }
+        case 'open-pin-modal': {
+          e.preventDefault();
+          const modal = document.getElementById('change-pin-modal');
+          const errEl = document.getElementById('change-pin-error');
+          if (errEl) errEl.setAttribute('hidden', '');
+          if (modal) {
+            modal.removeAttribute('hidden');
+            const cur = document.getElementById('current-pin-input');
+            if (cur) {
+              cur.value = '';
+              setTimeout(() => cur.focus(), 50);
+            }
+            const np = document.getElementById('new-pin-input');
+            if (np) np.value = '';
+            const cnp = document.getElementById('confirm-new-pin-input');
+            if (cnp) cnp.value = '';
+          }
+          break;
+        }
+        case 'close-pin-modal': {
+          e.preventDefault();
+          const modal = document.getElementById('change-pin-modal');
+          if (modal) modal.setAttribute('hidden', '');
+          break;
+        }
+        case 'save-new-pin': {
+          e.preventDefault();
+          const cur = document.getElementById('current-pin-input');
+          const np = document.getElementById('new-pin-input');
+          const cnp = document.getElementById('confirm-new-pin-input');
+          if (cur && np && cnp) {
+            changeAdminPin(cur.value, np.value, cnp.value);
+          }
+          break;
+        }
         case 'admin-select-product': {
           e.preventDefault();
           const prodId = actionEl.dataset.productId;
@@ -869,6 +1173,18 @@
     window.importPricingJson = importPricingJson;
     window.saveLocalPricing = saveLocalPricing;
     window.resetToBaseline = resetToBaseline;
+    window.DEFAULT_PIN_HASH = DEFAULT_PIN_HASH;
+    window.SESSION_STORAGE_KEY = SESSION_STORAGE_KEY;
+    window.PIN_STORAGE_KEY = PIN_STORAGE_KEY;
+    window.hashPin = hashPin;
+    window.getStoredPinHash = getStoredPinHash;
+    window.isAuthenticated = isAuthenticated;
+    window.unlockAdminUI = unlockAdminUI;
+    window.lockAdminUI = lockAdminUI;
+    window.loginWithPin = loginWithPin;
+    window.logoutAdmin = logoutAdmin;
+    window.checkAuth = checkAuth;
+    window.changeAdminPin = changeAdminPin;
   }
 
   if (typeof module !== 'undefined' && module.exports) {
@@ -880,7 +1196,19 @@
       exportPricingJson,
       importPricingJson,
       saveLocalPricing,
-      resetToBaseline
+      resetToBaseline,
+      DEFAULT_PIN_HASH,
+      SESSION_STORAGE_KEY,
+      PIN_STORAGE_KEY,
+      hashPin,
+      getStoredPinHash,
+      isAuthenticated,
+      unlockAdminUI,
+      lockAdminUI,
+      loginWithPin,
+      logoutAdmin,
+      checkAuth,
+      changeAdminPin
     };
   }
 })();

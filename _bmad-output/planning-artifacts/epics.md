@@ -423,3 +423,9 @@ So that I can verify calculations and ensure healthy margins before publishing c
 As a developer or site administrator,  
 I want 1-click ES6 JavaScript code generation, `localStorage` live browser overrides, and JSON export/import capabilities,  
 So that I can immediately test new pricing on the live website or copy updated configuration code directly into `app.js`.
+
+### Story 8.4: PIN-Protected Access Control & Session Management
+As a site owner protecting business operations,  
+I want a secure PIN authentication gate using Web Crypto SHA-256 verification and session persistence,  
+So that unauthorized visitors cannot alter production pricing configurations.
+

@@ -20,3 +20,9 @@ How does a range slider and badge pair stay synchronized in the admin simulation
 What is the purpose of Object.freeze() in the generated ES6 pricing code?	It locks the data structure at runtime to prevent unintended mutations from buggy application code.
 How does the admin rush rate field dynamically modify calculation math across products?	finalTotal = Math.round(discountedSubtotal * (1 + (adminState.rushRate / 100)))
 Why is JSON.stringify(data, null, 2) preferred when exporting JSON files or formatting code outputs?	The third argument (2) formats the JSON string with 2-space indentation, making it human-readable.
+What Web API provides secure cryptographic hashing directly in modern web browsers?	window.crypto.subtle.digest('SHA-256', dataBuffer)
+Why is SHA-256 hash comparison superior to plaintext PIN comparisons in client-side applications?	It prevents plain passwords or secret PINs from being exposed in source code, DevTools inspection, or raw storage.
+What is the primary difference between localStorage and sessionStorage?	sessionStorage is cleared when the browser tab/session closes, while localStorage persists indefinitely until cleared.
+How can a password input field securely toggle visibility between masked and plaintext in vanilla JavaScript?	Toggling the input element's type attribute between 'password' and 'text' upon user click.
+Why should keyframe shake animations be paired with programmatic focus selection upon authentication failure?	The shake animation provides a visual failure cue while input.select() or input.focus() maintains keyboard accessibility.
+What is the default Master PIN for the MJr Admin Pricing Center?	246748 (matching the official WhatsApp contact digits)
