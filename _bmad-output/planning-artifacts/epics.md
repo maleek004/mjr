@@ -404,3 +404,22 @@ So that I can effortlessly configure print specifications and see immediate pric
 As a ready-to-buy customer,  
 I want my configured specifications and calculated total exported directly into a 1-click WhatsApp message,  
 So that I can initiate an official quote verification with MJr's sales team in seconds without retyping details.
+
+---
+
+## Epic 8: Standalone Admin Pricing Center & Visual Code Configurator
+
+### Story 8.1: Standalone Admin Dashboard Layout & CSS Architecture
+As an MJr business administrator,  
+I want a dedicated, responsive standalone dashboard (`admin.html` & `admin.css`) with product tabs, parameter form fields, and sticky live preview,  
+So that I can visually manage print costs and profit margins without modifying raw code.
+
+### Story 8.2: Dynamic Admin Engine, Form Binding & Live Simulation Sandbox
+As an operations manager tuning print prices,  
+I want an interactive simulation sandbox (`admin.js`) that recalculates live customer quotes in real time as I edit base prices, add-on deltas, and discount brackets,  
+So that I can verify calculations and ensure healthy margins before publishing changes.
+
+### Story 8.3: ES6 Code Generator, LocalStorage Sync & JSON Export/Import
+As a developer or site administrator,  
+I want 1-click ES6 JavaScript code generation, `localStorage` live browser overrides, and JSON export/import capabilities,  
+So that I can immediately test new pricing on the live website or copy updated configuration code directly into `app.js`.
