@@ -103,6 +103,17 @@
   color: #FFFFFF;
 }
 
+.admin-btn-success {
+  background-color: #10B981;
+  color: #FFFFFF;
+}
+
+.admin-btn-success:hover {
+  background-color: #059669;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
 .admin-btn-ghost {
   background-color: transparent;
   color: #A0AEC0;

@@ -1375,11 +1375,17 @@
     }
   }
 
+  // Global Cloud Pricing Model Cache (fetched asynchronously from /api/pricing)
+  let globalPricingModel = null;
+
   /**
-   * Get active pricing model with fallback to localStorage overrides
+   * Get active pricing model with fallback to global cloud, localStorage, or factory defaults
    * @returns {Object} Active pricing model configuration
    */
   function getActivePricing() {
+    if (globalPricingModel && typeof globalPricingModel === 'object') {
+      return globalPricingModel;
+    }
     if (typeof localStorage !== 'undefined') {
       try {
         const stored = localStorage.getItem('mjr_custom_pricing');
@@ -1392,6 +1398,38 @@
       }
     }
     return PRICING_MODEL;
+  }
+
+  /**
+   * Fetch global pricing from Vercel Serverless API (/api/pricing)
+   */
+  async function fetchGlobalPricing() {
+    try {
+      if (typeof fetch === 'function') {
+        const res = await fetch('/api/pricing', {
+          headers: { 'Accept': 'application/json' },
+          cache: 'default'
+        });
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data.success && data.pricing) {
+            globalPricingModel = data.pricing;
+            if (typeof document !== 'undefined') {
+              const activeProduct = getActivePricing()[calculatorState.productId] || PRICING_MODEL[calculatorState.productId];
+              if (activeProduct) {
+                renderCalculatorOptions(calculatorState.productId);
+                renderCalculatorPresets(calculatorState.productId, calculatorState.quantity);
+                updateCalculatorSummary();
+              }
+            }
+            return data.pricing;
+          }
+        }
+      }
+    } catch (err) {
+      // Network failure or local file:// protocol - fall back silently to baseline
+    }
+    return null;
   }
 
   /**
@@ -1483,7 +1521,8 @@
    * @returns {string} WhatsApp message text
    */
   function generateCalculatorWhatsAppText({ productId, quantity, options = {}, isRush = false, estimate }) {
-    const product = PRICING_MODEL[productId] || PRICING_MODEL['business-cards'];
+    const pricing = getActivePricing();
+    const product = pricing[productId] || PRICING_MODEL[productId] || PRICING_MODEL['business-cards'];
     const est = estimate || calculateEstimate({ productId, quantity, options, isRush });
 
     const specLines = [];
@@ -1546,7 +1585,8 @@
    * @param {string} productId
    */
   function renderCalculatorOptions(productId) {
-    const product = PRICING_MODEL[productId];
+    const pricing = getActivePricing();
+    const product = pricing[productId] || PRICING_MODEL[productId];
     if (typeof document === 'undefined') return;
     const container = document.getElementById('calc-dynamic-options');
     if (!product || !container) return;
@@ -1778,7 +1818,8 @@
    * @param {boolean} [updateInputs=true]
    */
   function setCalculatorQuantity(qty, updateInputs = true) {
-    const product = PRICING_MODEL[calculatorState.productId] || PRICING_MODEL['business-cards'];
+    const pricing = getActivePricing();
+    const product = pricing[calculatorState.productId] || PRICING_MODEL[calculatorState.productId] || PRICING_MODEL['business-cards'];
     let val = parseInt(qty, 10);
     if (isNaN(val)) val = product.minQty;
     if (val < product.minQty) val = product.minQty;
@@ -1807,6 +1848,7 @@
     if (!calcSection) return;
 
     setCalculatorProduct(calculatorState.productId);
+    fetchGlobalPricing();
   }
 
   /**
@@ -1839,6 +1881,8 @@
     window.prevProject = prevProject;
     window.state = state;
     window.PRICING_MODEL = PRICING_MODEL;
+    window.getActivePricing = getActivePricing;
+    window.fetchGlobalPricing = fetchGlobalPricing;
     window.calculatorState = calculatorState;
     window.calculateEstimate = calculateEstimate;
     window.calculateVolumeDiscount = calculateVolumeDiscount;
@@ -1875,6 +1919,8 @@
       prevProject,
       state,
       PRICING_MODEL,
+      getActivePricing,
+      fetchGlobalPricing,
       calculatorState,
       calculateEstimate,
       calculateVolumeDiscount,

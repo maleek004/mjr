@@ -26,3 +26,8 @@ What is the primary difference between localStorage and sessionStorage?	sessionS
 How can a password input field securely toggle visibility between masked and plaintext in vanilla JavaScript?	Toggling the input element's type attribute between 'password' and 'text' upon user click.
 Why should keyframe shake animations be paired with programmatic focus selection upon authentication failure?	The shake animation provides a visual failure cue while input.select() or input.focus() maintains keyboard accessibility.
 What is the default Master PIN for the MJr Admin Pricing Center?	246748 (matching the official WhatsApp contact digits)
+How does a Vercel Serverless Function (/api/pricing) enable global state sharing for static frontends?	It handles server-side GET/POST requests that read from and write to a centralized cloud database (like Vercel KV).
+What Cache-Control header directive serves cached data while simultaneously refreshing it in the background?	stale-while-revalidate (e.g. s-maxage=30, stale-while-revalidate=120)
+Why should public visitor client pages initialize with local defaults before awaiting API responses?	It guarantees zero layout shift and instantaneous interactive page load regardless of network latency.
+How does the Vercel KV REST API authenticate serverless HTTP requests?	Using Authorization: Bearer ${KV_REST_API_TOKEN} with KV_REST_API_URL endpoints.
+What HTTP status code represents a request that is syntactically valid JSON but fails business schema validation?	422 Unprocessable Entity

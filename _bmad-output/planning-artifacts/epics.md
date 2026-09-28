@@ -429,3 +429,8 @@ As a site owner protecting business operations,
 I want a secure PIN authentication gate using Web Crypto SHA-256 verification and session persistence,  
 So that unauthorized visitors cannot alter production pricing configurations.
 
+### Story 8.5: Global Cloud Pricing Synchronization via Vercel Serverless API
+As an MJr business administrator,  
+I want pricing adjustments published in the admin center to instantly update across all website visitors worldwide,  
+So that the public price estimator always reflects current live commercial rates without manual code redeployments.
+

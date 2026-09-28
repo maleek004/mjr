@@ -628,8 +628,84 @@
   function saveLocalPricing() {
     if (typeof localStorage !== 'undefined') {
       localStorage.setItem('mjr_custom_pricing', JSON.stringify(adminState.model));
-      showToast('Pricing saved and applied to live website!');
+      showToast('Pricing saved and applied to local browser!');
     }
+  }
+
+  /**
+   * Publish current admin pricing model globally via Vercel Serverless API (/api/pricing)
+   */
+  async function publishGlobalPricing() {
+    const btn = (typeof document !== 'undefined') ? document.getElementById('btn-publish-global') : null;
+    const origHtml = btn ? btn.innerHTML : '';
+    if (btn) {
+      btn.disabled = true;
+      btn.textContent = 'Publishing...';
+    }
+
+    try {
+      const pinHash = getStoredPinHash();
+      const payload = {
+        pin: pinHash,
+        pricing: adminState.model
+      };
+
+      const res = await fetch('/api/pricing', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-admin-pin': pinHash
+        },
+        body: JSON.stringify(payload)
+      });
+
+      const json = await res.json();
+      if (res.ok && json.success) {
+        saveLocalPricing(); // Keep local copy in sync
+        showToast('🌐 Global pricing published! All visitors worldwide now see these rates.');
+        return { success: true, message: json.message };
+      } else {
+        const errMsg = json.error || 'Failed to publish global pricing.';
+        showToast(`❌ Error: ${errMsg}`);
+        return { success: false, error: errMsg };
+      }
+    } catch (err) {
+      console.warn('[Admin Global Publish] Request error:', err);
+      saveLocalPricing();
+      showToast('⚠️ Saved locally in this browser. (Deploy to Vercel KV for multi-device sync).');
+      return { success: false, error: err.message };
+    } finally {
+      if (btn) {
+        btn.disabled = false;
+        btn.innerHTML = origHtml;
+      }
+    }
+  }
+
+  /**
+   * Fetch latest global pricing on admin center load
+   */
+  async function fetchGlobalAdminPricing() {
+    try {
+      if (typeof fetch === 'function') {
+        const res = await fetch('/api/pricing', {
+          headers: { 'Accept': 'application/json' }
+        });
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data.success && data.pricing) {
+            adminState.model = deepClone(data.pricing);
+            if (typeof document !== 'undefined') {
+              loadProductIntoForm(adminState.activeProductId);
+            }
+            return data.pricing;
+          }
+        }
+      }
+    } catch (e) {
+      // Fall back to local
+    }
+    return null;
   }
 
   /**
@@ -905,6 +981,7 @@
       checkAuth();
       loadPersistedModel();
       loadProductIntoForm(adminState.activeProductId);
+      fetchGlobalAdminPricing();
     });
 
     // Form Submit Handlers
@@ -1065,6 +1142,11 @@
           saveLocalPricing();
           break;
         }
+        case 'publish-global-pricing': {
+          e.preventDefault();
+          publishGlobalPricing();
+          break;
+        }
         case 'reset-defaults': {
           e.preventDefault();
           resetToBaseline();
@@ -1185,6 +1267,8 @@
     window.logoutAdmin = logoutAdmin;
     window.checkAuth = checkAuth;
     window.changeAdminPin = changeAdminPin;
+    window.publishGlobalPricing = publishGlobalPricing;
+    window.fetchGlobalAdminPricing = fetchGlobalAdminPricing;
   }
 
   if (typeof module !== 'undefined' && module.exports) {
@@ -1208,7 +1292,9 @@
       loginWithPin,
       logoutAdmin,
       checkAuth,
-      changeAdminPin
+      changeAdminPin,
+      publishGlobalPricing,
+      fetchGlobalAdminPricing
     };
   }
 })();

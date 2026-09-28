@@ -397,10 +397,10 @@
 
 ### Epic 8: Standalone Admin Pricing Center & Visual Code Configurator
 * **Date**: 2026-09-28
-* **Stories Implemented**: Story 8.1, Story 8.2, Story 8.3, Story 8.4
-* **Files Implemented**: `admin.html`, `admin.css`, `admin.js`, `app.js`, `index.html`
-* **Test Suite**: `_bmad-output/test-artifacts/epic-8.test.mjs` (4/4 passed, 58/58 total project suite passing)
-* **Flashcards**: `_bmad-output/learning-journal/flashcards/epic-8.tsv` (28 cards)
+* **Stories Implemented**: Story 8.1, Story 8.2, Story 8.3, Story 8.4, Story 8.5
+* **Files Implemented**: `admin.html`, `admin.css`, `admin.js`, `app.js`, `api/pricing.js`, `index.html`
+* **Test Suite**: `_bmad-output/test-artifacts/story-8.5.test.mjs` (5/5 passed, 64/64 total project suite passing)
+* **Flashcards**: `_bmad-output/learning-journal/flashcards/epic-8.tsv` (34 cards)
 
 #### Core Concepts Mastered:
 1. **Standalone Admin UI Architecture & CSS Dashboard Design**:
@@ -420,3 +420,8 @@
    - Implemented zero-dependency client-side password/PIN verification using `window.crypto.subtle.digest('SHA-256', textBuffer)` to compare one-way hashes rather than plaintext strings.
    - Utilized `sessionStorage.setItem('mjr_admin_session', 'authenticated')` for tab-scoped ephemeral login persistence, cleared immediately on Lock/Logout.
    - Implemented accessible modal workflows for Master PIN updates with validation and error messaging announced via `aria-live="assertive"`.
+
+5. **Serverless Global Cloud Distribution & Vercel KV REST Synchronization**:
+   - Built `/api/pricing.js` serverless function with edge caching (`s-maxage=30, stale-while-revalidate=120`) and REST Upstash/Vercel KV integration.
+   - Decoupled public visitor render path from backend latency via synchronous factory baseline hydration followed by background API synchronization (`fetchGlobalPricing()`).
+   - Enabled 1-click global pricing publication from `admin.html` with authenticated `POST` and instant cross-device synchronization.
